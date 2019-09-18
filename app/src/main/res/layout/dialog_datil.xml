@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#11ffffff"
+              android:layout_gravity="center">
+
+    <Button
+            android:id="@+id/btn_detail_dismiss"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/close"/>
+
+    <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="@drawable/redius_10_concern"
+            tools:ignore="UselessParent">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp">
+
+            <ImageView
+                    android:id="@+id/image_detail"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@color/colorPrimary"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:scaleType="centerCrop"
+                    tools:ignore="ContentDescription"/>
+
+            <Button
+                android:id="@+id/btn_detail_folder_add"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="100dp"
+                android:background="@drawable/folder_add"/>
+
+            <Button
+                android:id="@+id/btn_detail_love"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="50dp"
+                android:background="@drawable/heart"/>
+
+
+            <Button
+                    android:id="@+id/btn_detail_play"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/play_circle"/>
+
+
+
+        </RelativeLayout>
+
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="15dp">
+
+                <TextView
+                        android:id="@+id/text_dialog_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"/>
+
+                <TextView
+                        android:id="@+id/text_dialog_author"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"/>
+
+                <TextView
+                        android:id="@+id/text_dialog_update"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"/>
+
+                <TextView
+                    android:id="@+id/text_dialog_link"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"/>
+
+            </LinearLayout>
+
+            <Button
+                    android:id="@+id/btn_detail_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#00000000"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
