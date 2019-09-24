@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         btn_main_more.setOnClickListener(this)
         btn_main_nav.setOnClickListener(this)
+        btn_nav_night.setOnClickListener(this)
         layout_nav.setOnClickListener(this)
         layout_nav_firstpage.setOnClickListener(this)
         layout_nav_love.setOnClickListener(this)
@@ -120,6 +121,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     .addToBackStack(null)
                     .commit()
 
+            }
+            R.id.btn_nav_night->{
+                btn_nav_night.isChecked = !btn_nav_night.isChecked
             }
             R.id.layout_nav_about->{
                 layout_drawer.closeDrawer(Gravity.START)

@@ -27,7 +27,6 @@ class AddFromXmlViewModel(val context: Context, val url:String) {
     fun subscribeAll(handler:Handler){
         val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
             .build()
-
         val mDao=db.radioDao()
         object : Thread() {
             override fun run() {

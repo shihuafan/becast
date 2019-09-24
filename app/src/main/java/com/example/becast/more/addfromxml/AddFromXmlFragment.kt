@@ -16,7 +16,7 @@ import com.example.becast.service.RadioService
 import com.example.becast.unit.data.radioDb.RadioData
 import com.example.becast.mine.ui.unit.RadioAdapter
 import com.example.becast.more.addfromxml.AddFromXmlViewModel
-import com.example.becast.playpage.PlayPageFragment
+import com.example.becast.playpage.play.PlayPageFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_add_from_xml.*
 import kotlinx.android.synthetic.main.frag_add_from_xml.view.*
@@ -30,7 +30,9 @@ class AddFromXmlFragment(private val url:String) : Fragment(), View.OnClickListe
         when(it.what){
             0x103 ->{
                 mBinder.playRadio(it.obj as RadioData)
-                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all, PlayPageFragment(mBinder))
+                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all,
+                    PlayPageFragment(mBinder)
+                )
                     .addToBackStack(null)
                     .commit()
             }

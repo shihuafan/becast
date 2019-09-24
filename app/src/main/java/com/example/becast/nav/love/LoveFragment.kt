@@ -13,7 +13,7 @@ import com.example.becast.R
 import com.example.becast.service.RadioService
 import com.example.becast.unit.data.radioDb.RadioData
 import com.example.becast.mine.ui.unit.RadioAdapter
-import com.example.becast.playpage.PlayPageFragment
+import com.example.becast.playpage.play.PlayPageFragment
 import kotlinx.android.synthetic.main.frag_love.view.*
 
 class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), View.OnClickListener {
@@ -35,7 +35,9 @@ class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), V
             }
             0x103 ->{
                 mBinder.playRadio(it.obj as RadioData)
-                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all, PlayPageFragment(mBinder))
+                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all,
+                    PlayPageFragment(mBinder)
+                )
                     .addToBackStack(null)
                     .commit()
             }
@@ -44,7 +46,7 @@ class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), V
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view= inflater.inflate(R.layout.frag_love, container, false)
+            val view= inflater.inflate(R.layout.frag_love, container, false)
 
         loveViewModel= context?.let { LoveViewModel(it) }!!
 

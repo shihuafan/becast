@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.playpage.PlayPageFragment
+import com.example.becast.playpage.play.PlayPageFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_playing.view.*
 import java.util.*
@@ -55,7 +55,9 @@ open class PlayingFragment(private val mBinder: RadioService.LocalBinder) : Frag
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.btn_playing_page->{
-                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all, PlayPageFragment(mBinder))
+                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all,
+                    PlayPageFragment(mBinder)
+                )
                     .addToBackStack(null)
                     .commit()
             }

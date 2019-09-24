@@ -16,7 +16,7 @@ import com.example.becast.data.radioList.RadioListData
 import com.example.becast.mine.ui.unit.RadioAdapter
 import com.example.becast.service.RadioService
 import com.example.becast.unit.data.radioDb.RadioData
-import com.example.becast.playpage.PlayPageFragment
+import com.example.becast.playpage.play.PlayPageFragment
 import kotlinx.android.synthetic.main.frag_radio_list.*
 import kotlinx.android.synthetic.main.frag_radio_list.view.*
 import java.lang.Exception
@@ -28,7 +28,9 @@ class RadioListFragment(private var mBinder: RadioService.LocalBinder,private va
         when(it.what){
             0x103 ->{
                 mBinder.playRadio(it.obj as RadioData)
-                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all, PlayPageFragment(mBinder))
+                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all,
+                    PlayPageFragment(mBinder)
+                )
                     .addToBackStack(null)
                     .commit()
             }
