@@ -3,7 +3,7 @@ package com.example.becast.mine.ui.radioList
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
-import com.example.becast.data.radioListDb.RadioListData
+import com.example.becast.data.radioList.RadioListData
 import com.example.becast.unit.data.radioDb.RadioData
 import com.example.becast.unit.data.radioDb.RadioDatabase
 

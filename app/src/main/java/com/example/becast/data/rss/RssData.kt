@@ -1,4 +1,4 @@
-package com.example.becast.data.rssDB
+package com.example.becast.data.rss
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

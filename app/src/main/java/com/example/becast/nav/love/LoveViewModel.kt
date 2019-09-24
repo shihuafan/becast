@@ -1,9 +1,8 @@
-package com.example.becast.mine.ui.love
+package com.example.becast.nav.love
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
-import com.example.becast.nav.love.LoveModel
 import com.example.becast.unit.data.radioDb.RadioData
 import com.example.becast.unit.data.radioDb.RadioDatabase
 import java.lang.Exception

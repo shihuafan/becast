@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.data.radioListDb.RadioListData
+import com.example.becast.data.radioList.RadioListData
 
 
 class PageAdapter (private val context: Context, private val mData : MutableList<RadioListData>, private val handler:Handler) : RecyclerView.Adapter<PageAdapter.ViewHolder>() {

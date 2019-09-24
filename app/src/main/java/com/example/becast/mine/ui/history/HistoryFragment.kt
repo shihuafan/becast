@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.becast.R
 import com.example.becast.service.RadioService
 import com.example.becast.unit.data.radioDb.RadioData
-import com.example.becast.mine.ui.RadioAdapter
+import com.example.becast.mine.ui.unit.RadioAdapter
 import com.example.becast.playpage.PlayPageFragment
 import kotlinx.android.synthetic.main.frag_history.view.*
 
-class HistoryFragment() :Fragment(), View.OnClickListener {
+class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), View.OnClickListener {
     private lateinit var historyViewModel:HistoryViewModel
-    private lateinit var mBinder: RadioService.LocalBinder
+
     private val mHandler : Handler = Handler{
         when(it.what){
             0x101->{
@@ -47,7 +47,6 @@ class HistoryFragment() :Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view= inflater.inflate(R.layout.frag_history, container, false)
 
-        mBinder= this.arguments!!.getBinder("service") as RadioService.LocalBinder
         historyViewModel= context?.let { HistoryViewModel(it) }!!
 
         view.list_history.layoutManager = LinearLayoutManager(context)

@@ -3,7 +3,7 @@ package com.example.becast.unit.data.rssDB
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.becast.data.rssDB.RssData
+import com.example.becast.data.rss.RssData
 
 @Database(entities = [RssData::class], version = 1)
 abstract class RssDatabase : RoomDatabase() {

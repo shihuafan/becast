@@ -1,6 +1,5 @@
 package com.example.becast.playpage
 
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -13,7 +12,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.becast.R
@@ -21,7 +19,6 @@ import com.example.becast.data.ShareData
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_playpage.*
 import kotlinx.android.synthetic.main.frag_playpage.view.*
-import okio.HashingSource.md5
 import java.util.*
 
 
@@ -32,7 +29,9 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
     private var flag=false
     private var shareData=ShareData(0,0,"")
     private val mHandler: Handler = Handler{
-        setView()
+        if(!mBinder.radioItemEmpty()){
+            setView()
+        }
         if(flag){
             text_play_end_time.text=playPageViewModel.timeToStr(mBinder.getRadioCurrentPosition()/1000)
         }
@@ -42,7 +41,6 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_playpage, container, false)
 
-        context?.let { Glide.with(it).load(Uri.parse(mBinder.getRadioItem().imageUri)).into(v.image_play_show) }
         val rotate0= AnimationUtils.loadAnimation(context, R.anim.rotate0)
         v.layout_pin.visibility=View.GONE
         v.image_play_loading.startAnimation(rotate0)
@@ -58,7 +56,7 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
                     v.layout_pin.visibility=View.VISIBLE
                     flag=true
                     shareData.startTime=mBinder.getRadioCurrentPosition()
-                    shareData.radioUri=mBinder.getRadioItem().radioUri
+                    shareData.radioUri= mBinder.getRadioItem().radioUri
                     text_play_start_time.text=playPageViewModel.timeToStr(shareData.startTime/1000)
 
                     val translateAnimation = TranslateAnimation(0F, -300F, 0F, 0f)
@@ -109,8 +107,9 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
     }
 
     private fun setView(){
-        v.text_play_title.text=mBinder.getRadioItem().title
-        v.text_play_rsstitle.text=mBinder.getRadioItem().rssTitle
+        context?.let { Glide.with(it).load(Uri.parse(mBinder.getRadioItem().imageUri)).into(v.image_play_show) }
+        v.text_play_title.text= mBinder.getRadioItem().title
+        v.text_play_rsstitle.text= mBinder.getRadioItem().rssTitle
         v.seekBar_play.max=mBinder.getRadioDuration()
         v.seekBar_play.progress = mBinder.getRadioCurrentPosition()
         v.text_play_duration.text= mBinder.getRadioItem().duration
@@ -152,13 +151,9 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
         mBinder.seekRadioTo(v.seekBar_play.progress)
     }
 
-    override fun onStartTrackingTouch(seekBar: SeekBar?) {
+    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-    }
-
-    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-
-    }
+    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
 
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         return if (enter) {

@@ -7,6 +7,7 @@ import com.example.becast.R
 
 class ShareDialog(context: Context) {
 
+
     init{
         val inflater: LayoutInflater = LayoutInflater.from(context)        //引用自定义dialog布局
         val view = inflater.inflate(R.layout.dialog_datil, null)

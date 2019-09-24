@@ -1,4 +1,4 @@
-package com.example.becast.data.radioListDb
+package com.example.becast.data.radioList
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

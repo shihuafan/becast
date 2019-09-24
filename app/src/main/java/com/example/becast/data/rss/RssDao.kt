@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.becast.data.rssDB.RssData
+import com.example.becast.data.rss.RssData
 
 @Dao
 interface RssDao {

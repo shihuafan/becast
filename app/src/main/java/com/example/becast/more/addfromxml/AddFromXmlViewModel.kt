@@ -1,16 +1,14 @@
-package com.example.becast.mine.ui.addfromxml
+package com.example.becast.more.addfromxml
 
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
-import android.os.Message
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.example.becast.unit.data.radioDb.RadioData
 import com.example.becast.unit.data.radioDb.RadioDatabase
-import com.example.becast.data.rssDB.RssData
+import com.example.becast.data.rss.RssData
+import com.example.becast.mine.ui.addfromxml.AddFromXmlModel
 import org.w3c.dom.Element
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,18 +24,11 @@ class AddFromXmlViewModel(val context: Context, val url:String) {
         getInfoFromXml()
     }
 
-    fun subscribeAll(){
+    fun subscribeAll(handler:Handler){
         val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
             .build()
 
         val mDao=db.radioDao()
-        val mHandler: Handler = @SuppressLint("HandlerLeak")
-        object : Handler() {
-            override fun handleMessage(msg: Message) {
-                Toast.makeText(context,"订阅成功", Toast.LENGTH_SHORT).show()
-
-            }
-        }
         object : Thread() {
             override fun run() {
                 for(item : RadioData in addFromXmlModel.list){
@@ -46,22 +37,19 @@ class AddFromXmlViewModel(val context: Context, val url:String) {
                     }catch (e:Exception){}
                 }
                 db.close()
-                mHandler.sendEmptyMessage(0x000)
+                handler.sendEmptyMessage(0x000)
             }
         }.start()
     }
 
-    private fun getInfoFromXml(){
-        object : Thread() {
-            override fun run() {
-              //  val url="https://getpodcast.xyz/data/ximalaya/3558668.xml"
-                addFromXmlModel.rssData=getRssFromXml(url)
-                getListFromXml(addFromXmlModel.rssData,addFromXmlModel.list)
-                addFromXmlModelLiveData.postValue(addFromXmlModel)
-            }
-        }.start()
-
-    }
+    private fun getInfoFromXml() = object : Thread() {
+        override fun run() {
+            /* val url="https://getpodcast.xyz/data/ximalaya/3558668.xml" */
+            addFromXmlModel.rssData=getRssFromXml(url)
+            getListFromXml(addFromXmlModel.rssData,addFromXmlModel.list)
+            addFromXmlModelLiveData.postValue(addFromXmlModel)
+        }
+    }.start()
 
     private fun getListFromXml(rss: RssData, list:MutableList<RadioData>){
         val url=rss.rssUri

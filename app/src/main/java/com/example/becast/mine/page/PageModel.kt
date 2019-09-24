@@ -1,6 +1,6 @@
 package com.example.becast.mine.page
 
-import com.example.becast.data.radioListDb.RadioListData
+import com.example.becast.data.radioList.RadioListData
 
 class PageModel{
 

@@ -1,9 +1,8 @@
-package com.example.becast.mine.ui
+package com.example.becast.mine.ui.unit
 
 import android.content.Context
 import android.net.Uri
 import android.os.Handler
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.unit.data.radioDb.RadioData
-import com.example.becast.mine.ui.unit.DetailDialog
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class RadioAdapter (private val context: Context, private val mData : MutableList<RadioData>,
@@ -38,7 +38,7 @@ class RadioAdapter (private val context: Context, private val mData : MutableLis
             .into(holder.imageItemShow)
 
         holder.textItemTitle.text=mData[position].title
-        holder.textItemDate.text=mData[position].pubDate
+        holder.textItemDate.text=getDateString(mData[position].upDate)
 
         holder.btnItem.setOnClickListener {
            DetailDialog(mData[position], context, handler)
@@ -52,6 +52,17 @@ class RadioAdapter (private val context: Context, private val mData : MutableLis
         val textItemDate:TextView=view.findViewById(R.id.text_item_radio_describe)
 
     }
+
+    private fun getDateString(update:Long):String{
+        val date= Date(update)
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        return try {
+            sdf.format(date)
+        } catch (e: Exception) {
+            ""
+        }
+    }
+
 
 }
 

@@ -12,8 +12,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.data.radioListDb.RadioListData
-import com.example.becast.mine.ui.RadioAdapter
+import com.example.becast.data.radioList.RadioListData
+import com.example.becast.mine.ui.unit.RadioAdapter
 import com.example.becast.service.RadioService
 import com.example.becast.unit.data.radioDb.RadioData
 import com.example.becast.playpage.PlayPageFragment
@@ -21,10 +21,9 @@ import kotlinx.android.synthetic.main.frag_radio_list.*
 import kotlinx.android.synthetic.main.frag_radio_list.view.*
 import java.lang.Exception
 
-class RadioListFragment(private val radioListData: RadioListData) : Fragment(), View.OnClickListener {
+class RadioListFragment(private var mBinder: RadioService.LocalBinder,private val radioListData: RadioListData) : Fragment(), View.OnClickListener {
 
     private lateinit var radioListViewModel: RadioListViewModel
-    private lateinit var mBinder: RadioService.LocalBinder
     private val mHandler : Handler = Handler{
         when(it.what){
             0x103 ->{
@@ -38,7 +37,7 @@ class RadioListFragment(private val radioListData: RadioListData) : Fragment(), 
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view= inflater.inflate(R.layout.frag_radio_list, container, false)
-        mBinder= this.arguments!!.getBinder("service") as RadioService.LocalBinder
+
         radioListViewModel= context?.let { RadioListViewModel(it,radioListData) }!!
         view.list_radio_list.layoutManager = LinearLayoutManager(context)
         view.list_radio_list.adapter = context?.let {

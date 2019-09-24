@@ -3,8 +3,8 @@ package com.example.becast.mine.page
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
-import com.example.becast.data.radioListDb.RadioListData
-import com.example.becast.data.radioListDb.RadioListDatabase
+import com.example.becast.data.radioList.RadioListData
+import com.example.becast.data.radioList.RadioListDatabase
 import java.util.*
 
 class PageViewModel(private val context: Context) {

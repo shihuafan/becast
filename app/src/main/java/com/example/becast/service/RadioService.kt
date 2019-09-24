@@ -5,7 +5,6 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
 import android.widget.Toast
@@ -19,12 +18,12 @@ class RadioService : Service() {
     private val mBinder = LocalBinder()
     private val mediaPlayer = MediaPlayer()
     private var list : MutableList<RadioData> = mutableListOf()
-    private var position=0
 
     internal interface MIBinder {
         fun playRadio(item: RadioData)
+        fun radioItemEmpty():Boolean
         fun setRadioList(list:MutableList<RadioData>)
-        fun getRadioItem():RadioData
+        fun getRadioItem(): RadioData
         fun addRadioItem(item:RadioData)
         fun getRadioList():MutableList<RadioData>
         fun playPreRadio()
@@ -38,6 +37,7 @@ class RadioService : Service() {
 
     inner class LocalBinder : Binder() , MIBinder {
         override fun playRadio(item: RadioData){ play(item) }
+        override fun radioItemEmpty():Boolean{return itemEmpty()}
         override fun setRadioList(list: MutableList<RadioData>){ setList(list) }
         override fun getRadioItem():RadioData{ return getItem() }
         override fun addRadioItem(item:RadioData){addItem(item)}
@@ -85,12 +85,11 @@ class RadioService : Service() {
         mediaPlayer.reset()
         //重置mediaPlayer对象，防止切换时异常
         addToHistory(item,this)
-//        try {
-//            mediaPlayer.setDataSource(url)
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//        }
-        mediaPlayer.setDataSource(url)
+        try {
+            mediaPlayer.setDataSource(url)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
         //异步准备，准备完成播放
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
@@ -106,6 +105,10 @@ class RadioService : Service() {
         }
     }
 
+
+    fun itemEmpty():Boolean{
+        return list.size<=0
+    }
     fun setList(list:MutableList<RadioData>){
         this.list=list
     }
@@ -125,12 +128,13 @@ class RadioService : Service() {
     }
 
     fun getItem():RadioData{
-        return list[position]
+        return list[0]
     }
 
     fun addItem(item:RadioData){
         list.add(item)
     }
+
     fun getDuration(): Int {
         return mediaPlayer.duration
     }

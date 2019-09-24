@@ -14,29 +14,34 @@
         android:id="@+id/btn_mav_personal_center">
 
         <ImageView
+            android:id="@+id/image_nav_show"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="50dp"
-            android:background="@drawable/list_icon"
             android:scaleType="centerCrop"/>
 
         <TextView
+            android:id="@+id/text_nav_uid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="110dp"
-            android:text="name"/>
+            android:layout_marginTop="110dp"/>
 
         <TextView
+            android:id="@+id/text_nav_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="140dp"
-            android:text="uid"/>
+            android:layout_marginTop="140dp"/>
 
-
-
+        <Button
+            android:id="@+id/btn_nav_login"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="50dp"
+            android:background="#00000000"/>
     </RelativeLayout>
 
     <View
@@ -51,7 +56,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/btn_nav_firstpage">
+        android:id="@+id/layout_nav_firstpage">
 
         <ImageView
             android:layout_width="30dp"
@@ -95,7 +100,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/brn_nav_love">
+        android:id="@+id/layout_nav_love">
 
         <ImageView
             android:layout_width="30dp"
@@ -139,7 +144,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/brn_nav_about">
+        android:id="@+id/layout_nav_about">
 
         <ImageView
             android:layout_width="30dp"

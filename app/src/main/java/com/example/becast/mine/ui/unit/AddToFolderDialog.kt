@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.becast.R
-import com.example.becast.data.radioListDb.RadioListData
-import com.example.becast.data.radioListDb.RadioListDatabase
+import com.example.becast.data.radioList.RadioListData
+import com.example.becast.data.radioList.RadioListDatabase
 import com.example.becast.unit.data.radioDb.RadioData
 import com.example.becast.mine.page.PageAdapter
 import kotlinx.android.synthetic.main.dialog_add_to_folder.view.*

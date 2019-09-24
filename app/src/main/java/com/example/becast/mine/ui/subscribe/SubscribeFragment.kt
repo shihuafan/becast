@@ -12,14 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.becast.R
 import com.example.becast.service.RadioService
 import com.example.becast.unit.data.radioDb.RadioData
-import com.example.becast.mine.ui.RadioAdapter
+import com.example.becast.mine.ui.unit.RadioAdapter
 import com.example.becast.playpage.PlayPageFragment
 import kotlinx.android.synthetic.main.frag_subscribe.view.*
 
-class SubscribeFragment : Fragment(){
+class SubscribeFragment(private var mBinder: RadioService.LocalBinder) : Fragment(){
 
     private lateinit var subscribeViewModel: SubscribeViewModel
-    private lateinit var mBinder: RadioService.LocalBinder
     private val mHandler : Handler = Handler{
         when(it.what){
             0x101->{
@@ -45,7 +44,7 @@ class SubscribeFragment : Fragment(){
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view= inflater.inflate(R.layout.frag_subscribe, container, false)
-        mBinder= this.arguments!!.getBinder("service") as RadioService.LocalBinder
+
         subscribeViewModel= context?.let { SubscribeViewModel(it) }!!
 
         view.list_subscribe.layoutManager = LinearLayoutManager(context)

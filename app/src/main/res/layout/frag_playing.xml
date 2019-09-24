@@ -16,46 +16,45 @@
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ffffff"
-                android:padding="10dp">
+                android:background="#ffffff">
 
             <ImageView
                     android:id="@+id/image_playing_show"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="#eeeeee"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
                     tools:ignore="ContentDescription"
-                    android:scaleType="centerCrop"/>
+                    android:scaleType="centerCrop" />
 
-            <TextView
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="80dp"
+                android:layout_centerVertical="true"
+                android:padding="5dp">
+
+                <TextView
                     android:id="@+id/text_playing_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="80dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="80dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="10dp"
                     android:text="BeCast"
                     android:textSize="12sp"
                     android:singleLine="true"
                     tools:ignore="RtlHardcoded"/>
 
-            <TextView
+                <TextView
                     android:id="@+id/text_playing_rsstitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="80dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="5dp"
                     android:gravity="left|center_vertical"
                     android:text="BeCast"
                     android:textSize="10sp"
                     android:singleLine="true"
                     tools:ignore="RtlHardcoded"/>
 
+            </LinearLayout>
 
             <Button
                     android:id="@+id/btn_playing_page"
@@ -70,17 +69,8 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="40dp"
+                    android:layout_marginEnd="30dp"
                     android:background="@drawable/play"
-                    android:layout_centerVertical="true"/>
-
-            <Button
-                    android:id="@+id/btn_playing_list"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/list"
                     android:layout_centerVertical="true"/>
 
         </RelativeLayout>
