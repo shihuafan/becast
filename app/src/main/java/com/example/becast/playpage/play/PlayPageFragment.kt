@@ -46,6 +46,7 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
         val rotate0= AnimationUtils.loadAnimation(context, R.anim.rotate0)
         v.layout_pin.visibility=View.GONE
         v.image_play_loading.startAnimation(rotate0)
+        v.btn_play_back.setOnClickListener(this)
         v.btn_play_pre.setOnClickListener(this)
         v.btn_play_pause.setOnClickListener(this)
         v.btn_play_next.setOnClickListener(this)
@@ -132,6 +133,9 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
 
     override fun onClick(v: View?) {
         when(v!!.id){
+            R.id.btn_play_back->{
+                activity?.onBackPressed()
+            }
             R.id.btn_play_pre->{
                 mBinder.playPreRadio()
             }

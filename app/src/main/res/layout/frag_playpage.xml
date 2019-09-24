@@ -14,12 +14,20 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:gravity="center">
+            android:layout_height="160dp">
+
+            <Button
+                android:id="@+id/btn_play_back"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/down"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginTop="50dp"
                 android:orientation="vertical"
                 tools:ignore="UselessParent">
 
