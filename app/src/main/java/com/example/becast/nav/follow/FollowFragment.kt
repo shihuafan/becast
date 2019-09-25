@@ -15,8 +15,9 @@ import com.example.becast.data.rss.RssData
 import com.example.becast.mine.ui.unit.RadioAdapter
 import kotlinx.android.synthetic.main.frag_follow.view.*
 import kotlinx.android.synthetic.main.frag_love.view.*
+import kotlinx.android.synthetic.main.layout_nav.view.*
 
-class FollowFragment:Fragment() {
+class FollowFragment:Fragment(), View.OnClickListener {
 
     private lateinit var followViewModel:FollowViewModel
     private val mHandler= Handler{
@@ -40,6 +41,17 @@ class FollowFragment:Fragment() {
         followViewModel.followModelLiveData.observe(this, Observer{
             view.list_follow.adapter?.notifyDataSetChanged()
         })
+
+        view.btn_follow_back.setOnClickListener(this)
+        view.layout_follow.setOnClickListener(this)
         return view
+    }
+
+    override fun onClick(v: View?) {
+        when(v!!.id){
+            R.id.btn_follow_back->{
+                activity?.onBackPressed()
+            }
+        }
     }
 }

@@ -84,7 +84,7 @@ class RadioService : Service() {
         val url=item.radioUri
         mediaPlayer.reset()
         //重置mediaPlayer对象，防止切换时异常
-        addToHistory(item,this)
+        addToHistory(item)
         try {
             mediaPlayer.setDataSource(url)
         } catch (e: IOException) {
@@ -93,7 +93,6 @@ class RadioService : Service() {
         //异步准备，准备完成播放
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            Toast.makeText(this,"即在完成",Toast.LENGTH_SHORT).show()
             mediaPlayer.start()
         }
         mediaPlayer.setOnCompletionListener {
@@ -117,9 +116,8 @@ class RadioService : Service() {
         return list
     }
 
-    private fun addToHistory(item: RadioData, context: Context) {
-
-        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "result")
+    private fun addToHistory(item: RadioData) {
+        val db = Room.databaseBuilder(this, RadioDatabase::class.java, "radio")
             .allowMainThreadQueries()
             .build()
         val mDao=db.radioDao()

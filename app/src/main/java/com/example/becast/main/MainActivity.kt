@@ -9,7 +9,9 @@ import android.os.Handler
 import android.os.IBinder
 import android.view.Gravity
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -26,6 +28,7 @@ import com.example.becast.mine.ui.subscribe.SubscribeFragment
 import com.example.becast.mine.page.PageFragment
 import com.example.becast.nav.about.AboutFragment
 import com.example.becast.nav.follow.FollowFragment
+import com.example.becast.nav.setting.SettingFragment
 import com.example.becast.nav.user.login.LoginFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_main.*
@@ -36,21 +39,49 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var conn : MyConnection
     internal lateinit var mBinder: RadioService.LocalBinder
-    private val mainViewModel=MainViewModel(this)
 
     private val mHandler : Handler = Handler{
-        lateinit var fg:Fragment
         when(it.what){
-            0x001->{ fg= SubscribeFragment(mBinder) }
-            0x002->{ fg= LoveFragment(mBinder) }
-            0x003->{ fg= HistoryFragment(mBinder) }
-            0x004->{ fg= RadioListFragment(mBinder,it.obj as RadioListData) }
-            0x005->{ fg= AddFromXmlFragment(mBinder,it.obj.toString()) }
+            0x001->{
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_main_top,SubscribeFragment(mBinder))
+                .addToBackStack(null)
+                .commit()
+            }
+            0x002->{
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_main_top,LoveFragment(mBinder))
+                .addToBackStack(null)
+                .commit()
+            }
+            0x003->{
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_main_top,HistoryFragment(mBinder))
+                .addToBackStack(null)
+                .commit()
+            }
+            0x004->{
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_main_top,RadioListFragment(mBinder,it.obj as RadioListData))
+                .addToBackStack(null)
+                .commit()
+            }
+            0x005->{
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_main_top,AddFromXmlFragment(mBinder,it.obj.toString()))
+                .addToBackStack(null)
+                .commit()
+            }
+            0x006->{
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            }
         }
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.layout_main_top,fg)
-            .addToBackStack(null)
-            .commit()
+
         false
     }
 
@@ -59,6 +90,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         val list: MutableList<Fragment> = mutableListOf()
         list.add(PageFragment(mHandler))
         list.add(PageFragment(mHandler))
@@ -88,9 +120,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         layout_nav_firstpage.setOnClickListener(this)
         layout_nav_follow.setOnClickListener(this)
         layout_nav_love.setOnClickListener(this)
+        layout_nav_setting.setOnClickListener(this)
         layout_nav_about.setOnClickListener(this)
         btn_nav_login.setOnClickListener(this)
-
 
     }
 
@@ -134,14 +166,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btn_nav_night->{
                 btn_nav_night.isChecked = !btn_nav_night.isChecked
             }
+            R.id.layout_nav_setting->{
+                layout_drawer.closeDrawer(Gravity.START)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.layout_main_all, SettingFragment ())
+                    .addToBackStack(null)
+                    .commit()
+            }
             R.id.layout_nav_about->{
                 layout_drawer.closeDrawer(Gravity.START)
-                if(UserData.uid==0){
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.layout_main_all, AboutFragment ())
-                        .addToBackStack(null)
-                        .commit()
-                }
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.layout_main_all, AboutFragment ())
+                    .addToBackStack(null)
+                    .commit()
+
+
             }
         }
     }

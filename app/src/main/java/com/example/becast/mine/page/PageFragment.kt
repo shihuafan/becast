@@ -6,6 +6,8 @@ import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -69,4 +71,18 @@ class PageFragment(private val handler: Handler) : Fragment(), View.OnClickListe
             }
         }
     }
+
+    override fun onResume() {
+        val msg=Message()
+        msg.what=0x006
+        handler.sendMessage(msg)
+        Toast.makeText(context,"onresume",Toast.LENGTH_LONG).show()
+        super.onResume()
+    }
+
+    override fun onStart() {
+        Toast.makeText(context,"onStart",Toast.LENGTH_LONG).show()
+        super.onStart()
+    }
+
 }

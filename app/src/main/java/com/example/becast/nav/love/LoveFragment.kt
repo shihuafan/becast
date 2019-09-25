@@ -60,6 +60,7 @@ class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), V
             view.list_love.adapter?.notifyDataSetChanged()
         })
 
+        view.layout_love.setOnClickListener(this)
         view.btn_love_back.setOnClickListener(this)
 
         return view
@@ -68,6 +69,7 @@ class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), V
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.btn_love_back->{
+                activity?.onBackPressed()
             }
         }
     }

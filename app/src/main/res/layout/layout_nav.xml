@@ -150,7 +150,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/brn_nav_setting">
+        android:id="@+id/layout_nav_setting">
 
         <ImageView
             android:layout_width="30dp"

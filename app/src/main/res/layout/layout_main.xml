@@ -24,7 +24,9 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp">
+                    android:layout_height="60dp"
+                    android:background="#fff"
+                    android:elevation="5dp">
 
                     <Button
                         android:id="@+id/btn_main_nav"
@@ -86,6 +88,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:background="#00000000"
                         android:textColor="#000"
                         android:text="本地"/>
@@ -94,6 +97,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:background="#00000000"
                         android:textColor="@android:color/darker_gray"
                         android:text="探索"/>

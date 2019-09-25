@@ -39,7 +39,6 @@ class RadioAdapter (private val context: Context, private val mData : MutableLis
 
         holder.textItemTitle.text=mData[position].title
         holder.textItemDate.text=getDateString(mData[position].upDate)
-
         holder.btnItem.setOnClickListener {
            DetailDialog(mData[position], context, handler)
         }
