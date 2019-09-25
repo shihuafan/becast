@@ -1,4 +1,4 @@
-package com.example.becast.mine.ui.addfromxml
+package com.example.becast.more.addfromxml
 
 import com.example.becast.unit.data.radioDb.RadioData
 import com.example.becast.data.rss.RssData

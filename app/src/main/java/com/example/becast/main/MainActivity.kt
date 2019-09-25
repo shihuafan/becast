@@ -18,13 +18,14 @@ import com.example.becast.R
 import com.example.becast.data.radioList.RadioListData
 import com.example.becast.data.user.UserData
 import com.example.becast.service.RadioService
-import com.example.becast.mine.ui.addfromxml.AddFromXmlFragment
+import com.example.becast.more.addfromxml.AddFromXmlFragment
 import com.example.becast.mine.ui.history.HistoryFragment
 import com.example.becast.nav.love.LoveFragment
 import com.example.becast.mine.ui.radioList.RadioListFragment
 import com.example.becast.mine.ui.subscribe.SubscribeFragment
 import com.example.becast.mine.page.PageFragment
 import com.example.becast.nav.about.AboutFragment
+import com.example.becast.nav.follow.FollowFragment
 import com.example.becast.nav.user.login.LoginFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_main.*
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             0x002->{ fg= LoveFragment(mBinder) }
             0x003->{ fg= HistoryFragment(mBinder) }
             0x004->{ fg= RadioListFragment(mBinder,it.obj as RadioListData) }
-            0x005->{ fg= AddFromXmlFragment(it.obj.toString()) }
+            0x005->{ fg= AddFromXmlFragment(mBinder,it.obj.toString()) }
         }
         supportFragmentManager.beginTransaction()
             .replace(R.id.layout_main_top,fg)
@@ -85,6 +86,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btn_nav_night.setOnClickListener(this)
         layout_nav.setOnClickListener(this)
         layout_nav_firstpage.setOnClickListener(this)
+        layout_nav_follow.setOnClickListener(this)
         layout_nav_love.setOnClickListener(this)
         layout_nav_about.setOnClickListener(this)
         btn_nav_login.setOnClickListener(this)
@@ -113,6 +115,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.layout_nav_firstpage->{
                 layout_drawer.setBackgroundColor(0xf2f2f2)
                 layout_drawer.closeDrawer(Gravity.START)
+            }
+            R.id.layout_nav_follow->{
+                layout_drawer.closeDrawer(Gravity.START)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.layout_main_all, FollowFragment())
+                    .addToBackStack(null)
+                    .commit()
             }
             R.id.layout_nav_love->{
                 layout_drawer.closeDrawer(Gravity.START)

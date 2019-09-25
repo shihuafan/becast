@@ -29,7 +29,7 @@ class PageFragment(private val handler: Handler) : Fragment(), View.OnClickListe
 
         view.list_page.layoutManager = LinearLayoutManager(context)
         view.list_page.adapter = context?.let {
-            PageAdapter(it, pageViewModel.pageModel.radioList, mHandler
+            PageAdapter(it, pageViewModel.list, mHandler
             )
         }
         pageViewModel.pageModelLiveData.observe(this, Observer{

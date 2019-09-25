@@ -10,16 +10,16 @@ import java.util.*
 
 class HistoryViewModel(private val context:Context) {
 
-    private var historyModel=HistoryModel()
-    val historyModelLiveData: MutableLiveData<HistoryModel> = MutableLiveData()
+    private var list : MutableList<RadioData> = mutableListOf()
+    val historyModelLiveData: MutableLiveData<MutableList<RadioData>> = MutableLiveData()
     init {
-        historyModelLiveData.value=historyModel
+        historyModelLiveData.value=list
         val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
             .allowMainThreadQueries()
             .build()
         val mDao=db.radioDao()
-        historyModel.list =mDao.getHistory() as MutableList<RadioData>
-        historyModelLiveData.postValue(historyModel)
+        list =mDao.getHistory() as MutableList<RadioData>
+        historyModelLiveData.value=list
         db.close()
     }
     fun addToRadioList(radioData: RadioData):Boolean{
@@ -56,13 +56,13 @@ class HistoryViewModel(private val context:Context) {
             .allowMainThreadQueries()
             .build()
         val mDao=db.radioDao()
-        for(item in historyModel.list){
+        for(item in list){
             item.historyTime=0
             mDao.updateItem(item)
         }
         db.close()
-        historyModel.list.clear()
-        historyModelLiveData.postValue(historyModel)
+        list.clear()
+        historyModelLiveData.postValue(list)
 
 
     }

@@ -53,7 +53,7 @@ class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment()
 
         view.list_history.layoutManager = LinearLayoutManager(context)
         view.list_history.adapter = context?.let {
-            RadioAdapter(it,historyViewModel.historyModelLiveData.value!!.list, mHandler)
+            RadioAdapter(it,historyViewModel.historyModelLiveData.value!!, mHandler)
         }
 
         //更新列表
@@ -61,6 +61,7 @@ class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment()
             view.list_history.adapter?.notifyDataSetChanged()
         })
 
+        view.layout_history.setOnClickListener(this)
         view.btn_history_back.setOnClickListener(this)
         view.btn_history_clear.setOnClickListener(this)
 
@@ -70,6 +71,7 @@ class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment()
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.btn_history_back->{
+                activity?.onBackPressed()
             }
             R.id.btn_history_clear->{
                 historyViewModel.clearList()

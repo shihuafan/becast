@@ -1,4 +1,4 @@
-package com.example.becast.mine.ui.addfromxml
+package com.example.becast.more.addfromxml
 
 import android.os.Bundle
 import android.os.Handler
@@ -15,17 +15,16 @@ import com.example.becast.R
 import com.example.becast.service.RadioService
 import com.example.becast.unit.data.radioDb.RadioData
 import com.example.becast.mine.ui.unit.RadioAdapter
-import com.example.becast.more.addfromxml.AddFromXmlViewModel
 import com.example.becast.playpage.play.PlayPageFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_add_from_xml.*
 import kotlinx.android.synthetic.main.frag_add_from_xml.view.*
 
-class AddFromXmlFragment(private val url:String) : Fragment(), View.OnClickListener {
+class AddFromXmlFragment(private var mBinder: RadioService.LocalBinder,private val url:String) : Fragment(), View.OnClickListener {
 
     private lateinit var addFromXmlViewModel: AddFromXmlViewModel
     private lateinit var v: View
-    private lateinit var mBinder: RadioService.LocalBinder
+
     private val mHandler : Handler = Handler{
         when(it.what){
             0x103 ->{
@@ -42,7 +41,6 @@ class AddFromXmlFragment(private val url:String) : Fragment(), View.OnClickListe
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_add_from_xml, container, false)
 
-        mBinder= this.arguments!!.getBinder("service") as RadioService.LocalBinder
         addFromXmlViewModel= context?.let { AddFromXmlViewModel(it,url) }!!
 
         v.list_add_from_xml.layoutManager = LinearLayoutManager(context)
@@ -61,12 +59,17 @@ class AddFromXmlFragment(private val url:String) : Fragment(), View.OnClickListe
             }catch (e:Exception){}
         })
 
+        v.layout_add_from_xml.setOnClickListener(this)
+        v.btn_add_from_xml_back.setOnClickListener(this)
         v.btn_add_from_xml_subscribe.setOnClickListener(this)
         return v
     }
 
     override fun onClick(v: View?) {
         when(v?.id){
+            R.id.btn_add_from_xml_back->{
+                activity?.onBackPressed()
+            }
             R.id.btn_add_from_xml_subscribe->{
                 val handler = Handler{
                     Snackbar.make(v, "订阅成功", Snackbar.LENGTH_SHORT).show()

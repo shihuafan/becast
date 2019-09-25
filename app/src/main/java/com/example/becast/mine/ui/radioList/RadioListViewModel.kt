@@ -10,18 +10,17 @@ import com.example.becast.unit.data.radioDb.RadioDatabase
 
 class RadioListViewModel(context: Context,radioListData: RadioListData) {
 
-    val radioListModel: RadioListModel = RadioListModel()
-    val radioListModelLiveData: MutableLiveData<RadioListModel> = MutableLiveData()
+    var list : MutableList<RadioData> = mutableListOf()
+    val radioListModelLiveData: MutableLiveData<MutableList<RadioData>> = MutableLiveData()
     init {
-        radioListModel.radioListData=radioListData
-        radioListModelLiveData.value=radioListModel
+        radioListModelLiveData.value=list
         val db= Room.databaseBuilder(context, RadioDatabase::class.java,"radio")
             .allowMainThreadQueries()
             .build()
         val mDao=db.radioDao()
-        radioListModel.list=mDao.getRadioList(radioListModel.radioListData.id) as MutableList<RadioData>
+        list=mDao.getRadioList(radioListData.id) as MutableList<RadioData>
         db.close()
-        radioListModelLiveData.postValue(radioListModel)
+        radioListModelLiveData.value=list
     }
 
 }

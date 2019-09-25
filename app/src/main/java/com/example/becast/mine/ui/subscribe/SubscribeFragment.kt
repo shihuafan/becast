@@ -16,7 +16,8 @@ import com.example.becast.mine.ui.unit.RadioAdapter
 import com.example.becast.playpage.play.PlayPageFragment
 import kotlinx.android.synthetic.main.frag_subscribe.view.*
 
-class SubscribeFragment(private var mBinder: RadioService.LocalBinder) : Fragment(){
+class SubscribeFragment(private var mBinder: RadioService.LocalBinder) : Fragment(),
+    View.OnClickListener {
 
     private lateinit var subscribeViewModel: SubscribeViewModel
     private val mHandler : Handler = Handler{
@@ -51,7 +52,7 @@ class SubscribeFragment(private var mBinder: RadioService.LocalBinder) : Fragmen
 
         view.list_subscribe.layoutManager = LinearLayoutManager(context)
         view.list_subscribe.adapter = context?.let {
-            RadioAdapter(it,subscribeViewModel.subscribeModelLiveData.value!!.list, mHandler)
+            RadioAdapter(it,subscribeViewModel.subscribeModelLiveData.value!!, mHandler)
         }
 
         //更新列表
@@ -59,7 +60,18 @@ class SubscribeFragment(private var mBinder: RadioService.LocalBinder) : Fragmen
             view.list_subscribe.adapter?.notifyDataSetChanged()
         })
 
+        view.layout_subscribe.setOnClickListener(this)
+        view.btn_subscribe_back.setOnClickListener(this)
         return view
     }
 
+
+    override fun onClick(v: View?) {
+        when(v!!.id){
+            R.id.btn_subscribe_back->{
+                activity?.onBackPressed()
+            }
+
+        }
+    }
 }

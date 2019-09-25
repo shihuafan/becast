@@ -14,13 +14,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.mine.ui.unit.DetailDialog
-import com.example.becast.mine.ui.unit.RadioAdapter
-import com.example.becast.unit.data.radioDb.RadioData
-import java.text.SimpleDateFormat
-import java.util.*
+import com.example.becast.data.rss.RssData
 
-class FollowAdapter (private val context: Context, private val mData : MutableList<RadioData>,
+class FollowAdapter (private val context: Context, private val mData : MutableList<RssData>,
                      private val handler: Handler)
     : RecyclerView.Adapter<FollowAdapter.ViewHolder>() {
 
@@ -41,15 +37,13 @@ class FollowAdapter (private val context: Context, private val mData : MutableLi
 
         holder.textItemTitle.text=mData[position].title
 
-        holder.btnItem.setOnClickListener {
-            DetailDialog(mData[position], context, handler)
-        }
+
     }
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
-        val btnItem : Button = view.findViewById(R.id.btn_item_radio)
-        val imageItemShow: ImageView = view.findViewById(R.id.image_item_radio_show)
-        val textItemTitle: TextView = view.findViewById(R.id.text_item_radio_title)
+        val btnItem : Button = view.findViewById(R.id.btn_item_follow)
+        val imageItemShow: ImageView = view.findViewById(R.id.image_item_follow)
+        val textItemTitle: TextView = view.findViewById(R.id.text_item_follow)
 
     }
 }

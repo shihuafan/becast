@@ -10,17 +10,17 @@ import java.util.*
 
 class SubscribeViewModel(private val context: Context) {
 
-    private val subscribeModel: SubscribeModel = SubscribeModel()
-    val subscribeModelLiveData: MutableLiveData<SubscribeModel> = MutableLiveData()
+    var list : MutableList<RadioData> = mutableListOf()
+    val subscribeModelLiveData: MutableLiveData<MutableList<RadioData>> = MutableLiveData()
 
     init {
-        subscribeModelLiveData.value=subscribeModel
+        subscribeModelLiveData.value=list
         val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
             .allowMainThreadQueries()
             .build()
         val mDao=db.radioDao()
-        subscribeModel.list =mDao.getAll() as MutableList<RadioData>
-        subscribeModelLiveData.postValue(subscribeModel)
+        list =mDao.getAll() as MutableList<RadioData>
+        subscribeModelLiveData.value=list
         db.close()
 //        object : Thread() {
 //            override fun run() {

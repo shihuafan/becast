@@ -8,7 +8,7 @@ import androidx.room.Room
 import com.example.becast.unit.data.radioDb.RadioData
 import com.example.becast.unit.data.radioDb.RadioDatabase
 import com.example.becast.data.rss.RssData
-import com.example.becast.mine.ui.addfromxml.AddFromXmlModel
+import com.example.becast.unit.data.rssDB.RssDatabase
 import org.w3c.dom.Element
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,21 +24,36 @@ class AddFromXmlViewModel(val context: Context, val url:String) {
         getInfoFromXml()
     }
 
-    fun subscribeAll(handler:Handler){
-        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-            .build()
-        val mDao=db.radioDao()
+    fun subscribeAll(handler: Handler){
         object : Thread() {
             override fun run() {
-                for(item : RadioData in addFromXmlModel.list){
-                    try{
-                        mDao.insert(item)
-                    }catch (e:Exception){}
-                }
-                db.close()
+                subscribeRadio()
+                subscribeRss()
                 handler.sendEmptyMessage(0x000)
             }
         }.start()
+
+    }
+
+    fun subscribeRss(){
+        val db = Room.databaseBuilder(context, RssDatabase::class.java, "rss")
+            .build()
+        val mDao=db.rssDao()
+        mDao.insert(addFromXmlModel.rssData)
+        db.close()
+    }
+
+
+    fun subscribeRadio(){
+        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
+            .build()
+        val mDao=db.radioDao()
+        for(item : RadioData in addFromXmlModel.list){
+            try{
+                mDao.insert(item)
+            }catch (e:Exception){}
+        }
+        db.close()
     }
 
     private fun getInfoFromXml() = object : Thread() {

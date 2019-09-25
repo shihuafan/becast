@@ -43,7 +43,7 @@ class RadioListFragment(private var mBinder: RadioService.LocalBinder,private va
         radioListViewModel= context?.let { RadioListViewModel(it,radioListData) }!!
         view.list_radio_list.layoutManager = LinearLayoutManager(context)
         view.list_radio_list.adapter = context?.let {
-            RadioAdapter(it, radioListViewModel.radioListModelLiveData.value!!.list, mHandler)
+            RadioAdapter(it, radioListViewModel.radioListModelLiveData.value!!, mHandler)
         }
 
         //更新列表
@@ -52,13 +52,14 @@ class RadioListFragment(private var mBinder: RadioService.LocalBinder,private va
             try{
                 Glide.with(this)
                     .asBitmap()
-                    .load(radioListViewModel.radioListModel.radioListData.image)
+                    .load(radioListData.image)
                     .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
                     .into(image_radio_list)
-                view.text_radio_list.text=radioListViewModel.radioListModel.radioListData.name
+                view.text_radio_list.text=radioListData.name
             }catch (e:Exception){}
         })
 
+        view.layout_radio_list.setOnClickListener(this)
         view.btn_radio_list_back.setOnClickListener(this)
         view.btn_radio_list_more.setOnClickListener(this)
         return view
@@ -67,7 +68,7 @@ class RadioListFragment(private var mBinder: RadioService.LocalBinder,private va
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.btn_radio_list_back->{
-
+                activity?.onBackPressed()
             }
             R.id.btn_radio_list_more->{
 

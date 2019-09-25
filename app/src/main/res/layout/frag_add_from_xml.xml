@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#fff2f2f2"
-    android:id="@+id/layout_radio_list">
+    android:id="@+id/layout_add_from_xml">
 
     <LinearLayout
         android:layout_width="match_parent"

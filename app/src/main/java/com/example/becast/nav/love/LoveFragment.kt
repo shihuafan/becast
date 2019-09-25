@@ -52,7 +52,7 @@ class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), V
 
         view.list_love.layoutManager = LinearLayoutManager(context)
         view.list_love.adapter = context?.let {
-            RadioAdapter(it,loveViewModel.loveModelLiveData.value!!.list, mHandler)
+            RadioAdapter(it,loveViewModel.loveModelLiveData.value!!, mHandler)
         }
 
         //更新列表

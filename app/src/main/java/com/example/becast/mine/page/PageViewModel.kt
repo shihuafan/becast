@@ -8,18 +8,18 @@ import com.example.becast.data.radioList.RadioListDatabase
 import java.util.*
 
 class PageViewModel(private val context: Context) {
-    val pageModel: PageModel = PageModel()
-    val pageModelLiveData: MutableLiveData<PageModel> = MutableLiveData()
+    var list: MutableList<RadioListData> = mutableListOf()
+    val pageModelLiveData: MutableLiveData<MutableList<RadioListData>> = MutableLiveData()
 
     init{
-        pageModelLiveData.value=pageModel
+        pageModelLiveData.value=list
         val db=Room.databaseBuilder(context,RadioListDatabase::class.java,"radio_list")
             .allowMainThreadQueries()
             .build()
         val mDao=db.radioListDao()
-        pageModel.radioList=mDao.getAll() as MutableList<RadioListData>
+        list=mDao.getAll() as MutableList<RadioListData>
         db.close()
-        pageModelLiveData.postValue(pageModel)
+        pageModelLiveData.postValue(list)
 //        object : Thread() {
 //            override fun run() {
 //                pageModel.radioList=mDao.getAll() as MutableList<RadioListData>
@@ -37,8 +37,8 @@ class PageViewModel(private val context: Context) {
         object : Thread() {
             override fun run() {
                 mDao.insert(radioListData)
-                pageModel.radioList.add(0, radioListData)
-                pageModelLiveData.postValue(pageModel)
+                list.add(0, radioListData)
+                pageModelLiveData.postValue(list)
                 db.close()
             }
         }.start()

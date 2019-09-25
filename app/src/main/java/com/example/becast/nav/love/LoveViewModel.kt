@@ -10,18 +10,20 @@ import java.util.*
 
 class LoveViewModel(private val context:Context) {
 
-    private var loveModel= LoveModel()
-    val loveModelLiveData: MutableLiveData<LoveModel> = MutableLiveData()
+    private var list : MutableList<RadioData> = mutableListOf()
+    val loveModelLiveData: MutableLiveData<MutableList<RadioData>> = MutableLiveData()
+
     init {
-        loveModelLiveData.value=loveModel
+        loveModelLiveData.value=list
         val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
             .allowMainThreadQueries()
             .build()
         val mDao=db.radioDao()
-        loveModel.list =mDao.getLove() as MutableList<RadioData>
-        loveModelLiveData.postValue(loveModel)
+        list =mDao.getLove() as MutableList<RadioData>
+        loveModelLiveData.value=list
         db.close()
     }
+
     fun addToRadioList(radioData: RadioData):Boolean{
         val db=Room.databaseBuilder(context,RadioDatabase::class.java,"radio")
             .allowMainThreadQueries()
@@ -38,7 +40,7 @@ class LoveViewModel(private val context:Context) {
 
     fun changeLove(radioData:RadioData){
         if(radioData.loveTime>0){
-            loveModel.list.remove(radioData)
+            list.remove(radioData)
             radioData.loveTime=0
 
         }
@@ -52,6 +54,6 @@ class LoveViewModel(private val context:Context) {
         mDao.updateItem(radioData)
         db.close()
 
-        loveModelLiveData.postValue(loveModel)
+        loveModelLiveData.postValue(list)
     }
 }
