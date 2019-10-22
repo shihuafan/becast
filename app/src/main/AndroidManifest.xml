@@ -24,6 +24,12 @@
         </activity>
 
         <service android:name=".service.RadioService"/>
+
+        <receiver android:name=".broadcast.MyBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.example.broadcasttest.MY_BROADCAST"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.becast.R
 import com.example.becast.data.ShareData
-import com.example.becast.unit.data.radioDb.RadioData
+import com.example.becast.data.radioDb.RadioData
 import kotlinx.android.synthetic.main.frag_share.view.*
 
 class ShareFragment(private val radioData: RadioData, private val shareData: ShareData) : Fragment(){

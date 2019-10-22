@@ -4,11 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.example.becast.data.rss.RssData
-import com.example.becast.unit.data.radioDb.RadioData
-import com.example.becast.unit.data.radioDb.RadioDatabase
 import com.example.becast.unit.data.rssDB.RssDatabase
-import java.lang.Exception
-import java.util.*
 
 class FollowViewModel(private val context:Context) {
 

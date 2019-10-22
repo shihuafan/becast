@@ -1,4 +1,4 @@
-package com.example.becast.unit.data.radioDb
+package com.example.becast.data.radioDb
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

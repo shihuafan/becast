@@ -8,20 +8,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.becast.R
-import com.example.becast.main.MainActivity
+import com.example.becast.data.user.UserData
 import com.example.becast.nav.user.register.RegisterFragment
 import kotlinx.android.synthetic.main.frag_login.*
 import kotlinx.android.synthetic.main.frag_login.view.*
-import java.util.*
 
 class LoginFragment :Fragment(), View.OnClickListener {
-
+    private lateinit var v:View
     private val loginViewModel= LoginViewModel()
     val mHandler=Handler{
         when(it.what){
             0x001->{
                 Toast.makeText(context,"successful",Toast.LENGTH_SHORT).show()
-                Objects.requireNonNull<MainActivity>(activity as MainActivity?).onBackPressed()
+                activity?.onBackPressed()
             }
             0x002->{
                 Toast.makeText(context,"fail",Toast.LENGTH_SHORT).show()
@@ -30,11 +29,20 @@ class LoginFragment :Fragment(), View.OnClickListener {
         }
         false
     }
+
+    override fun onResume() {
+        super.onResume()
+        v.edit_login_id.hint=UserData.uid.toString()
+        v.edit_login_password.hint=UserData.uid.toString()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.frag_login, container, false)
-        view.btn_login_sign_in.setOnClickListener(this)
-        view.btn_login_sign_up.setOnClickListener(this)
-        return view
+        v = inflater.inflate(R.layout.frag_login, container, false)
+        v.layout_login.setOnClickListener(this)
+        v.btn_login_sign_in.setOnClickListener(this)
+        v.btn_login_sign_up.setOnClickListener(this)
+
+        return v
     }
 
     override fun onClick(v: View?) {
@@ -46,7 +54,7 @@ class LoginFragment :Fragment(), View.OnClickListener {
                     Toast.makeText(context,"id和密码不能为空",Toast.LENGTH_SHORT).show()
                 }
                 else{
-                    loginViewModel.login(id,password,mHandler)
+                    context?.let { loginViewModel.login(id,password,mHandler, it) }
                 }
             }
             R.id.btn_login_sign_up->{

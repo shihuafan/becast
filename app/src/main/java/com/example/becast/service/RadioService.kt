@@ -2,15 +2,13 @@ package com.example.becast.service
 
 
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
-import android.widget.Toast
 import androidx.room.Room
-import com.example.becast.unit.data.radioDb.RadioData
-import com.example.becast.unit.data.radioDb.RadioDatabase
+import com.example.becast.data.radioDb.RadioData
+import com.example.becast.data.radioDb.RadioDatabase
 import java.io.IOException
 
 class RadioService : Service() {
@@ -24,7 +22,7 @@ class RadioService : Service() {
         fun radioItemEmpty():Boolean
         fun setRadioList(list:MutableList<RadioData>)
         fun getRadioItem(): RadioData
-        fun addRadioItem(item:RadioData)
+        fun addRadioItem(item: RadioData)
         fun getRadioList():MutableList<RadioData>
         fun playPreRadio()
         fun playNextRadio()
@@ -39,8 +37,8 @@ class RadioService : Service() {
         override fun playRadio(item: RadioData){ play(item) }
         override fun radioItemEmpty():Boolean{return itemEmpty()}
         override fun setRadioList(list: MutableList<RadioData>){ setList(list) }
-        override fun getRadioItem():RadioData{ return getItem() }
-        override fun addRadioItem(item:RadioData){addItem(item)}
+        override fun getRadioItem(): RadioData { return getItem() }
+        override fun addRadioItem(item: RadioData){addItem(item)}
         override fun getRadioList():MutableList<RadioData>{ return getList() }
         override fun playPreRadio(){ playPre() }
         override fun playNextRadio(){  playNext() }
@@ -125,11 +123,11 @@ class RadioService : Service() {
         mDao.updateItem(item)
     }
 
-    fun getItem():RadioData{
+    fun getItem(): RadioData {
         return list[0]
     }
 
-    fun addItem(item:RadioData){
+    fun addItem(item: RadioData){
         list.add(item)
     }
 

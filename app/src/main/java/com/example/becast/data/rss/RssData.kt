@@ -4,9 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "rss")
+@Entity(tableName = "rss",primaryKeys  = ["link"])
 data class RssData(
-    @PrimaryKey(autoGenerate = true) var uid:Int,
     @ColumnInfo(name = "title")var title:String,
     @ColumnInfo(name = "link")var link:String,
     @ColumnInfo(name = "image_uri")var imageUri:String,

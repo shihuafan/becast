@@ -1,9 +1,9 @@
-package com.example.becast.unit.data.radioDb
+package com.example.becast.data.radioDb
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-//,"radio_list","rss_uri"
-@Entity(tableName = "radio",primaryKeys  = ["radio_uri","rss_uri","radio_list"])
+
+@Entity(tableName = "radio",primaryKeys  = ["radio_uri","rss_uri"])
 data class RadioData(
     @ColumnInfo (name = "title") var title:String ,
     @ColumnInfo (name = "duration") var duration:String ,
@@ -17,5 +17,5 @@ data class RadioData(
     @ColumnInfo (name = "rss_title")var rssTitle:String ,
     @ColumnInfo (name = "love_time")var loveTime:Long,
     @ColumnInfo (name = "history_time")var historyTime:Long ,
-    @ColumnInfo (name = "radio_list")var radioList:Long
+    @ColumnInfo (name = "wait_time")var waitTime:Long
 )

@@ -59,8 +59,8 @@
 
             <ImageView
                 android:id="@+id/image_play_show"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:layout_centerHorizontal="true"
                 android:background="@color/colorPrimary"
                 android:scaleType="centerCrop"
@@ -75,7 +75,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="30dp"
                 android:layout_weight="1">
 
                 <TextView
@@ -107,7 +107,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="60dp"
                 android:layout_weight="1">
 
                 <ImageButton
@@ -157,76 +157,132 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp">
 
-                <RelativeLayout
-                    android:id="@+id/layout_pin"
-                    android:layout_width="match_parent"
+                <ImageButton
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="70dp"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/earphone"
+                    android:background="#00000000"/>
 
-                        <LinearLayout
-                            android:id="@+id/layout_play_pin"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentEnd="true"
-                            android:orientation="horizontal">
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/earphone"
+                    android:background="#00000000"/>
 
-                            <RelativeLayout
-                                android:layout_width="20dp"
-                                android:layout_height="30dp">
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/earphone"
+                    android:background="#00000000"/>
 
-                                <ImageView
-                                    android:id="@+id/image_play_point"
-                                    android:layout_width="10dp"
-                                    android:layout_height="10dp"
-                                    android:background="@drawable/point_red"
-                                    android:layout_centerInParent="true"/>
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/earphone"
+                    android:background="#00000000"/>
 
-                            </RelativeLayout>
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="20dp">
 
-                            <TextView
-                                android:id="@+id/text_play_start_time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:text=" - "/>
-
-                            <TextView
-                                android:id="@+id/text_play_end_time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center"/>
-
-                        </LinearLayout>
-
-                </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="20dp"
+                    android:text="节目详情"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#000"/>
+            </LinearLayout>
 
 
-                <Button
-                    android:id="@+id/btn_play_pin"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/pin"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="20dp"/>
-
-            </RelativeLayout>
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:id="@+id/layout_pin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="70dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/layout_play_pin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="20dp"
+                        android:layout_height="30dp">
+
+                        <ImageView
+                            android:id="@+id/image_play_point"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:background="@drawable/point_red"
+                            android:layout_centerInParent="true"/>
+
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/text_play_start_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text=" - "/>
+
+                    <TextView
+                        android:id="@+id/text_play_end_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+            <Button
+                android:id="@+id/btn_play_pin"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/pin"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

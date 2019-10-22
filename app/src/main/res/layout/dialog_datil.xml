@@ -38,14 +38,7 @@
                     android:scaleType="centerCrop"
                     tools:ignore="ContentDescription"/>
 
-            <Button
-                android:id="@+id/btn_detail_folder_add"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="100dp"
-                android:background="@drawable/folder_add"/>
+
 
             <Button
                 android:id="@+id/btn_detail_love"

@@ -3,6 +3,7 @@ package com.example.becast.nav.follow
 import android.content.Context
 import android.net.Uri
 import android.os.Handler
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,11 +33,16 @@ class FollowAdapter (private val context: Context, private val mData : MutableLi
 
         Glide.with(context)
             .load(Uri.parse(mData[position].imageUri))
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(10)).circleCrop())
+            .apply(RequestOptions.overrideOf(100,100))
             .into(holder.imageItemShow)
 
         holder.textItemTitle.text=mData[position].title
-
+        holder.btnItem.setOnClickListener{
+            val msg= Message()
+            msg.what=0x001
+            msg.obj=mData[position]
+            handler.sendMessage(msg)
+        }
 
     }
 
