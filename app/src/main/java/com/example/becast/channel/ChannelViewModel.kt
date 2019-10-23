@@ -12,18 +12,24 @@ import com.example.becast.unit.data.rssDB.RssDatabase
 class ChannelViewModel(private val context: Context, private val rssData: RssData) {
 
     private var flag =true
-    var list : MutableList<RadioData> = mutableListOf()
+    val list : MutableList<RadioData> = mutableListOf()
     val channelLiveData: MutableLiveData<MutableList<RadioData>> = MutableLiveData()
 
     init {
         channelLiveData.value=list
-        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-            .allowMainThreadQueries()
-            .build()
-        val mDao=db.radioDao()
-        list =mDao.getByChannel(rssData.rssUri) as MutableList<RadioData>
-        channelLiveData.value=list
-        db.close()
+        object : Thread(){
+            override fun run() {
+                super.run()
+                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
+                    .build()
+                val mDao=db.radioDao()
+                list.clear()
+                list.addAll(mDao.getByChannel(rssData.rssUri) as MutableList<RadioData>)
+                channelLiveData.postValue(list)
+                db.close()
+            }
+        }.start()
+
     }
 
     fun changeAll(handler: Handler):Boolean{

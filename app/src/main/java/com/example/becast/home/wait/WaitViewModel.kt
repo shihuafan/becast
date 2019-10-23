@@ -8,18 +8,23 @@ import com.example.becast.data.radioDb.RadioDatabase
 
 class WaitViewModel(private val context: Context) {
 
-    private var list : MutableList<RadioData> = mutableListOf()
+    private val list : MutableList<RadioData> = mutableListOf()
     val waitModelLiveData: MutableLiveData<MutableList<RadioData>> = MutableLiveData()
 
     init {
         waitModelLiveData.value=list
-        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-            .allowMainThreadQueries()
-            .build()
-        val mDao=db.radioDao()
-        list =mDao.getWait() as MutableList<RadioData>
-        waitModelLiveData.value=list
-        db.close()
+        object:Thread(){
+            override fun run() {
+                super.run()
+                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
+                    .build()
+                val mDao=db.radioDao()
+                list.addAll(mDao.getWait() as MutableList<RadioData>)
+                waitModelLiveData.postValue(list)
+                db.close()
+            }
+        }.start()
+
     }
 
 }
