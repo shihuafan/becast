@@ -10,6 +10,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.data.radioDb.RadioData
 import java.text.SimpleDateFormat
@@ -31,15 +34,11 @@ class RadioAdapter (private val context: Context, private val mData : MutableLis
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-
-//        val fb= FBitamp()
-//        val fbhandler=Handler{
-//            var bitmap=fb.size(100,100,it.obj as Bitmap)
-//            bitmap=fb.roundedCorner(0.2F,bitmap)
-//            holder.imageItemShow.setImageBitmap(bitmap)
-//            false
-//        }
-//        fb.getBitmap(mData[position].imageUri,fbhandler)
+        Glide.with(context)
+            .load(mData[position].imageUri)
+            .apply(RequestOptions.overrideOf(100,100))
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+            .into(holder.imageItemShow)
 
         holder.textItemName.text=mData[position].title
         holder.textItemTitle.text=mData[position].rssTitle

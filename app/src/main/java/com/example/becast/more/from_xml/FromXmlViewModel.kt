@@ -1,4 +1,4 @@
-package com.example.becast.more.addfromxml
+package com.example.becast.more.from_xml
 
 
 import android.content.Context
@@ -8,8 +8,8 @@ import androidx.room.Room
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.data.radioDb.RadioDatabase
 import com.example.becast.data.rss.RssData
-import com.example.becast.more.from_xml.FromXmlModel
 import com.example.becast.unit.data.rssDB.RssDatabase
+import org.w3c.dom.Document
 import org.w3c.dom.Element
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,10 +18,13 @@ import javax.xml.parsers.DocumentBuilderFactory
 
 class FromXmlViewModel(val context: Context, val url:String) {
 
-    val fromXmlModel: FromXmlModel = FromXmlModel()
-    val fromXmlModelLiveData: MutableLiveData<FromXmlModel> = MutableLiveData()
+    private lateinit var rssData: RssData
+    val rssDataLiveData : MutableLiveData<RssData> = MutableLiveData()
+    private var radioList : MutableList<RadioData> = mutableListOf()
+    val radioListLiveData : MutableLiveData<MutableList<RadioData>> = MutableLiveData()
+
     init {
-        fromXmlModelLiveData.value=fromXmlModel
+        radioListLiveData.value=radioList
         getInfoFromXml()
     }
 
@@ -45,7 +48,7 @@ class FromXmlViewModel(val context: Context, val url:String) {
             .build()
         val mDao=db.rssDao()
         try{
-            mDao.insert(fromXmlModel.rssData)
+            mDao.insert(rssData)
         }catch (e:Exception){
             if(!e.message!!.contains("SQLITE_CONSTRAINT_PRIMARYKEY")){
                throw e
@@ -59,7 +62,7 @@ class FromXmlViewModel(val context: Context, val url:String) {
         val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
             .build()
         val mDao=db.radioDao()
-        for(item : RadioData in fromXmlModel.list){
+        for(item : RadioData in radioList){
             try{
                 mDao.insert(item)
             }catch (e:Exception){
@@ -76,21 +79,21 @@ class FromXmlViewModel(val context: Context, val url:String) {
 
     private fun getInfoFromXml() = object : Thread() {
         override fun run() {
-            /* val url="https://getpodcast.xyz/data/ximalaya/3558668.xml" */
-            fromXmlModel.rssData=getRssFromXml(url)
-            getListFromXml(fromXmlModel.rssData,fromXmlModel.list)
-            fromXmlModelLiveData.postValue(fromXmlModel)
+            val factory = DocumentBuilderFactory.newInstance()
+            val builder = factory.newDocumentBuilder()
+            val doc = builder.parse(url)
+
+            rssData=getRssFromXml(url,doc)
+            rssDataLiveData.postValue(rssData)
+            getListFromXml(url,doc)
+            radioListLiveData.postValue(radioList)
+
         }
     }.start()
 
-    private fun getListFromXml(rss: RssData, list:MutableList<RadioData>){
-        val url=rss.rssUri
-        val factory = DocumentBuilderFactory.newInstance()
-        val builder = factory.newDocumentBuilder()
-        val doc = builder.parse(url)
+    private fun getListFromXml(url:String,doc:Document){
         val node = doc.getElementsByTagName("item")
         for (i: Int in 0 until node.length) {
-
             val e = node.item(i) as Element
 
             var title =" "
@@ -109,7 +112,7 @@ class FromXmlViewModel(val context: Context, val url:String) {
                 radioUrl = enclosure.getAttribute("url")
             }
 
-            var imageUrl: String = rss.imageUri
+            var imageUrl: String = rssData.imageUri
             if (e.getElementsByTagName("itunes:image").length != 0) {
                 val image = e.getElementsByTagName("itunes:image").item(0) as Element
                 imageUrl = image.getAttribute("href")
@@ -141,19 +144,16 @@ class FromXmlViewModel(val context: Context, val url:String) {
                 update,
                 description,
                 url,
-                rss.title,
+                rssData.title,
                 0,
                 0,
                 0
             )
-            list.add(temp)
+            radioList.add(temp)
         }
     }
 
-    private fun getRssFromXml(url:String): RssData {
-        val factory = DocumentBuilderFactory.newInstance()
-        val builder = factory.newDocumentBuilder()
-        val doc = builder.parse(url)
+    private fun getRssFromXml(url:String,doc:Document): RssData {
 
         var title=""
         if(doc.getElementsByTagName("title").length != 0){

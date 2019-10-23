@@ -32,12 +32,16 @@ class RegisterFragment :Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.frag_register, container, false)
         view.layout_register.setOnClickListener(this)
+        view.btn_register_back.setOnClickListener(this)
         view.btn_register_register.setOnClickListener(this)
         return view
     }
 
     override fun onClick(v: View?) {
         when(v!!.id){
+            R.id.btn_register_back->{
+                activity?.onBackPressed()
+            }
             R.id.btn_register_register->{
 
                 val id=edit_register_id.text.toString()

@@ -2,7 +2,9 @@
   <dictionary name="HuafanShi">
     <words>
       <w>fromxml</w>
+      <w>primarykey</w>
       <w>recyclerview</w>
+      <w>sqlite</w>
     </words>
   </dictionary>
 </component>

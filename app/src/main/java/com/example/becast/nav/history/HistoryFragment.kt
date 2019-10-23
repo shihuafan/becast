@@ -36,9 +36,9 @@ class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment()
             }
             0x103 ->{
                 mBinder.playRadio(it.obj as RadioData)
-                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all,
-                    PlayPageFragment(mBinder)
-                )
+                fragmentManager!!.beginTransaction()
+                    .replace(R.id.layout_main_all,
+                    PlayPageFragment(mBinder))
                     .addToBackStack(null)
                     .commit()
             }

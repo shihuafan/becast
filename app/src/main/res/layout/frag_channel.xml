@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff2f2f2"
@@ -8,9 +7,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,85 +22,135 @@
                 android:layout_marginStart="20dp"
                 android:background="@drawable/back"/>
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp">
-
-            <ImageView
-                android:id="@+id/image_channel_show"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:scaleType="centerCrop" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="120dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/text_channel_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:gravity="center_vertical"
-                    android:singleLine="true"
-                    android:text="节目"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:gravity="center_vertical"
-                    android:lines="1"
-                    android:text="更新"
-                    android:textColor="#8a8a8e"
-                    android:textSize="15sp" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="订阅" />
-            </LinearLayout>
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="20dp">
-
             <TextView
+                android:id="@+id/text_channel_head_title"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginTop="10dp"
-                android:text="简介"
-                android:textColor="#000" />
-
-            <TextView
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="简啊哈哈哈哈哈哈哈哈嗝哈哈哈哈哈哈哈哈"
-                android:lines="3"/>
+                android:layout_centerInParent="true"
+                android:text="节目"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#00000000"/>
 
         </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_channel"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:nestedScrollingEnabled="false"/>
+            android:id="@+id/scrollView_channel">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/layout_channel_head">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp">
+
+                        <ImageView
+                            android:id="@+id/image_channel_show"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10dp"
+                            android:scaleType="centerCrop" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="100dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginStart="120dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/text_channel_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:gravity="center_vertical"
+                                android:singleLine="true"
+                                android:text="节目"
+                                android:textColor="#000000"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/text_channel_update"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:gravity="center_vertical"
+                                android:lines="1"
+                                android:text="更新"
+                                android:textColor="#8a8a8e"
+                                android:textSize="14sp" />
+
+                            <Button
+                                android:id="@+id/btn_channel_subscribe"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:layout_marginTop="10dp"
+                                android:text="取消订阅"
+                                android:background="@drawable/radius_concern_10_0xd8d8d8"/>
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="10dp"
+                            android:text="简介"
+                            android:textColor="#000" />
+
+                        <TextView
+                            android:id="@+id/text_channel_describe"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="40dp"
+                            android:text="简啊哈哈哈哈哈哈哈哈嗝哈哈哈哈哈哈哈哈"
+                            android:lines="3"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/list_channel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="false"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
     </LinearLayout>
 
-</ScrollView>
+
+</FrameLayout>
+
+

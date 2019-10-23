@@ -1,4 +1,4 @@
-package com.example.becast.nav.user.Info
+package com.example.becast.nav.user.personal
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +16,7 @@ class InfoFragment  : Fragment(), View.OnClickListener {
         val view = inflater.inflate(R.layout.frag_info, container, false)
 
         view.layout_info_sign_up.setOnClickListener(this)
+        view.btn_info_back.setOnClickListener(this)
         return view
     }
 

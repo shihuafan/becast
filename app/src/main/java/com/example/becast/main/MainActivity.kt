@@ -16,7 +16,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.data.user.UserData
-import com.example.becast.more.from_xml.FromXmlFragment
 import com.example.becast.main.page.PageFragment
 import com.example.becast.home.subscribe.SubscribeFragment
 import com.example.becast.more.MoreFragment
@@ -24,7 +23,7 @@ import com.example.becast.nav.follow.FollowFragment
 import com.example.becast.nav.history.HistoryFragment
 import com.example.becast.nav.love.LoveFragment
 import com.example.becast.nav.setting.SettingFragment
-import com.example.becast.nav.user.Info.InfoFragment
+import com.example.becast.nav.user.personal.InfoFragment
 import com.example.becast.nav.user.login.LoginFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.activity_main.*
@@ -118,7 +117,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.layout_nav_follow->{
                 layout_drawer.closeDrawer(Gravity.START)
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.layout_main_all, FollowFragment())
+                    .replace(R.id.layout_main_all, FollowFragment(mBinder))
                     .addToBackStack(null)
                     .commit()
             }

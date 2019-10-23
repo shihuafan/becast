@@ -14,7 +14,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.service.RadioService
 import com.example.becast.data.radioDb.RadioData
-import com.example.becast.more.addfromxml.FromXmlViewModel
 import com.example.becast.home.unit.RadioAdapter
 import com.example.becast.playpage.play.PlayPageFragment
 import com.google.android.material.snackbar.Snackbar
@@ -46,21 +45,27 @@ class FromXmlFragment(private var mBinder: RadioService.LocalBinder, private val
 
         v.list_add_from_xml.layoutManager = LinearLayoutManager(context)
         v.list_add_from_xml.adapter = context?.let {
-            RadioAdapter(it, fromXmlViewModel.fromXmlModelLiveData.value!!.list,mHandler) }
+            RadioAdapter(it, fromXmlViewModel.radioListLiveData.value!!,mHandler) }
+        Glide.with(context!!)
+            .load(resources.getDrawable(R.drawable.loading_gif,null))
+            .into(v.image_add_from_xml_loading)
 
         //更新列表
-        fromXmlViewModel.fromXmlModelLiveData.observe(this, Observer{
+        fromXmlViewModel.radioListLiveData.observe(this, Observer{
             v.list_add_from_xml.adapter?.notifyDataSetChanged()
-            try{
-                Glide.with(this)
-                    .asBitmap()
-                    .load(fromXmlViewModel.fromXmlModel.rssData.imageUri)
-                    .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
-                    .into(image_add_from_xml)
-                v.text_add_from_xml.text=fromXmlViewModel.fromXmlModel.rssData.title
-            }catch (e:Exception){}
         })
 
+        fromXmlViewModel.rssDataLiveData.observe(this, Observer {
+            layout_add_from_xml_loading.visibility=View.GONE
+            try{
+                Glide.with(this)
+                    .load(fromXmlViewModel.rssDataLiveData.value!!.imageUri)
+                    .apply(RequestOptions.overrideOf(100,100))
+                    .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+                    .into(image_add_from_xml)
+                v.text_add_from_xml.text=fromXmlViewModel.rssDataLiveData.value!!.title
+            }catch (e:Exception){}
+        })
         v.layout_add_from_xml.setOnClickListener(this)
         v.btn_add_from_xml_subscribe.setOnClickListener(this)
         return v

@@ -11,10 +11,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_wait"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbarSize="5dp"
-            android:scrollbarThumbVertical="@color/colorPrimary"
-            android:scrollbars="vertical"/>
+            android:layout_height="match_parent"/>
 
 
 </FrameLayout>

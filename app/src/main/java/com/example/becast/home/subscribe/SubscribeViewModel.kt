@@ -19,7 +19,7 @@ class SubscribeViewModel(private val context: Context) {
             .allowMainThreadQueries()
             .build()
         val mDao=db.radioDao()
-        list =mDao.getAll() as MutableList<RadioData>
+        list =mDao.getAll(0,20) as MutableList<RadioData>
         subscribeModelLiveData.value=list
         db.close()
 //        object : Thread() {
@@ -29,12 +29,22 @@ class SubscribeViewModel(private val context: Context) {
 //        }.start()
     }
 
+
+    fun getMore(){
+        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
+            .allowMainThreadQueries()
+            .build()
+        val mDao=db.radioDao()
+        list.addAll(mDao.getAll(list.size,list.size+20) as MutableList<RadioData>)
+        subscribeModelLiveData.value=list
+        db.close()
+    }
     fun update(){
         val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
             .allowMainThreadQueries()
             .build()
         val mDao=db.radioDao()
-        list =mDao.getAll() as MutableList<RadioData>
+        list =mDao.getAll(0,20) as MutableList<RadioData>
         subscribeModelLiveData.value=list
         db.close()
     }

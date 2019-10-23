@@ -11,16 +11,17 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.becast.R
 import com.example.becast.channel.ChannelFragment
 import com.example.becast.data.rss.RssData
+import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_follow.view.*
 
-class FollowFragment:Fragment(), View.OnClickListener {
+class FollowFragment(private val mBinder: RadioService.LocalBinder):Fragment(), View.OnClickListener {
 
     private lateinit var followViewModel:FollowViewModel
     private val mHandler= Handler{
         when(it.what){
             0x001->{
                 fragmentManager!!.beginTransaction()
-                    .replace(R.id.layout_follow, ChannelFragment(it.obj as RssData))
+                    .replace(R.id.layout_follow, ChannelFragment(it.obj as RssData,mBinder))
                     .addToBackStack(null)
                     .commit()
             }

@@ -39,6 +39,7 @@ class LoginFragment :Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.frag_login, container, false)
         v.layout_login.setOnClickListener(this)
+        v.btn_login_back.setOnClickListener(this)
         v.btn_login_sign_in.setOnClickListener(this)
         v.btn_login_sign_up.setOnClickListener(this)
 
@@ -47,6 +48,9 @@ class LoginFragment :Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when(v!!.id){
+            R.id.btn_login_back->{
+                activity?.onBackPressed()
+            }
             R.id.btn_login_sign_in->{
                 val id=edit_login_id.text.toString()
                 val password=edit_login_password.text.toString()

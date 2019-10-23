@@ -38,7 +38,8 @@ open class PlayingFragment(private val mBinder: RadioService.LocalBinder) : Frag
             context?.let {
                 Glide.with(context!!)
                     .load(mBinder.getRadioItem().imageUri)
-                    .apply(RequestOptions.bitmapTransform(RoundedCorners(10)).circleCrop())
+                    .apply(RequestOptions.overrideOf(100,100))
+                    .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                     .into(v.image_playing_show)
             }
             v.text_playing_title.text= mBinder.getRadioItem().title

@@ -17,7 +17,7 @@
             android:layout_height="60dp">
 
             <Button
-                android:id="@+id/btn_about_back"
+                android:id="@+id/btn_info_back"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_centerVertical="true"

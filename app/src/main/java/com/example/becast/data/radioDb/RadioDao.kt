@@ -5,8 +5,8 @@ import androidx.room.*
 
 @Dao
 interface RadioDao {
-    @Query("SELECT  * FROM radio  ORDER BY up_date DESC")
-    fun getAll(): List<RadioData>
+    @Query("SELECT  * FROM radio  ORDER BY up_date DESC limit (:start),(:end)")
+    fun getAll(start:Int,end:Int): List<RadioData>
 
     @Insert
     fun insert(users: RadioData?)
@@ -17,7 +17,7 @@ interface RadioDao {
     @Update
     fun updateItem(user: RadioData)
 
-    @Query("SELECT * FROM radio WHERE love_time != 0 ORDER BY up_date DESC")
+    @Query("SELECT * FROM radio WHERE love_time != 0 ORDER BY up_date DESC ")
     fun getLove():List<RadioData>
 
     @Query("SELECT * FROM radio WHERE history_time != 0 ORDER BY history_time DESC")
@@ -25,5 +25,11 @@ interface RadioDao {
 
     @Query("SELECT * FROM radio WHERE wait_time !=0  ORDER BY wait_time DESC")
     fun getWait():List<RadioData>
+
+    @Query("DELETE FROM radio WHERE rss_uri = (:link)")
+    fun deleteByChannel(link:String)
+
+    @Query("SELECT * FROM radio WHERE rss_uri = (:link)  ORDER BY up_date DESC")
+    fun getByChannel(link:String):List<RadioData>
 
 }

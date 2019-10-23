@@ -15,6 +15,8 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.data.ShareData
 import com.example.becast.playpage.share.ShareFragment
@@ -35,7 +37,7 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
             setView()
         }
         if(flag){
-            text_play_end_time.text=playPageViewModel.timeToStr(mBinder.getRadioCurrentPosition()/1000)
+           // text_play_end_time.text=playPageViewModel.timeToStr(mBinder.getRadioCurrentPosition()/1000)
         }
         false
     }
@@ -55,50 +57,39 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
         v.btn_play_pin.setOnTouchListener{ _: View, motionEvent: MotionEvent ->
             when(motionEvent.action){
                 MotionEvent.ACTION_DOWN->{
-                    //开始记录
-                    v.layout_play_pin.visibility=View.VISIBLE
                     v.layout_pin.visibility=View.VISIBLE
-                    flag=true
-                    shareData.startTime=mBinder.getRadioCurrentPosition()
-                    shareData.radioUri= mBinder.getRadioItem().radioUri
-                    text_play_start_time.text=playPageViewModel.timeToStr(shareData.startTime/1000)
+                    //开始记录
 
                     //时间显示动画
-                    val translateAnimation = TranslateAnimation(0F, -300F, 0F, 0f)
-                    translateAnimation.duration = 300
-                    translateAnimation.repeatCount =0
-                    translateAnimation.repeatMode = Animation.RESTART
-                    translateAnimation.fillAfter=true
-                    v.layout_pin.animation = translateAnimation
-                    translateAnimation.start()
 
                     //红点闪烁动画
-                    val alphaAnimation = AlphaAnimation(0.1f, 1.0f)
-                    alphaAnimation.duration = 500
-                    alphaAnimation.repeatCount = Animation.INFINITE
-                    alphaAnimation.repeatMode = Animation.RESTART
-                    v.image_play_point.animation = alphaAnimation
-                    alphaAnimation.start()
+//                    val alphaAnimation = AlphaAnimation(0.1f, 1.0f)
+//                    alphaAnimation.duration = 500
+//                    alphaAnimation.repeatCount = Animation.INFINITE
+//                    alphaAnimation.repeatMode = Animation.RESTART
+//                    v.image_play_point.animation = alphaAnimation
+//                    alphaAnimation.start()
                 }
                 //记录结束
                 MotionEvent.ACTION_UP->{
-                    shareData.endTime=mBinder.getRadioCurrentPosition()
                     v.layout_pin.visibility=View.GONE
-                    v.layout_play_pin.visibility=View.GONE
-                    flag=false
+//                    shareData.endTime=mBinder.getRadioCurrentPosition()
+//                    v.layout_pin.visibility=View.GONE
+//                    v.layout_play_pin.visibility=View.GONE
+//                    flag=false
 
-                    //将信息传到Dialog中
-                    if((shareData.endTime-shareData.startTime)<3000){
-                        Toast.makeText(context,"截取时长不应小于3秒",Toast.LENGTH_SHORT).show()
-                    }
-                    else{
-                        val content=shareData.toString()
-                        shareData.bitmap= playPageViewModel.createQRCodeBitmap(content)
-                        fragmentManager!!.beginTransaction()
-                            .replace(R.id.layout_main_all, ShareFragment(mBinder.getRadioItem(),shareData))
-                            .addToBackStack(null)
-                            .commit()
-                    }
+//                    //将信息传到Dialog中
+//                    if((shareData.endTime-shareData.startTime)<3000){
+//                        Toast.makeText(context,"截取时长不应小于3秒",Toast.LENGTH_SHORT).show()
+//                    }
+//                    else{
+//                        val content=shareData.toString()
+//                        shareData.bitmap= playPageViewModel.createQRCodeBitmap(content)
+//                        fragmentManager!!.beginTransaction()
+//                            .replace(R.id.layout_main_all, ShareFragment(mBinder.getRadioItem(),shareData))
+//                            .addToBackStack(null)
+//                            .commit()
+//                    }
 
                 }
             }
@@ -114,7 +105,12 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
 
     //更新播放界面状态
     private fun setView(){
-        context?.let { Glide.with(it).load(Uri.parse(mBinder.getRadioItem().imageUri)).into(v.image_play_show) }
+        context?.let {
+            Glide.with(it)
+            .load(Uri.parse(mBinder.getRadioItem().imageUri))
+                .apply(RequestOptions.overrideOf(500,500))
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
+            .into(v.image_play_show) }
         v.text_play_title.text= mBinder.getRadioItem().title
         v.text_play_rsstitle.text= mBinder.getRadioItem().rssTitle
         v.seekBar_play.max=mBinder.getRadioDuration()

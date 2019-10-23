@@ -18,7 +18,7 @@
             android:background="@color/colorPrimary">
 
             <Button
-                android:id="@+id/btn_login_back"
+                android:id="@+id/btn_register_back"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_centerVertical="true"

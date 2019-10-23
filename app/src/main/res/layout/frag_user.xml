@@ -16,7 +16,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/redius_10_concern">
+            android:background="@drawable/radius_concern_10_0xfff">
 
 
             <ImageView
@@ -50,7 +50,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/redius_10_concern">
+            android:background="@drawable/radius_concern_10_0xfff">
 
 
             <ImageView
@@ -84,7 +84,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/redius_10_concern">
+            android:background="@drawable/radius_concern_10_0xfff">
 
 
             <ImageView
@@ -134,7 +134,7 @@
             android:layout_height="60dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/redius_10_concern">
+            android:background="@drawable/radius_concern_10_0xfff">
 
 
             <ImageView

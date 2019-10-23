@@ -10,6 +10,7 @@ import com.example.becast.more.from_xml.FromXmlFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_more.*
 import kotlinx.android.synthetic.main.frag_more.view.*
+import java.util.regex.Pattern
 
 class MoreFragment(private var mBinder: RadioService.LocalBinder) : Fragment(), View.OnClickListener {
 
@@ -32,9 +33,15 @@ class MoreFragment(private var mBinder: RadioService.LocalBinder) : Fragment(), 
                 activity?.onBackPressed()
             }
             R.id.btn_more_search->{
-                fragmentManager!!.beginTransaction()
-                    .replace(R.id.layout_more_show, FromXmlFragment(mBinder,edit_more.text.toString()))
-                    .commit()
+                val url=edit_more.text.toString()
+                val regex = "(((https|http)?://)?([a-z0-9]+[.])|(www.))" + "\\w+[.|\\/]([a-z0-9]{0,})?[[.]([a-z0-9]{0,})]+((/[\\S&&[^,;\u4E00-\u9FA5]]+)+)?([.][a-z0-9]{0,}+|/?)"
+                val pat = Pattern.compile(regex.trim())
+                val mat = pat.matcher(url.trim())
+                if (mat.matches()) {
+                    fragmentManager!!.beginTransaction()
+                        .replace(R.id.layout_more_show, FromXmlFragment(mBinder,url))
+                        .commit()
+                }
             }
             R.id.btn_more_opml->{
                 fragmentManager!!.beginTransaction()

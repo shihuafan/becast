@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.becast.R
 import com.example.becast.home.unit.RadioAdapter
 import com.example.becast.playpage.play.PlayPageFragment
@@ -49,11 +50,23 @@ class SubscribeFragment(private var mBinder: RadioService.LocalBinder) : Fragmen
 
         subscribeViewModel= context?.let { SubscribeViewModel(it) }!!
 
+
         view.list_subscribe.layoutManager = LinearLayoutManager(context)
         view.list_subscribe.adapter = context?.let {
-            RadioAdapter(it,subscribeViewModel.subscribeModelLiveData.value!!, mHandler)
-        }
-
+            RadioAdapter(it,subscribeViewModel.subscribeModelLiveData.value!!, mHandler) }
+        view.list_subscribe.addOnScrollListener(object :RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val manager = recyclerView.layoutManager as LinearLayoutManager
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()//从0开始
+                    val totalItemCount = manager.itemCount
+                    if (lastVisibleItem == (totalItemCount - 1)) {
+                        subscribeViewModel.getMore()
+                    }
+                }
+            }
+        })
         //更新列表
         subscribeViewModel.subscribeModelLiveData.observe(this, Observer{
             view.list_subscribe.adapter?.notifyDataSetChanged()
@@ -61,6 +74,8 @@ class SubscribeFragment(private var mBinder: RadioService.LocalBinder) : Fragmen
 
         return view
     }
+
+
 
 
 }
