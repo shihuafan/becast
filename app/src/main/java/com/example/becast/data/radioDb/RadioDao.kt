@@ -29,7 +29,7 @@ interface RadioDao {
     @Query("DELETE FROM radio WHERE rss_uri = (:link)")
     fun deleteByChannel(link:String)
 
-    @Query("SELECT * FROM radio WHERE rss_uri = (:link)  ORDER BY up_date DESC")
+    @Query("SELECT * FROM radio WHERE rss_uri = (:link)  ORDER BY up_date DESC ")
     fun getByChannel(link:String):List<RadioData>
 
 }

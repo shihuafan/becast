@@ -47,6 +47,7 @@ class FromXmlFragment(private var mBinder: RadioService.LocalBinder, private val
         v.list_add_from_xml.layoutManager = LinearLayoutManager(context)
         v.list_add_from_xml.adapter = context?.let {
             RadioAdapter(it, fromXmlViewModel.radioListLiveData.value!!,mHandler) }
+
         Glide.with(context!!)
             .load(resources.getDrawable(R.drawable.loading_gif,null))
             .into(v.image_add_from_xml_loading)

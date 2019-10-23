@@ -22,7 +22,7 @@ class SubscribeViewModel(private val context: Context) {
                     .build()
                 val mDao=db.radioDao()
                 list.clear()
-                list.addAll(mDao.getAll(0,20) as MutableList<RadioData>)
+                list.addAll(mDao.getAll(0,50) as MutableList<RadioData>)
                 subscribeModelLiveData.postValue(list)
                 db.close()
             }
@@ -31,22 +31,32 @@ class SubscribeViewModel(private val context: Context) {
 
 
     fun getMore(){
-        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-            .allowMainThreadQueries()
-            .build()
-        val mDao=db.radioDao()
-        list.addAll(mDao.getAll(list.size,list.size+20) as MutableList<RadioData>)
-        subscribeModelLiveData.value=list
-        db.close()
+        object :Thread(){
+            override fun run() {
+                super.run()
+                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
+                    .build()
+                val mDao=db.radioDao()
+                list.addAll(mDao.getAll(list.size,list.size+50) as MutableList<RadioData>)
+                subscribeModelLiveData.postValue(list)
+                db.close()
+            }
+        }.start()
+
     }
     fun update(){
-        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-            .allowMainThreadQueries()
-            .build()
-        val mDao=db.radioDao()
-        list.addAll(mDao.getAll(0,20) as MutableList<RadioData>)
-        subscribeModelLiveData.value=list
-        db.close()
+        object :Thread(){
+            override fun run() {
+                super.run()
+                list.clear()
+                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
+                    .build()
+                val mDao=db.radioDao()
+                list.addAll(mDao.getAll(0,50) as MutableList<RadioData>)
+                subscribeModelLiveData.postValue(list)
+                db.close()
+            }
+        }.start()
     }
     fun changeLove(radioData: RadioData){
         if(radioData.loveTime>0){

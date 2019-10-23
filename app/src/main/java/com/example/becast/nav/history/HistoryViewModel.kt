@@ -10,17 +10,24 @@ import java.util.*
 
 class HistoryViewModel(private val context:Context) {
 
-    private var list : MutableList<RadioData> = mutableListOf()
+    private val list : MutableList<RadioData> = mutableListOf()
     val historyModelLiveData: MutableLiveData<MutableList<RadioData>> = MutableLiveData()
     init {
         historyModelLiveData.value=list
-        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-            .allowMainThreadQueries()
-            .build()
-        val mDao=db.radioDao()
-        list =mDao.getHistory() as MutableList<RadioData>
-        historyModelLiveData.value=list
-        db.close()
+        object :Thread(){
+            override fun run() {
+                super.run()
+                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
+                    .allowMainThreadQueries()
+                    .build()
+                val mDao=db.radioDao()
+                list.addAll(mDao.getHistory() as MutableList<RadioData>)
+                historyModelLiveData.postValue(list)
+                db.close()
+            }
+        }.start()
+
+
     }
     fun addToRadioList(radioData: RadioData):Boolean{
         val db=Room.databaseBuilder(context, RadioDatabase::class.java,"radio")

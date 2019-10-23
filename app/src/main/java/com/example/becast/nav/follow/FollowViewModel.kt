@@ -8,17 +8,24 @@ import com.example.becast.unit.data.rssDB.RssDatabase
 
 class FollowViewModel(private val context:Context) {
 
-    var list : MutableList<RssData> = mutableListOf()
+    val list : MutableList<RssData> = mutableListOf()
     val followModelLiveData: MutableLiveData<MutableList<RssData>> = MutableLiveData()
     init {
         followModelLiveData.value=list
-        val db = Room.databaseBuilder(context, RssDatabase::class.java, "rss")
-            .allowMainThreadQueries()
-            .build()
-        val mDao=db.rssDao()
-        list =mDao.getAll() as MutableList<RssData>
-        followModelLiveData.value=list
-        db.close()
+        object :Thread(){
+            override fun run() {
+                super.run()
+                val db = Room.databaseBuilder(context, RssDatabase::class.java, "rss")
+                    .allowMainThreadQueries()
+                    .build()
+                val mDao=db.rssDao()
+                list.clear()
+                list.addAll(mDao.getAll() as MutableList<RssData>)
+                followModelLiveData.postValue(list)
+                db.close()
+            }
+        }.start()
+
     }
 
 }
