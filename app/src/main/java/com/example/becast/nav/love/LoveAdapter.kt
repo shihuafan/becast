@@ -2,6 +2,7 @@ package com.example.becast.nav.love
 
 import android.content.Context
 import android.os.Handler
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,12 +46,18 @@ class LoveAdapter (private val context: Context,
         holder.textItemTitle.text=mData[position].title
         holder.textItemDate.text=getDateString(mData[position].upDate)
         holder.btnItem.setOnClickListener {
+            val msg= Message()
+            msg.what=0x001
+            msg.obj=mData[position]
+            handler.sendMessage(msg)
         }
         holder.btnLoveAdd.setOnClickListener{
             loveViewModel.addToRadioList(mData[position])
             holder.itemLove.close(false)
         }
-        holder.btnLoveCancel.setOnClickListener{ loveViewModel.changeLove(mData[position]) }
+        holder.btnLoveCancel.setOnClickListener{
+            loveViewModel.changeLove(mData[position])
+        }
         holder.itemLove.close(false)
     }
 

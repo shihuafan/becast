@@ -17,8 +17,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.data.rss.RssData
-import com.example.becast.home.subscribe.SubscribeFragment
-import com.example.becast.home.unit.RadioAdapter
+import com.example.becast.main.page.RadioAdapter
 import com.example.becast.playpage.DetailFragment
 import com.example.becast.service.RadioService
 import com.google.android.material.snackbar.Snackbar

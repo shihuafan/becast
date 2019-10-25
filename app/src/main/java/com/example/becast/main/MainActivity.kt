@@ -9,41 +9,34 @@ import android.os.Handler
 import android.os.IBinder
 import android.view.Gravity
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.data.user.UserData
 import com.example.becast.main.page.PageFragment
-import com.example.becast.home.subscribe.SubscribeFragment
 import com.example.becast.more.MoreFragment
 import com.example.becast.nav.follow.FollowFragment
 import com.example.becast.nav.history.HistoryFragment
 import com.example.becast.nav.love.LoveFragment
 import com.example.becast.nav.setting.SettingFragment
-import com.example.becast.nav.user.personal.InfoFragment
 import com.example.becast.nav.user.login.LoginFragment
+import com.example.becast.nav.user.personal.InfoFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_nav.*
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener{
 
     private lateinit var conn : MyConnection
     internal lateinit var mBinder: RadioService.LocalBinder
 
     private val mHandler : Handler = Handler{
         when(it.what){
-            0x001->{
-                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                supportFragmentManager.beginTransaction()
-                .replace(R.id.layout_main_top, SubscribeFragment(mBinder))
-                .addToBackStack(null)
-                .commit()
-            }
             0x003->{
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.layout_main_all, MoreFragment(mBinder))
@@ -162,5 +155,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onDestroy() {
         unbindService(conn)
         super.onDestroy()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Toast.makeText(this,supportFragmentManager.fragments[supportFragmentManager.fragments.size-1].toString(),Toast.LENGTH_SHORT).show()
+        supportFragmentManager.fragments[supportFragmentManager.fragments.size-1].onResume()
+     //   supportFragmentManager.addOnBackStackChangedListener {  }
     }
 }

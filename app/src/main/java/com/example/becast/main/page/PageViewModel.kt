@@ -6,8 +6,57 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.lifecycle.MutableLiveData
+import androidx.room.Room
+import com.example.becast.data.radioDb.RadioData
+import com.example.becast.data.radioDb.RadioDatabase
 
 class PageViewModel(private val context: Context) {
+
+    val subscribeList : MutableList<RadioData> = mutableListOf()
+    val subscribeListLiveData: MutableLiveData<MutableList<RadioData>> = MutableLiveData()
+
+    val waitList : MutableList<RadioData> = mutableListOf()
+    val waitListLiveData: MutableLiveData<MutableList<RadioData>> = MutableLiveData()
+
+    init {
+        subscribeListLiveData.value=subscribeList
+        waitListLiveData.value=waitList
+    }
+    fun getAll(){
+        subscribeList.clear()
+        waitList.clear()
+        getSubscribeList()
+        getWaitList()
+    }
+
+    fun getSubscribeList(){
+        val start=subscribeList.size
+        object : Thread() {
+            override fun run() {
+                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
+                    .build()
+                val mDao=db.radioDao()
+                subscribeList.addAll(mDao.getAll(start,start+50) as MutableList<RadioData>)
+                subscribeListLiveData.postValue(subscribeList)
+                db.close()
+            }
+        }.start()
+    }
+
+    fun getWaitList(){
+        val start=waitList.size
+        object : Thread() {
+            override fun run() {
+                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
+                    .build()
+                val mDao=db.radioDao()
+                waitList.addAll(mDao.getWait(start,start+50) as MutableList<RadioData>)
+                waitListLiveData.postValue(subscribeList)
+                db.close()
+            }
+        }.start()
+    }
 
     fun roundedCorner(position: Int, positionOffset: Float): Bitmap {
 

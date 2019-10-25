@@ -12,6 +12,9 @@ class FollowViewModel(private val context:Context) {
     val followModelLiveData: MutableLiveData<MutableList<RssData>> = MutableLiveData()
     init {
         followModelLiveData.value=list
+    }
+
+    fun getList(){
         object :Thread(){
             override fun run() {
                 super.run()
@@ -25,7 +28,5 @@ class FollowViewModel(private val context:Context) {
                 db.close()
             }
         }.start()
-
     }
-
 }

@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.service.RadioService
 import com.example.becast.data.radioDb.RadioData
-import com.example.becast.home.unit.RadioAdapter
+import com.example.becast.main.page.RadioAdapter
 import com.example.becast.playpage.play.PlayPageFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_add_from_xml.*

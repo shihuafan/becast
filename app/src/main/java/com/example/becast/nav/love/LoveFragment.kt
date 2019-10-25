@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.becast.R
 import com.example.becast.data.radioDb.RadioData
+import com.example.becast.playpage.DetailFragment
 import com.example.becast.playpage.play.PlayPageFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_love.view.*
@@ -19,24 +20,10 @@ class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), V
     private lateinit var loveViewModel: LoveViewModel
     private val mHandler : Handler = Handler{
         when(it.what){
-            0x101->{
-                val flag=  loveViewModel.addToRadioList(it.obj as RadioData)
-                if(flag){
-                    Toast.makeText(context,"添加成功", Toast.LENGTH_SHORT).show()
-                }
-                else{
-                    Toast.makeText(context,"添加失败,请确定列表中是否已添加该节目", Toast.LENGTH_SHORT).show()
-                }
-            }
-            0x102->{
-                loveViewModel.changeLove(it.obj as RadioData)
-                Toast.makeText(context,"已取消收藏", Toast.LENGTH_SHORT).show()
-            }
-            0x103 ->{
+            0x001 ->{
                 mBinder.playRadio(it.obj as RadioData)
-                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all,
-                    PlayPageFragment(mBinder)
-                )
+                fragmentManager!!.beginTransaction()
+                    .replace(R.id.layout_main_all, DetailFragment(it.obj as RadioData,mBinder))
                     .addToBackStack(null)
                     .commit()
             }

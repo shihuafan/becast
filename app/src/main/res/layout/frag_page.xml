@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:id="@+id/layout_page">
 
-    <RelativeLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="#fff">
@@ -33,50 +38,65 @@
 
         </RelativeLayout>
 
-    <RelativeLayout
-           android:layout_width="match_parent"
-           android:layout_height="55dp"
-           android:layout_marginStart="30dp"
-           android:layout_marginTop="10dp">
-
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="55dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp">
 
 
-            <TextView
-                android:id="@+id/text_page_subscribe"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:gravity="center"
-                android:text="订阅列表"
-                android:textSize="26sp"
-                android:textStyle="bold"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp">
 
-            <TextView
-                android:id="@+id/text_page_wait"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:gravity="center"
-                android:text="待收听列表"
-                android:textSize="26sp"
-                android:textStyle="bold"/>
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/text_page_subscribe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="#00000000"
+                    android:gravity="center"
+                    android:text="订阅列表"
+                    android:textSize="26sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/text_page_wait"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="#00000000"
+                    android:gravity="center"
+                    android:text="待收听列表"
+                    android:textSize="26sp"
+                    android:textStyle="bold"/>
+
+            </RelativeLayout>
 
             <ImageView
-               android:id="@+id/image_page_bar"
-               android:layout_width="30dp"
-               android:layout_height="15dp"
-               android:layout_alignParentBottom="true"/>
-       </RelativeLayout>
+                android:id="@+id/image_page_bar"
+                android:layout_width="30dp"
+                android:layout_height="15dp"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager_page"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_page_subscribe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_page_wait"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </androidx.viewpager.widget.ViewPager>
+
+    </LinearLayout>
+
+</RelativeLayout>
+

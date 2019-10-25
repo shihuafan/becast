@@ -38,7 +38,7 @@ class MoreFragment(private var mBinder: RadioService.LocalBinder) : Fragment(), 
                 val pat = Pattern.compile(regex.trim())
                 val mat = pat.matcher(url.trim())
                 if (mat.matches()) {
-                    fragmentManager!!.beginTransaction()
+                    childFragmentManager.beginTransaction()
                         .replace(R.id.layout_more_show, FromXmlFragment(mBinder,url))
                         .commit()
                 }
