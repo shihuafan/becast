@@ -20,8 +20,11 @@ class FromXmlViewModel(val context: Context, val url:String) {
 
     private lateinit var rssData: RssData
     val rssDataLiveData : MutableLiveData<RssData> = MutableLiveData()
-    private var radioList : MutableList<RadioData> = mutableListOf()
+    private val radioList : MutableList<RadioData> = mutableListOf()
+    private val radioListCache : MutableList<RadioData> = mutableListOf()
     val radioListLiveData : MutableLiveData<MutableList<RadioData>> = MutableLiveData()
+    @Volatile
+    var flag=true
 
     init {
         radioListLiveData.value=radioList
@@ -86,7 +89,12 @@ class FromXmlViewModel(val context: Context, val url:String) {
             rssData=getRssFromXml(url,doc)
             rssDataLiveData.postValue(rssData)
             getListFromXml(url,doc)
-            radioListLiveData.postValue(radioList)
+            if(radioListCache.size<50){
+                radioList.clear()
+                radioList.addAll(radioListCache)
+                radioListLiveData.postValue(radioList)
+            }
+
 
         }
     }.start()
@@ -149,7 +157,12 @@ class FromXmlViewModel(val context: Context, val url:String) {
                 0,
                 0
             )
-            radioList.add(temp)
+            radioListCache.add(temp)
+            if(radioListCache.size==50){
+                radioList.clear()
+                radioList.addAll(radioListCache.subList(0,50))
+                radioListLiveData.postValue(radioList)
+            }
         }
     }
 
@@ -213,4 +226,20 @@ class FromXmlViewModel(val context: Context, val url:String) {
 
     }
 
+    fun getMore(){
+        if(flag){
+            object:Thread(){
+                override fun run() {
+                    super.run()
+                    if(radioListCache.size-radioList.size>30){
+                        radioList.addAll(radioListCache.subList(radioList.size,radioList.size+30))
+                    }else{
+                        radioList.addAll(radioListCache.subList(radioList.size,radioListCache.size))
+                        flag=false
+                    }
+                    radioListLiveData.postValue(radioList)
+                }
+            }.start()
+        }
+    }
 }

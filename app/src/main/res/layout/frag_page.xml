@@ -5,11 +5,6 @@
     android:layout_height="match_parent"
     android:id="@+id/layout_page">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -42,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="70dp">
 
 
             <RelativeLayout
@@ -82,7 +77,8 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewpager_page"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="125dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_page_subscribe"
@@ -96,7 +92,6 @@
 
         </androidx.viewpager.widget.ViewPager>
 
-    </LinearLayout>
 
 </RelativeLayout>
 

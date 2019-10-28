@@ -14,8 +14,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/colorPrimary">
+            android:layout_height="60dp">
 
             <Button
                 android:id="@+id/btn_login_back"
@@ -25,14 +24,6 @@
                 android:layout_marginStart="20dp"
                 android:background="@drawable/back"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="60dp"
-                android:text="登录"
-                android:textColor="@color/colorAccent"
-                android:textSize="16sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -42,8 +33,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="50dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:text="Login"
+                        android:textColor="#000"
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
+
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -89,31 +98,34 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="20dp">
 
                     <Button
                         android:id="@+id/btn_login_sign_up"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:layout_margin="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
                         android:text="注册"
                         android:textSize="16sp"
                         android:textColor="#fff"
-                        android:background="#222"/>
+                        android:background="@drawable/radius_concern_40_0xcfcfcf"/>
 
                     <Button
                         android:id="@+id/btn_login_sign_in"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:layout_margin="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
                         android:text="登录"
                         android:textSize="16sp"
                         android:textColor="#fff"
-                        android:background="#222"/>
+                        android:background="@drawable/radius_concern_40_0xf7c325"/>
                 </LinearLayout>
+
 
             </LinearLayout>
 

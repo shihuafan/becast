@@ -2,10 +2,12 @@ package com.example.becast.service
 
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
+import android.widget.Toast
 import androidx.room.Room
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.data.radioDb.RadioDatabase
@@ -15,7 +17,11 @@ class RadioService : Service() {
 
     private val mBinder = LocalBinder()
     private val mediaPlayer = MediaPlayer()
-    private var list : MutableList<RadioData> = mutableListOf()
+    private lateinit var radioData:RadioData
+    private val list : MutableList<RadioData> = mutableListOf()
+    private lateinit var context: Context
+    @Volatile
+    private var isPrepared=true
 
     internal interface MIBinder {
         fun playRadio(item: RadioData)
@@ -31,6 +37,7 @@ class RadioService : Service() {
         fun getRadioCurrentPosition():Int
         fun seekRadioTo( progress: Int)
         fun isRadioPlaying():Boolean
+        fun isPrepared():Boolean
     }
 
     inner class LocalBinder : Binder() , MIBinder {
@@ -47,38 +54,49 @@ class RadioService : Service() {
         override fun getRadioCurrentPosition(): Int { return getCurrentPosition() }
         override fun seekRadioTo( progress: Int){ seekTo(progress) }
         override fun isRadioPlaying():Boolean{return isPlaying()}
+        override fun isPrepared():Boolean{return isPrepared}
     }
 
     override fun onBind(intent: Intent?): IBinder { return mBinder }
 
     override fun onCreate() {
         super.onCreate()
-        val db = Room.databaseBuilder(this, RadioDatabase::class.java, "result")
-            .allowMainThreadQueries()
-            .build()
-        val mDao=db.radioDao()
-        list =mDao.getLove() as MutableList<RadioData>
-        db.close()
+        context=this
+        object:Thread(){
+            override fun run() {
+                super.run()
+                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
+                    .build()
+                val mDao=db.radioDao()
+                list.clear()
+                list.addAll(mDao.getWait(0,50) as MutableList<RadioData>)
+                db.close()
 
-        if(list.size>0){
-            //查询待播放列表，并将最开始的加入mediaPlayer
-            val url=list[0].radioUri
-            try {
-                mediaPlayer.setDataSource(url)
-                mediaPlayer.prepareAsync()
-            } catch (e: IOException) {
-                e.printStackTrace()
+                if(list.size>0){
+                    //查询待播放列表，并将最开始的加入mediaPlayer
+                    radioData=list[0]
+
+                    val url=list[0].radioUri
+                    try {
+                        mediaPlayer.setDataSource(url)
+                        isPrepared=false
+                        mediaPlayer.prepareAsync()
+                        mediaPlayer.setOnPreparedListener {
+                            isPrepared=true
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
             }
-        }
+        }.start()
+
     }
 
 
     fun play(item: RadioData){
         //直接播放，删除当前播放，并将传入的插在列表头
         list.add(0,item)
-        if(list.size>1){
-            list.removeAt(1)
-        }
         val url=item.radioUri
         mediaPlayer.reset()
         //重置mediaPlayer对象，防止切换时异常
@@ -89,30 +107,34 @@ class RadioService : Service() {
             e.printStackTrace()
         }
         //异步准备，准备完成播放
+        isPrepared=false
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             mediaPlayer.start()
+            isPrepared=true
         }
         mediaPlayer.setOnCompletionListener {
-            if(list.size > 1){
-                val temp=list[1]
-                list.removeAt(1)
-                play(temp)
-            }
+
+//            Toast.makeText(context,"finish",Toast.LENGTH_SHORT).show()
+//            if(list.size > 0){
+//                list.removeAt(0)
+//                if(list.size> 0){
+//                    play(list.removeAt(0))
+//                }
+//            }
         }
     }
 
 
-    fun itemEmpty():Boolean{
-        return list.size<=0
-    }
+
+    fun itemEmpty()=(list.size<=0)
+
     fun setList(list:MutableList<RadioData>){
-        this.list=list
+        this.list.clear()
+        this.list.addAll(list)
     }
 
-    fun getList():MutableList<RadioData>{
-        return list
-    }
+    fun getList()=list
 
     private fun addToHistory(item: RadioData) {
         val db = Room.databaseBuilder(this, RadioDatabase::class.java, "radio")
@@ -123,21 +145,15 @@ class RadioService : Service() {
         mDao.updateItem(item)
     }
 
-    fun getItem(): RadioData {
-        return list[0]
-    }
+    fun getItem()=list[0]
 
     fun addItem(item: RadioData){
         list.add(item)
     }
 
-    fun getDuration(): Int {
-        return mediaPlayer.duration
-    }
+    fun getDuration()=mediaPlayer.duration
 
-    fun getCurrentPosition(): Int {
-        return mediaPlayer.currentPosition
-    }
+    fun getCurrentPosition()=mediaPlayer.currentPosition
 
     fun playPre(){
         var time=getCurrentPosition()-15*1000
@@ -169,9 +185,7 @@ class RadioService : Service() {
         mediaPlayer.seekTo(progress)
     }
 
-    fun isPlaying():Boolean{
-        return mediaPlayer.isPlaying
-    }
+    fun isPlaying()=mediaPlayer.isPlaying
 
 }
 

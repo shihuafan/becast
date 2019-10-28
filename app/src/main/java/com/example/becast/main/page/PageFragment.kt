@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.becast.R
 import com.example.becast.data.radioDb.RadioData
+import com.example.becast.more.MoreFragment
 import com.example.becast.playpage.DetailFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_page.view.*
+import org.greenrobot.eventbus.EventBus
 
 
-class PageFragment(private val handler: Handler,private val mBinder: RadioService.LocalBinder) : Fragment(), View.OnClickListener,
+class PageFragment(private val mBinder: RadioService.LocalBinder) : Fragment(), View.OnClickListener,
     ViewPager.OnPageChangeListener {
 
     private lateinit var pageViewModel:PageViewModel
@@ -28,7 +30,8 @@ class PageFragment(private val handler: Handler,private val mBinder: RadioServic
         when(it.what){
             0x103 ->{
                 fragmentManager!!.beginTransaction()
-                    .replace(R.id.layout_main_all, DetailFragment(it.obj as RadioData,mBinder))
+                    .hide(this)
+                    .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData,mBinder))
                     .addToBackStack(null)
                     .commit()
             }
@@ -37,6 +40,7 @@ class PageFragment(private val handler: Handler,private val mBinder: RadioServic
     }
     override fun onResume() {
         super.onResume()
+        EventBus.getDefault().post("open")
         pageViewModel.getAll()
     }
 
@@ -44,11 +48,6 @@ class PageFragment(private val handler: Handler,private val mBinder: RadioServic
         val view= inflater.inflate(R.layout.frag_page, container, false)
         v=view
         pageViewModel= context?.let { PageViewModel(it) }!!
-
-//        val list: MutableList<Fragment> = mutableListOf(SubscribeFragment(mHandler,mBinder),WaitFragment(mBinder))
-//        view.viewpager_page.adapter= fragmentManager?.let { MyFragmentPagerAdapter(it, list) }
-//        view.viewpager_page.addOnPageChangeListener(this)
-
 
         view.list_page_subscribe.layoutManager = LinearLayoutManager(context)
         view.list_page_wait.layoutManager = LinearLayoutManager(context)
@@ -93,7 +92,11 @@ class PageFragment(private val handler: Handler,private val mBinder: RadioServic
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.btn_page_more->{
-                handler.sendEmptyMessage(0x003)
+                fragmentManager!!.beginTransaction()
+                    .hide(this)
+                    .add(R.id.layout_main_all,MoreFragment(mBinder))
+                    .addToBackStack(null)
+                    .commit()
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.becast.playpage.play
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -42,13 +43,25 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
         false
     }
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_playpage, container, false)
 
-        val rotate0= AnimationUtils.loadAnimation(context, R.anim.rotate0)
+        context?.let {
+            Glide.with(it)
+                .load(Uri.parse(mBinder.getRadioItem().imageUri))
+                .apply(RequestOptions.overrideOf(300,300))
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(30)))
+                .into(v.image_play_show) }
+        v.text_play_title.text= mBinder.getRadioItem().title
+        v.text_play_title.isSelected=true
+        v.text_play_rsstitle.text= mBinder.getRadioItem().rssTitle
+
         v.layout_pin.visibility=View.GONE
-        v.image_play_loading.startAnimation(rotate0)
-        v.btn_play_back.setOnClickListener(this)
+        v.image_play_loading.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate0))
+
+
+        v.btn_playpage_back.setOnClickListener(this)
         v.btn_play_pre.setOnClickListener(this)
         v.btn_play_pause.setOnClickListener(this)
         v.btn_play_next.setOnClickListener(this)
@@ -57,12 +70,9 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
         v.btn_play_pin.setOnTouchListener{ _: View, motionEvent: MotionEvent ->
             when(motionEvent.action){
                 MotionEvent.ACTION_DOWN->{
+                    shareData.startTime=mBinder.getRadioCurrentPosition()/1000
                     v.layout_pin.visibility=View.VISIBLE
-                    //开始记录
 
-                    //时间显示动画
-
-                    //红点闪烁动画
 //                    val alphaAnimation = AlphaAnimation(0.1f, 1.0f)
 //                    alphaAnimation.duration = 500
 //                    alphaAnimation.repeatCount = Animation.INFINITE
@@ -70,56 +80,49 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
 //                    v.image_play_point.animation = alphaAnimation
 //                    alphaAnimation.start()
                 }
+                MotionEvent.ACTION_MOVE->{
+                    val time=mBinder.getRadioCurrentPosition()/1000
+                    @SuppressLint("SetTextI18n")
+                    v.text_playpage_pin.text=playPageViewModel.timeToStr(shareData.startTime)+"-"+playPageViewModel.timeToStr(time)
+                }
                 //记录结束
                 MotionEvent.ACTION_UP->{
                     v.layout_pin.visibility=View.GONE
-//                    shareData.endTime=mBinder.getRadioCurrentPosition()
-//                    v.layout_pin.visibility=View.GONE
-//                    v.layout_play_pin.visibility=View.GONE
-//                    flag=false
-
-//                    //将信息传到Dialog中
-//                    if((shareData.endTime-shareData.startTime)<3000){
-//                        Toast.makeText(context,"截取时长不应小于3秒",Toast.LENGTH_SHORT).show()
-//                    }
-//                    else{
-//                        val content=shareData.toString()
-//                        shareData.bitmap= playPageViewModel.createQRCodeBitmap(content)
-//                        fragmentManager!!.beginTransaction()
-//                            .replace(R.id.layout_main_all, ShareFragment(mBinder.getRadioItem(),shareData))
-//                            .addToBackStack(null)
-//                            .commit()
-//                    }
-
+                    shareData.endTime=mBinder.getRadioCurrentPosition()
+                    if((shareData.endTime-shareData.startTime)<3000){
+                        Toast.makeText(context,"截取时长不应小于3秒",Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        val content=shareData.toString()
+                        shareData.bitmap= playPageViewModel.createQRCodeBitmap(content)
+                        fragmentManager!!.beginTransaction()
+                            .replace(R.id.layout_main_all, ShareFragment(mBinder.getRadioItem(),shareData))
+                            .addToBackStack(null)
+                            .commit()
+                    }
                 }
             }
             false
         }
-
         Timer().schedule(object : TimerTask() {
-            override fun run() { mHandler.sendEmptyMessage(1) }}, 0, 10)
-
-        setView()
+            override fun run() { mHandler.sendEmptyMessage(1) }}, 0, 1000)
         return v
     }
 
-    //更新播放界面状态
     private fun setView(){
-        context?.let {
-            Glide.with(it)
-            .load(Uri.parse(mBinder.getRadioItem().imageUri))
-                .apply(RequestOptions.overrideOf(500,500))
-                .apply(RequestOptions.bitmapTransform(RoundedCorners(50)))
-            .into(v.image_play_show) }
-        v.text_play_title.text= mBinder.getRadioItem().title
-        v.text_play_rsstitle.text= mBinder.getRadioItem().rssTitle
-        v.seekBar_play.max=mBinder.getRadioDuration()
         v.seekBar_play.progress = mBinder.getRadioCurrentPosition()
-        v.text_play_duration.text= mBinder.getRadioItem().duration
+        v.seekBar_play.max=mBinder.getRadioDuration()
+        v.text_play_duration.text= playPageViewModel.timeToStr(mBinder.getRadioDuration()/1000)
         v.text_play_position.text= playPageViewModel.timeToStr(mBinder.getRadioCurrentPosition()/1000)
-        if(mBinder.isRadioPlaying()){
+        if(mBinder.isPrepared()){
             v.image_play_loading.clearAnimation()
             v.image_play_loading.visibility=View.INVISIBLE
+        }
+        else{
+            v.image_play_loading.visibility=View.VISIBLE
+            v.image_play_loading.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate0))
+        }
+        if(mBinder.isRadioPlaying()){
             v.btn_play_pause.setBackgroundResource(R.drawable.pause)
         }
         else{
@@ -129,7 +132,7 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
 
     override fun onClick(v: View?) {
         when(v!!.id){
-            R.id.btn_play_back->{
+            R.id.btn_playpage_back->{
                 activity?.onBackPressed()
             }
             R.id.btn_play_pre->{
@@ -146,9 +149,6 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
             R.id.btn_play_next->{
                 mBinder.playNextRadio()
             }
-//            R.id.btn_play_back->{
-//                activity?.onBackPressed()
-//            }
             R.id.layout_play->{ }
         }
     }

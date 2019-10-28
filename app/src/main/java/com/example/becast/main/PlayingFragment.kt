@@ -5,6 +5,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -30,20 +31,22 @@ open class PlayingFragment(private val mBinder: RadioService.LocalBinder) : Frag
 
         v.btn_playing_page.setOnClickListener(this)
         v.btn_playing_pause.setOnClickListener(this)
+        v.text_playing_title.isSelected=true
         return v
     }
 
     private fun setView(){
         if(!mBinder.radioItemEmpty()) {
-            context?.let {
-                Glide.with(context!!)
-                    .load(mBinder.getRadioItem().imageUri)
-                    .apply(RequestOptions.overrideOf(100,100))
-                    .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
-                    .into(v.image_playing_show)
+            if(v.text_playing_title.text != mBinder.getRadioItem().title){
+                v.text_playing_title.text = mBinder.getRadioItem().title
+                context?.let {
+                    Glide.with(context!!)
+                        .load(mBinder.getRadioItem().imageUri)
+                        .apply(RequestOptions.overrideOf(100,100))
+                        .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+                        .into(v.image_playing_show)
+                }
             }
-            v.text_playing_title.text= mBinder.getRadioItem().title
-            v.text_playing_rsstitle.text= mBinder.getRadioItem().rssTitle
             if(mBinder.isRadioPlaying()){
                 v.btn_playing_pause.setBackgroundResource(R.drawable.pause)
             }
@@ -56,11 +59,13 @@ open class PlayingFragment(private val mBinder: RadioService.LocalBinder) : Frag
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.btn_playing_page->{
-                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all,
-                    PlayPageFragment(mBinder)
-                )
-                    .addToBackStack(null)
-                    .commit()
+                if(!mBinder.radioItemEmpty()){
+                    fragmentManager!!.beginTransaction()
+                        .hide(this)
+                        .add(R.id.layout_main_all, PlayPageFragment(mBinder))
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
             R.id.btn_playing_pause->{
                 if(mBinder.pauseRadio()){

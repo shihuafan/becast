@@ -11,6 +11,7 @@ import com.example.becast.R
 import com.example.becast.main.MainActivity
 import kotlinx.android.synthetic.main.frag_register.*
 import kotlinx.android.synthetic.main.frag_register.view.*
+import org.greenrobot.eventbus.EventBus
 import java.util.*
 
 class RegisterFragment :Fragment(), View.OnClickListener {
@@ -31,6 +32,7 @@ class RegisterFragment :Fragment(), View.OnClickListener {
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.frag_register, container, false)
+
         view.layout_register.setOnClickListener(this)
         view.btn_register_back.setOnClickListener(this)
         view.btn_register_register.setOnClickListener(this)

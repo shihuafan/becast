@@ -14,6 +14,7 @@ import com.example.becast.channel.ChannelFragment
 import com.example.becast.data.rss.RssData
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_follow.view.*
+import org.greenrobot.eventbus.EventBus
 
 class FollowFragment(private val mBinder: RadioService.LocalBinder):Fragment(), View.OnClickListener {
 
@@ -22,7 +23,8 @@ class FollowFragment(private val mBinder: RadioService.LocalBinder):Fragment(), 
         when(it.what){
             0x001->{
                 fragmentManager!!.beginTransaction()
-                    .replace(R.id.layout_follow, ChannelFragment(it.obj as RssData,mBinder))
+                    .hide(this)
+                    .add(R.id.layout_main_top, ChannelFragment(it.obj as RssData,mBinder))
                     .addToBackStack(null)
                     .commit()
             }
@@ -37,7 +39,7 @@ class FollowFragment(private val mBinder: RadioService.LocalBinder):Fragment(), 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.frag_follow, container, false)
-
+        EventBus.getDefault().post("close")
         followViewModel= context?.let { FollowViewModel(it) }!!
 
         view.list_follow.layoutManager = GridLayoutManager(context,3)

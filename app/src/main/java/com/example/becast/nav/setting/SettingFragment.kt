@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.becast.R
 import kotlinx.android.synthetic.main.frag_setting.view.*
+import org.greenrobot.eventbus.EventBus
 
 class SettingFragment :Fragment(), View.OnClickListener {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.frag_setting, container, false)
+        EventBus.getDefault().post("close")
 
         view.layout_setting.setOnClickListener(this)
         view.btn_setting_back.setOnClickListener(this)

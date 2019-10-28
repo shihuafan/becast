@@ -7,10 +7,16 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
+import android.view.DragEvent
 import android.view.Gravity
+import android.view.ScaleGestureDetector
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -27,32 +33,24 @@ import com.example.becast.nav.user.login.LoginFragment
 import com.example.becast.nav.user.personal.InfoFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_main.*
 import kotlinx.android.synthetic.main.layout_nav.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener{
+class MainActivity : AppCompatActivity(), View.OnClickListener {
+
 
     private lateinit var conn : MyConnection
     internal lateinit var mBinder: RadioService.LocalBinder
-
-    private val mHandler : Handler = Handler{
-        when(it.what){
-            0x003->{
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.layout_main_all, MoreFragment(mBinder))
-                    .addToBackStack(null)
-                    .commit()
-            }
-        }
-
-        false
-    }
-
-
+    private lateinit var pageFragment: PageFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        EventBus.getDefault().register(this)
         UserData.getAll(this)
         Glide.with(this)
             .load(UserData.image)
@@ -70,11 +68,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         conn=MyConnection()
         bindService(intent,conn,BIND_AUTO_CREATE)
 
-//        btn_main_more.setOnClickListener(this)
-//        btn_main_nav.setOnClickListener(this)
-//        btn_nav_night.setOnClickListener(this)
-//        layout_nav.setOnClickListener(this)
-
         //nav
         btn_nav_user.setOnClickListener(this)
         layout_nav.setOnClickListener(this)
@@ -84,7 +77,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         btn_nav_night.setOnClickListener(this)
         btn_nav_setting.setOnClickListener(this)
 
-    }
+        }
 
     @SuppressLint("WrongConstant")
     override fun onClick(v: View?) {
@@ -94,44 +87,55 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             }
             R.id.btn_nav_user->{
                 layout_drawer.closeDrawer(Gravity.START)
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 if(UserData.uid == 0){
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.layout_main_all, LoginFragment())
+                        .hide(pageFragment)
+                        .add(R.id.layout_main_all, LoginFragment())
                         .addToBackStack(null)
                         .commit()
                 }
                 else{
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.layout_main_all, InfoFragment())
+                        .hide(pageFragment)
+                        .add(R.id.layout_main_all, InfoFragment())
                         .addToBackStack(null)
                         .commit()
                 }
             }
             R.id.layout_nav_follow->{
                 layout_drawer.closeDrawer(Gravity.START)
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.layout_main_all, FollowFragment(mBinder))
+                    .hide(pageFragment)
+                    .add(R.id.layout_main_top, FollowFragment(mBinder))
                     .addToBackStack(null)
                     .commit()
             }
             R.id.layout_nav_collect->{
                 layout_drawer.closeDrawer(Gravity.START)
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.layout_main_all, LoveFragment(mBinder))
+                    .hide(pageFragment)
+                    .add(R.id.layout_main_top, LoveFragment(mBinder))
                     .addToBackStack(null)
                     .commit()
             }
             R.id.layout_nav_history->{
                 layout_drawer.closeDrawer(Gravity.START)
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.layout_main_all, HistoryFragment(mBinder))
+                    .hide(pageFragment)
+                    .add(R.id.layout_main_top, HistoryFragment(mBinder))
                     .addToBackStack(null)
                     .commit()
             }
             R.id.btn_nav_setting->{
                 layout_drawer.closeDrawer(Gravity.START)
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.layout_main_all, SettingFragment())
+                    .hide(pageFragment)
+                    .add(R.id.layout_main_all, SettingFragment())
                     .addToBackStack(null)
                     .commit()
             }
@@ -141,11 +145,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     internal inner class MyConnection : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             mBinder = service as RadioService.LocalBinder
+
+
             supportFragmentManager.beginTransaction()
                 .replace(R.id.layout_main_bottom, PlayingFragment(mBinder))
                 .commit()
+            pageFragment=PageFragment(mBinder)
             supportFragmentManager.beginTransaction()
-                .replace(R.id.layout_main_top,PageFragment(mHandler,mBinder))
+                .replace(R.id.layout_main_top,pageFragment)
                 .commit()
         }
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -161,6 +168,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         super.onBackPressed()
         Toast.makeText(this,supportFragmentManager.fragments[supportFragmentManager.fragments.size-1].toString(),Toast.LENGTH_SHORT).show()
         supportFragmentManager.fragments[supportFragmentManager.fragments.size-1].onResume()
-     //   supportFragmentManager.addOnBackStackChangedListener {  }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun changeDrawer(msg:String){
+        when(msg){
+            "close"->{
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
+            "open"->{
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            }
+        }
+    }
+
 }

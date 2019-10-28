@@ -22,4 +22,19 @@ class DetailViewModel(private val context: Context,private val radioData: RadioD
         mDao.updateItem(radioData)
         db.close()
     }
+
+    fun addToWait(){
+       object:Thread(){
+           override fun run() {
+               super.run()
+               radioData.waitTime= Date().time
+               val db= Room.databaseBuilder(context, RadioDatabase::class.java,"radio")
+                   .build()
+               val mDao=db.radioDao()
+               mDao.updateItem(radioData)
+               db.close()
+           }
+       }.start()
+
+    }
 }

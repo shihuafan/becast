@@ -76,6 +76,14 @@
                 android:layout_centerVertical="true"
                 android:background="@drawable/play_circle"/>
 
+            <Button
+                android:id="@+id/btn_detail_wait"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="150dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/plus"/>
+
         </RelativeLayout>
 
         <RelativeLayout

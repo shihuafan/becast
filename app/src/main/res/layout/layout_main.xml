@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.MainActivity"
-    android:background="#f2f2f2"
-    android:id="@+id/layout_main_all">
+    android:id="@+id/layout_main">
 
-        <FrameLayout
-            android:id="@+id/layout_main_top"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="70dp">
-        </FrameLayout>
+            tools:context=".main.MainActivity"
+            android:id="@+id/layout_main_all">
 
-        <FrameLayout
-            android:id="@+id/layout_main_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_alignParentBottom="true"/>
+                <FrameLayout
+                    android:id="@+id/layout_main_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="70dp">
+                </FrameLayout>
 
-</RelativeLayout>
+                <FrameLayout
+                    android:id="@+id/layout_main_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
+
+</FrameLayout>
+
+
+

@@ -12,6 +12,7 @@ import com.example.becast.data.user.UserData
 import com.example.becast.nav.user.register.RegisterFragment
 import kotlinx.android.synthetic.main.frag_login.*
 import kotlinx.android.synthetic.main.frag_login.view.*
+import org.greenrobot.eventbus.EventBus
 
 class LoginFragment :Fragment(), View.OnClickListener {
     private lateinit var v:View
@@ -38,6 +39,8 @@ class LoginFragment :Fragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.frag_login, container, false)
+        EventBus.getDefault().post("close")
+
         v.layout_login.setOnClickListener(this)
         v.btn_login_back.setOnClickListener(this)
         v.btn_login_sign_in.setOnClickListener(this)

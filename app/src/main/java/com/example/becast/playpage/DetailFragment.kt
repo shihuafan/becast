@@ -12,6 +12,7 @@ import com.example.becast.R
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.playpage.play.PlayPageFragment
 import com.example.becast.service.RadioService
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_detail.*
 import kotlinx.android.synthetic.main.frag_detail.view.*
 
@@ -32,7 +33,9 @@ class DetailFragment(private val radioData: RadioData,private val mBinder: Radio
         v.btn_detail_back.setOnClickListener(this)
         v.btn_detail_love.setOnClickListener(this)
         v.btn_detail_play.setOnClickListener(this)
+        v.btn_detail_wait.setOnClickListener(this)
         v.btn_detail_rss.setOnClickListener(this)
+        v.layout_detail.setOnClickListener(this)
         return v
     }
 
@@ -48,11 +51,15 @@ class DetailFragment(private val radioData: RadioData,private val mBinder: Radio
                mBinder.playRadio(radioData)
                fragmentManager!!.beginTransaction()
                    .replace(R.id.layout_detail, PlayPageFragment(mBinder))
-                   .addToBackStack(null)
                    .commit()
            }
            R.id.btn_detail_rss->{
 
+           }
+           R.id.btn_detail_wait->{
+               detailViewModel.addToWait()
+               mBinder.addRadioItem(radioData)
+               Snackbar.make(v, "已加入收听列表", Snackbar.LENGTH_SHORT).show()
            }
        }
 

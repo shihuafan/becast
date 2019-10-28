@@ -11,11 +11,13 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/scroll_add_from_xml"
             tools:ignore="UselessParent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/content_scroll_add_from_xml"
                 android:orientation="vertical">
 
                 <RelativeLayout

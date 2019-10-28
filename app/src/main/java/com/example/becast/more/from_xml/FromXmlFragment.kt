@@ -1,5 +1,6 @@
 package com.example.becast.more.from_xml
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -56,6 +58,20 @@ class FromXmlFragment(private var mBinder: RadioService.LocalBinder, private val
         fromXmlViewModel.radioListLiveData.observe(this, Observer{
             v.list_add_from_xml.adapter?.notifyDataSetChanged()
         })
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            v.scroll_add_from_xml.setOnScrollChangeListener { v, X, Y, oX, oY ->
+                if((v.content_scroll_add_from_xml.height-(v.scroll_add_from_xml.height+Y))<500){
+                    if(fromXmlViewModel.flag){
+                        Toast.makeText(context,"更新",Toast.LENGTH_SHORT).show()
+                        fromXmlViewModel.getMore()
+                    }
+                }
+            }
+        }
+
+
+
+
 
         fromXmlViewModel.rssDataLiveData.observe(this, Observer {
             layout_add_from_xml_loading.visibility=View.GONE

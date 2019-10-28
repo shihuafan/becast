@@ -14,6 +14,7 @@ import com.example.becast.main.page.RadioAdapter
 import com.example.becast.playpage.play.PlayPageFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_history.view.*
+import org.greenrobot.eventbus.EventBus
 
 class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), View.OnClickListener {
     private lateinit var historyViewModel:HistoryViewModel
@@ -23,8 +24,8 @@ class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment()
             0x103 ->{
                 mBinder.playRadio(it.obj as RadioData)
                 fragmentManager!!.beginTransaction()
-                    .replace(R.id.layout_main_all,
-                    PlayPageFragment(mBinder))
+                    .hide(this)
+                    .add(R.id.layout_main_all, PlayPageFragment(mBinder))
                     .addToBackStack(null)
                     .commit()
             }
@@ -38,7 +39,7 @@ class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment()
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view= inflater.inflate(R.layout.frag_history, container, false)
-
+        EventBus.getDefault().post("close")
         historyViewModel= context?.let { HistoryViewModel(it) }!!
 
         view.list_history.layoutManager = LinearLayoutManager(context)
