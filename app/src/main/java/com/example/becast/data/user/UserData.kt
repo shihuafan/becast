@@ -56,5 +56,17 @@ object UserData {
         edit.putInt("style", style)
         edit.apply()
     }
+
+    fun saveSleepType(context: Context,type:Int){
+        val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
+        val edit=sp.edit()
+        edit.putInt("sleep_type", type)
+        edit.apply()
+    }
+
+    fun getSleepType(context: Context):Int{
+        val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
+        return sp.getInt("sleep_type", 0)
+    }
 }
 

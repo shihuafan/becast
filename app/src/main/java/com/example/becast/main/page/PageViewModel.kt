@@ -110,14 +110,16 @@ class PageViewModel(private val context: Context) {
         if(position==0 && positionOffset==0F){
             textView1.visibility=View.VISIBLE
             textView2.visibility=View.GONE
-            textView1.setTextColor(Color.argb(255, 0, 0, 0))
+            textView1.currentTextColor
+            textView1.alpha=1F
+
         }
         else if(position==0){
             textView1.visibility=View.VISIBLE
             textView2.visibility=View.VISIBLE
-            textView1.setTextColor(Color.argb((255-255*positionOffset).toInt(), 0, 0, 0))
+            textView1.alpha=1F-positionOffset
             textView1.textSize=26F-10*positionOffset
-            textView2.setTextColor(Color.argb((255*positionOffset).toInt(), 0, 0, 0))
+            textView2.alpha=positionOffset
             textView2.textSize=16F+10*positionOffset
             val layoutParams = RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -129,7 +131,7 @@ class PageViewModel(private val context: Context) {
         else{
             textView1.visibility= View.GONE
             textView2.visibility=View.VISIBLE
-            textView2.setTextColor(Color.argb(255, 0, 0, 0))
+            textView2.alpha=1F
         }
 
     }

@@ -1,28 +1,39 @@
 package com.example.becast.service
 
-
+import android.app.Activity
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
+import android.os.Handler
 import android.os.IBinder
-import android.widget.Toast
 import androidx.room.Room
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.data.radioDb.RadioDatabase
 import java.io.IOException
 import java.util.*
+import android.os.Build
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 class RadioService : Service() {
 
+
     private val mBinder = LocalBinder()
     private val mediaPlayer = MediaPlayer()
-    private lateinit var radioData:RadioData
     private val list : MutableList<RadioData> = mutableListOf()
     private lateinit var context: Context
+    private val timer=Timer()
+    private val task=object : TimerTask() {
+        override fun run() {
+            updateProgress()
+        }
+    }
     @Volatile
-    private var isPrepared=true
+    private var isPrepared=false
 
     internal interface MIBinder {
         fun playRadio(item: RadioData)
@@ -63,6 +74,10 @@ class RadioService : Service() {
     override fun onCreate() {
         super.onCreate()
         context=this
+        val handler=Handler{
+            playList()
+            false
+        }
         object:Thread(){
             override fun run() {
                 super.run()
@@ -72,64 +87,66 @@ class RadioService : Service() {
                 list.clear()
                 list.addAll(mDao.getWait(0,50) as MutableList<RadioData>)
                 db.close()
-
-                if(list.size>0){
-                    //查询待播放列表，并将最开始的加入mediaPlayer
-                    radioData=list[0]
-                    val url=list[0].radioUri
-                    try {
-                        mediaPlayer.setDataSource(url)
-                        isPrepared=false
-                        mediaPlayer.prepareAsync()
-                        mediaPlayer.setOnPreparedListener {
-                            isPrepared=true
-                            mediaPlayer.seekTo(list[0].progress)
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
+                handler.sendEmptyMessage(0x000)
             }
         }.start()
 
 
 
-        Timer().schedule(object : TimerTask() { override fun run() { updateProgress() }}, 0, 10000)
+
+        mediaPlayer.setOnPreparedListener {
+            mediaPlayer.start()
+            isPrepared=true
+            try {
+                timer.schedule(task,0,10000)
+            }catch (e:Exception){}
+        }
+        mediaPlayer.setOnCompletionListener {
+            timer.cancel()
+            clearProgress(list[0])
+            if(list.size <= 1){
+                seekTo(0)
+                mediaPlayer.start()
+            }
+            else{
+                list.removeAt(0)
+                playList()
+            }
+        }
 
     }
 
 
     fun play(item: RadioData){
-        //直接播放，删除当前播放，并将传入的插在列表头
+        timer.cancel()
+        //正在播放则直接进入
+        if(list.size>0 && list[0]==item){
+            return
+        }
+        else if (list.size > 0){
+            list.remove(item)
+            list.removeAt(0)
+        }
         list.add(0,item)
-        val url=item.radioUri
-        mediaPlayer.reset()
-        //重置mediaPlayer对象，防止切换时异常
-        addToHistory(item)
-        try {
-            mediaPlayer.setDataSource(url)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        //异步准备，准备完成播放
-        isPrepared=false
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            mediaPlayer.start()
-            isPrepared=true
-        }
-        mediaPlayer.setOnCompletionListener {
+        addToWait(item)
 
-//            Toast.makeText(context,"finish",Toast.LENGTH_SHORT).show()
-//            if(list.size > 0){
-//                list.removeAt(0)
-//                if(list.size> 0){
-//                    play(list.removeAt(0))
-//                }
-//            }
-        }
+        playList()
     }
 
+    private fun playList(){
+        if(list.size>0){
+            isPrepared=false
+            mediaPlayer.reset()
+            //重置mediaPlayer对象，防止切换时异常
+            addToHistory(list[0])
+            try {
+                mediaPlayer.setDataSource(list[0].radioUri)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            mediaPlayer.prepareAsync()
+        }
+    }
 
 
     fun itemEmpty()=(list.size<=0)
@@ -142,12 +159,12 @@ class RadioService : Service() {
     fun getList()=list
 
     private fun addToHistory(item: RadioData) {
-        val db = Room.databaseBuilder(this, RadioDatabase::class.java, "radio")
-            .allowMainThreadQueries()
-            .build()
-        val mDao=db.radioDao()
-        item.historyTime=System.currentTimeMillis()
-        mDao.updateItem(item)
+//        val db = Room.databaseBuilder(this, RadioDatabase::class.java, "radio")
+//            .allowMainThreadQueries()
+//            .build()
+//        val mDao=db.radioDao()
+//        item.historyTime=System.currentTimeMillis()
+//        mDao.updateItem(item)
     }
 
     fun getItem()=list[0]
@@ -190,23 +207,68 @@ class RadioService : Service() {
         mediaPlayer.seekTo(progress)
     }
 
+    fun changeplayerSpeed(speed: Float) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (mediaPlayer.isPlaying) {
+
+                mediaPlayer.playbackParams = mediaPlayer.playbackParams.setSpeed(speed)
+            } else {
+                mediaPlayer.playbackParams = mediaPlayer.playbackParams.setSpeed(speed)
+                mediaPlayer.pause()
+            }
+        }
+    }
+
     fun isPlaying()=mediaPlayer.isPlaying
 
     private fun updateProgress(){
-        if(list.size<=0){
-            return
-        }
-        list[0].progress=mediaPlayer.currentPosition
+//        if(list.size<=0){
+//            return
+//        }
+//        list[0].progress=mediaPlayer.currentPosition
+//        object :Thread(){
+//            override fun run() {
+//                super.run()
+//                val db=Room.databaseBuilder(context, RadioDatabase::class.java,"radio")
+//                    .build()
+//                val mDao=db.radioDao()
+//                mDao.updateItem(list[0])
+//                db.close()
+//            }
+//        }.start()
+    }
+
+    private fun clearProgress(item: RadioData){
+        item.progress=0
+        item.waitTime=0
         object :Thread(){
             override fun run() {
                 super.run()
                 val db=Room.databaseBuilder(context, RadioDatabase::class.java,"radio")
                     .build()
                 val mDao=db.radioDao()
-                mDao.updateItem(list[0])
+                mDao.updateItem(item)
                 db.close()
             }
         }.start()
+    }
+
+    private fun addToWait(item: RadioData){
+        item.waitTime=System.currentTimeMillis()
+        object :Thread(){
+            override fun run() {
+                super.run()
+                val db=Room.databaseBuilder(context, RadioDatabase::class.java,"radio")
+                    .build()
+                val mDao=db.radioDao()
+                mDao.updateItem(item)
+                db.close()
+            }
+        }.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
 }

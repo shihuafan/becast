@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="30dp"
+    android:paddingEnd="30dp"
+    android:paddingBottom="20dp"
+    android:orientation="vertical"
+    android:background="@drawable/radius_top_concern_40_0xcfcfcf">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="睡眠时间"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/btn_sleep_close"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:text="关闭"
+        android:background="#00000000"/>
+
+    <Button
+        android:id="@+id/btn_sleep_10"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:text="十分钟后"
+        android:background="#00000000"/>
+
+    <Button
+        android:id="@+id/btn_sleep_30"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:text="三十分钟后"
+        android:background="#00000000"/>
+
+    <Button
+        android:id="@+id/btn_sleep_60"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:text="六十分钟后"
+        android:background="#00000000"/>
+
+
+</LinearLayout>

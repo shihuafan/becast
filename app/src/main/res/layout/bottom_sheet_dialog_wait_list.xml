@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/radius_top_concern_40_0xcfcfcf">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="待播放列表"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_wait_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"/>
+
+
+
+</LinearLayout>

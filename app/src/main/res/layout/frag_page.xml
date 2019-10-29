@@ -48,21 +48,21 @@
                     android:id="@+id/text_page_subscribe"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="#00000000"
                     android:gravity="center"
                     android:text="订阅列表"
                     android:textSize="26sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:textColor="?attr/textColor1"/>
 
                 <TextView
                     android:id="@+id/text_page_wait"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="#00000000"
                     android:gravity="center"
                     android:text="待收听列表"
                     android:textSize="26sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:textColor="?attr/textColor1"/>
 
             </RelativeLayout>
 

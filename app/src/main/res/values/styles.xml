@@ -7,7 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorBackgroundFloating">#fff</item>
-        <item name="android:textColor">#000</item>
+        <item name="navBackground">#F7C325</item>
+        <item name="textColor1">#000</item>
+
+        <item name="btnNight">@drawable/ic_night</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -16,7 +19,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">#000</item>
         <item name="colorBackgroundFloating">#000</item>
-        <item name="android:textColor">#fff</item>
+        <item name="navBackground">#000</item>
+        <item name="textColor1">#fff</item>
+
+        <item name="btnNight">@drawable/light</item>
     </style>
 
 </resources>

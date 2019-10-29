@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:orientation="vertical"
-    android:background="?attr/colorPrimary">
+    android:background="?attr/navBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -120,7 +120,7 @@
             android:layout_marginStart="20dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="30dp"
-            android:background="@drawable/ic_night"/>
+            android:background="?attr/btnNight"/>
 
         <ImageButton
             android:id="@+id/btn_nav_setting"

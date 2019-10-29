@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         UserData.getAll(this)
         this.setTheme(UserData.style)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -69,7 +71,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btn_nav_night.setOnClickListener(this)
         btn_nav_setting.setOnClickListener(this)
         btn_nav_night.setOnClickListener(this)
-
     }
 
     @SuppressLint("WrongConstant")
