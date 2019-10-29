@@ -2,6 +2,7 @@ package com.example.becast.more
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,13 +17,13 @@ import kotlinx.android.synthetic.main.frag_more.view.*
 import java.util.regex.Pattern
 
 
-class MoreFragment(private var mBinder: RadioService.LocalBinder) : Fragment(), View.OnClickListener{
+class MoreFragment : Fragment(), View.OnClickListener{
 
     private lateinit var v: View
-
+    private lateinit var mBinder: RadioService.LocalBinder
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        v= inflater.inflate(com.example.becast.R.layout.frag_more, container, false)
-
+        v= inflater.inflate(R.layout.frag_more, container, false)
+        mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
         v.layout_more.setOnClickListener(this)
         v.btn_more_back.setOnClickListener(this)
         v.btn_more_opml.setOnClickListener(this)
@@ -36,8 +37,13 @@ class MoreFragment(private var mBinder: RadioService.LocalBinder) : Fragment(), 
                 if (mat.matches()) {
                     val imm = activity!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(activity!!.window.decorView.windowToken, 0)
+                    val fromXmlFragment=FromXmlFragment()
+                    val bundle=Bundle()
+                    bundle.putBinder("Binder",mBinder)
+                    bundle.putString("url",url)
+                    fromXmlFragment.arguments=bundle
                     childFragmentManager.beginTransaction()
-                        .replace(R.id.layout_more_show, FromXmlFragment(mBinder,url))
+                        .replace(R.id.layout_more_show, fromXmlFragment)
                         .commit()
                 }
             }
@@ -53,9 +59,7 @@ class MoreFragment(private var mBinder: RadioService.LocalBinder) : Fragment(), 
                 activity?.onBackPressed()
             }
             R.id.btn_more_opml->{
-                fragmentManager!!.beginTransaction()
-                    .replace(R.id.layout_more_show, FromXmlFragment(mBinder,edit_more.text.toString()))
-                    .commit()
+
             }
         }
     }

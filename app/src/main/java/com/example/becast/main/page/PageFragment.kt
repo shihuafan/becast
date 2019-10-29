@@ -3,6 +3,7 @@ package com.example.becast.main.page
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,17 +22,18 @@ import kotlinx.android.synthetic.main.frag_page.view.*
 import org.greenrobot.eventbus.EventBus
 
 
-class PageFragment(private val mBinder: RadioService.LocalBinder) : Fragment(), View.OnClickListener,
+class PageFragment : Fragment(), View.OnClickListener,
     ViewPager.OnPageChangeListener {
 
     private lateinit var pageViewModel:PageViewModel
     private lateinit var v:View
+    private lateinit var mBinder: RadioService.LocalBinder
     private val mHandler : Handler = Handler{
         when(it.what){
             0x103 ->{
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData,mBinder))
+                    .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData, mBinder))
                     .addToBackStack(null)
                     .commit()
             }
@@ -47,6 +49,9 @@ class PageFragment(private val mBinder: RadioService.LocalBinder) : Fragment(), 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view= inflater.inflate(R.layout.frag_page, container, false)
         v=view
+
+        mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
+
         pageViewModel= context?.let { PageViewModel(it) }!!
 
         view.list_page_subscribe.layoutManager = LinearLayoutManager(context)
@@ -92,9 +97,13 @@ class PageFragment(private val mBinder: RadioService.LocalBinder) : Fragment(), 
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.btn_page_more->{
+                val moreFragment=MoreFragment()
+                val bundle=Bundle()
+                bundle.putBinder("Binder",mBinder)
+                moreFragment.arguments=bundle
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_all,MoreFragment(mBinder))
+                    .add(R.id.layout_main_all,moreFragment)
                     .addToBackStack(null)
                     .commit()
             }

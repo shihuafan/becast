@@ -5,26 +5,18 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.Handler
 import android.os.IBinder
-import android.view.DragEvent
 import android.view.Gravity
-import android.view.ScaleGestureDetector
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.ScaleAnimation
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
-import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.data.user.UserData
 import com.example.becast.main.page.PageFragment
-import com.example.becast.more.MoreFragment
 import com.example.becast.nav.follow.FollowFragment
 import com.example.becast.nav.history.HistoryFragment
 import com.example.becast.nav.love.LoveFragment
@@ -33,12 +25,10 @@ import com.example.becast.nav.user.login.LoginFragment
 import com.example.becast.nav.user.personal.InfoFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_main.*
 import kotlinx.android.synthetic.main.layout_nav.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -47,6 +37,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     internal lateinit var mBinder: RadioService.LocalBinder
     private lateinit var pageFragment: PageFragment
     override fun onCreate(savedInstanceState: Bundle?) {
+        UserData.getAll(this)
+        this.setTheme(UserData.style)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -76,8 +68,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         layout_nav_history.setOnClickListener(this)
         btn_nav_night.setOnClickListener(this)
         btn_nav_setting.setOnClickListener(this)
+        btn_nav_night.setOnClickListener(this)
 
-        }
+    }
 
     @SuppressLint("WrongConstant")
     override fun onClick(v: View?) {
@@ -139,6 +132,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     .addToBackStack(null)
                     .commit()
             }
+            R.id.btn_nav_night->{
+                layout_drawer.closeDrawer(Gravity.START)
+                UserData.changeStyle(this)
+                recreate()
+            }
         }
     }
 
@@ -146,11 +144,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             mBinder = service as RadioService.LocalBinder
 
-
+            val bundle=Bundle()
+            bundle.putBinder("Binder",mBinder)
+            val playingFragment=PlayingFragment()
+            playingFragment.arguments=bundle
+            pageFragment=PageFragment()
+            pageFragment.arguments=bundle
             supportFragmentManager.beginTransaction()
-                .replace(R.id.layout_main_bottom, PlayingFragment(mBinder))
+                .replace(R.id.layout_main_bottom, playingFragment)
                 .commit()
-            pageFragment=PageFragment(mBinder)
+
             supportFragmentManager.beginTransaction()
                 .replace(R.id.layout_main_top,pageFragment)
                 .commit()

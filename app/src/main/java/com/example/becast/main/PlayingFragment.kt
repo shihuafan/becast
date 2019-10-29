@@ -2,10 +2,10 @@ package com.example.becast.main
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -16,9 +16,10 @@ import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_playing.view.*
 import java.util.*
 
-open class PlayingFragment(private val mBinder: RadioService.LocalBinder) : Fragment(), View.OnClickListener {
+open class PlayingFragment : Fragment(), View.OnClickListener {
 
     private lateinit var v:View
+    private lateinit var mBinder: RadioService.LocalBinder
     private val mHandler: Handler = Handler{
         setView()
         false
@@ -26,6 +27,7 @@ open class PlayingFragment(private val mBinder: RadioService.LocalBinder) : Frag
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_playing, container, false)
 
+        mBinder= arguments?.getBinder("Binder") as RadioService.LocalBinder
         Timer().schedule(object : TimerTask() {
             override fun run() { mHandler.sendEmptyMessage(1) }}, 0, 10)
 

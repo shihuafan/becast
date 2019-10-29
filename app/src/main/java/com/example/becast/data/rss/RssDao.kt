@@ -1,4 +1,4 @@
-package com.example.becast.unit.data.rssDB
+package com.example.becast.data.rss
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -16,5 +16,8 @@ interface RssDao {
 
     @Delete
     fun delete(user: RssData)
+
+    @Query("SELECT * FROM rss WHERE rss_uri == (:rss_uri)")
+    fun getRssData(rss_uri:String):RssData
 
 }

@@ -17,5 +17,6 @@ data class RadioData(
     @ColumnInfo (name = "rss_title")var rssTitle:String ,
     @ColumnInfo (name = "love_time")var loveTime:Long,
     @ColumnInfo (name = "history_time")var historyTime:Long ,
-    @ColumnInfo (name = "wait_time")var waitTime:Long
+    @ColumnInfo (name = "wait_time")var waitTime:Long,
+    @ColumnInfo (name = "progress")var progress:Int
 )

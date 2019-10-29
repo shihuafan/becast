@@ -10,24 +10,24 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.service.RadioService
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.main.page.RadioAdapter
 import com.example.becast.playpage.play.PlayPageFragment
+import com.example.becast.service.RadioService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_add_from_xml.*
 import kotlinx.android.synthetic.main.frag_add_from_xml.view.*
 
-class FromXmlFragment(private var mBinder: RadioService.LocalBinder, private val url:String) : Fragment(), View.OnClickListener {
+class FromXmlFragment : Fragment(), View.OnClickListener {
 
     private lateinit var fromXmlViewModel: FromXmlViewModel
     private lateinit var v: View
-
+    private lateinit var mBinder: RadioService.LocalBinder
+    private lateinit var url: String
     private val mHandler : Handler = Handler{
         when(it.what){
             0x103 ->{
@@ -43,7 +43,8 @@ class FromXmlFragment(private var mBinder: RadioService.LocalBinder, private val
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_add_from_xml, container, false)
-
+        mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
+        url=arguments!!.getString("url") as String
         fromXmlViewModel= context?.let { FromXmlViewModel(it,url) }!!
 
         v.list_add_from_xml.layoutManager = LinearLayoutManager(context)
@@ -59,8 +60,8 @@ class FromXmlFragment(private var mBinder: RadioService.LocalBinder, private val
             v.list_add_from_xml.adapter?.notifyDataSetChanged()
         })
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            v.scroll_add_from_xml.setOnScrollChangeListener { v, X, Y, oX, oY ->
-                if((v.content_scroll_add_from_xml.height-(v.scroll_add_from_xml.height+Y))<500){
+            v.scroll_add_from_xml.setOnScrollChangeListener { v, _, Y, _, _ ->
+                if((v.content_scroll_add_from_xml.height-(v.scroll_add_from_xml.height+Y))<1000){
                     if(fromXmlViewModel.flag){
                         Toast.makeText(context,"更新",Toast.LENGTH_SHORT).show()
                         fromXmlViewModel.getMore()

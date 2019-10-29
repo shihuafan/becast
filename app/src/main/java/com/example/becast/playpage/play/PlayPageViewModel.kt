@@ -1,8 +1,14 @@
 package com.example.becast.playpage.play
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
+import androidx.room.Room
+import com.example.becast.data.radioDb.RadioData
+import com.example.becast.data.radioDb.RadioDatabase
+import com.example.becast.data.rss.RssData
+import com.example.becast.unit.data.rssDB.RssDatabase
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.WriterException
@@ -69,6 +75,17 @@ class PlayPageViewModel {
             return result.toUpperCase()
         }catch(e:Exception){}
         return " "
+    }
+
+    fun getRssData(context: Context,radioData: RadioData): RssData {
+        val db= Room.databaseBuilder(context, RssDatabase::class.java,"rss")
+            .allowMainThreadQueries()
+            .build()
+        val mDao=db.rssDao()
+        val temp=mDao.getRssData(radioData.rssUri)
+        db.close()
+        return temp
+
     }
 
 }

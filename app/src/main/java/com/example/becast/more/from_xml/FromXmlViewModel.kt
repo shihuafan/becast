@@ -155,6 +155,7 @@ class FromXmlViewModel(val context: Context, val url:String) {
                 rssData.title,
                 0,
                 0,
+                0,
                 0
             )
             radioListCache.add(temp)

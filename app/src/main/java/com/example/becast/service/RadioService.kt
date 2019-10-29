@@ -12,6 +12,7 @@ import androidx.room.Room
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.data.radioDb.RadioDatabase
 import java.io.IOException
+import java.util.*
 
 class RadioService : Service() {
 
@@ -75,7 +76,6 @@ class RadioService : Service() {
                 if(list.size>0){
                     //查询待播放列表，并将最开始的加入mediaPlayer
                     radioData=list[0]
-
                     val url=list[0].radioUri
                     try {
                         mediaPlayer.setDataSource(url)
@@ -83,6 +83,7 @@ class RadioService : Service() {
                         mediaPlayer.prepareAsync()
                         mediaPlayer.setOnPreparedListener {
                             isPrepared=true
+                            mediaPlayer.seekTo(list[0].progress)
                         }
                     } catch (e: IOException) {
                         e.printStackTrace()
@@ -90,6 +91,10 @@ class RadioService : Service() {
                 }
             }
         }.start()
+
+
+
+        Timer().schedule(object : TimerTask() { override fun run() { updateProgress() }}, 0, 10000)
 
     }
 
@@ -186,6 +191,23 @@ class RadioService : Service() {
     }
 
     fun isPlaying()=mediaPlayer.isPlaying
+
+    private fun updateProgress(){
+        if(list.size<=0){
+            return
+        }
+        list[0].progress=mediaPlayer.currentPosition
+        object :Thread(){
+            override fun run() {
+                super.run()
+                val db=Room.databaseBuilder(context, RadioDatabase::class.java,"radio")
+                    .build()
+                val mDao=db.radioDao()
+                mDao.updateItem(list[0])
+                db.close()
+            }
+        }.start()
+    }
 
 }
 

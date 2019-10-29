@@ -8,10 +8,8 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.view.animation.TranslateAnimation
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -19,10 +17,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
+import com.example.becast.channel.ChannelFragment
 import com.example.becast.data.ShareData
 import com.example.becast.playpage.share.ShareFragment
 import com.example.becast.service.RadioService
-import kotlinx.android.synthetic.main.frag_playpage.*
 import kotlinx.android.synthetic.main.frag_playpage.view.*
 import java.util.*
 
@@ -33,16 +31,6 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
     private val playPageViewModel= PlayPageViewModel()
     private var flag=false
     private var shareData=ShareData(0,0,"",null)
-    private val mHandler: Handler = Handler{
-        if(!mBinder.radioItemEmpty()){
-            setView()
-        }
-        if(flag){
-           // text_play_end_time.text=playPageViewModel.timeToStr(mBinder.getRadioCurrentPosition()/1000)
-        }
-        false
-    }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_playpage, container, false)
@@ -67,12 +55,12 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
         v.btn_play_next.setOnClickListener(this)
         v.seekBar_play.setOnSeekBarChangeListener(this)
         v.layout_play.setOnClickListener(this)
+        v.btn_play_channel.setOnClickListener(this)
         v.btn_play_pin.setOnTouchListener{ _: View, motionEvent: MotionEvent ->
             when(motionEvent.action){
                 MotionEvent.ACTION_DOWN->{
                     shareData.startTime=mBinder.getRadioCurrentPosition()/1000
                     v.layout_pin.visibility=View.VISIBLE
-
 //                    val alphaAnimation = AlphaAnimation(0.1f, 1.0f)
 //                    alphaAnimation.duration = 500
 //                    alphaAnimation.repeatCount = Animation.INFINITE
@@ -88,12 +76,13 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
                 //记录结束
                 MotionEvent.ACTION_UP->{
                     v.layout_pin.visibility=View.GONE
-                    shareData.endTime=mBinder.getRadioCurrentPosition()
+                    shareData.endTime=mBinder.getRadioCurrentPosition()/1000
                     if((shareData.endTime-shareData.startTime)<3000){
                         Toast.makeText(context,"截取时长不应小于3秒",Toast.LENGTH_SHORT).show()
                     }
                     else{
                         val content=shareData.toString()
+                        Toast.makeText(context,(shareData.endTime-shareData.startTime).toString(),Toast.LENGTH_SHORT).show()
                         shareData.bitmap= playPageViewModel.createQRCodeBitmap(content)
                         fragmentManager!!.beginTransaction()
                             .replace(R.id.layout_main_all, ShareFragment(mBinder.getRadioItem(),shareData))
@@ -105,7 +94,7 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
             false
         }
         Timer().schedule(object : TimerTask() {
-            override fun run() { mHandler.sendEmptyMessage(1) }}, 0, 1000)
+            override fun run() { setView() }}, 0, 1000)
         return v
     }
 
@@ -150,6 +139,16 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
                 mBinder.playNextRadio()
             }
             R.id.layout_play->{ }
+            R.id.btn_play_channel->{
+                val rssData= context?.let { playPageViewModel.getRssData(it,mBinder.getRadioItem()) }
+                if(rssData!=null){
+                    fragmentManager!!.beginTransaction()
+                        .replace(R.id.layout_play,ChannelFragment(rssData,mBinder))
+                        .addToBackStack(null)
+                        .commit()
+                }
+
+            }
         }
     }
 

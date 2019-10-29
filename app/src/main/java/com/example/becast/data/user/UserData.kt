@@ -1,6 +1,7 @@
 package com.example.becast.data.user
 
 import android.content.Context
+import com.example.becast.R
 
 
 object UserData {
@@ -8,6 +9,7 @@ object UserData {
     var name:String?=" "
     var image:String?=" "
     var isLogin:Boolean=false
+    var style:Int= R.style.AppTheme
 
     fun getAll(context:Context) :UserData{
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
@@ -15,6 +17,7 @@ object UserData {
         name=sp.getString("name", "")
         image=sp.getString("image", "")
         isLogin=sp.getBoolean("is_login",false)
+        style=sp.getInt("style",R.style.DarkTheme)
         return this
     }
 
@@ -39,6 +42,18 @@ object UserData {
         edit.putString("name", "")
         edit.putString("image", "")
         edit.putBoolean("is_login",false)
+        edit.apply()
+    }
+
+    fun changeStyle(context: Context){
+        style = if(style==R.style.AppTheme){
+            R.style.DarkTheme
+        }else{
+            R.style.AppTheme
+        }
+        val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
+        val edit=sp.edit()
+        edit.putInt("style", style)
         edit.apply()
     }
 }
