@@ -9,8 +9,8 @@
         <item name="colorBackgroundFloating">#fff</item>
         <item name="navBackground">#F7C325</item>
         <item name="textColor1">#000</item>
-
         <item name="btnNight">@drawable/ic_night</item>
+        <item name="bottomSheetDialogBackground">@drawable/radius_top_concern_40_0xcfcfcf</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -21,7 +21,7 @@
         <item name="colorBackgroundFloating">#000</item>
         <item name="navBackground">#000</item>
         <item name="textColor1">#fff</item>
-
+        <item name="bottomSheetDialogBackground">@drawable/radius_top_concern_40_0x000</item>
         <item name="btnNight">@drawable/light</item>
     </style>
 

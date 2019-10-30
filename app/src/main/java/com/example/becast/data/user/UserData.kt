@@ -10,6 +10,7 @@ object UserData {
     var image:String?=" "
     var isLogin:Boolean=false
     var style:Int= R.style.AppTheme
+    var delay:Int=0
 
     fun getAll(context:Context) :UserData{
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)

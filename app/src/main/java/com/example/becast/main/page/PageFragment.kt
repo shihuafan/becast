@@ -60,7 +60,7 @@ class PageFragment : Fragment(), View.OnClickListener,
             RadioAdapter(it, pageViewModel.subscribeListLiveData.value!!, mHandler)
         }
         view.list_page_wait.adapter = context?.let {
-            RadioAdapter(it, pageViewModel.waitListLiveData.value!!, mHandler)
+            WaitAdapter(it, mBinder.getLiveData().value!!, mHandler,mBinder)
         }
         view.list_page_subscribe.addOnScrollListener(object :RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -81,7 +81,7 @@ class PageFragment : Fragment(), View.OnClickListener,
         pageViewModel.subscribeListLiveData.observe(this, Observer{
             view.list_page_subscribe.adapter?.notifyDataSetChanged()
         })
-        pageViewModel.waitListLiveData.observe(this, Observer{
+        mBinder.getLiveData().observe(this, Observer{
             view.list_page_wait.adapter?.notifyDataSetChanged()
         })
 

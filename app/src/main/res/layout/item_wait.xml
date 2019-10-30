@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        app:mode="same_level"
+        app:dragEdge="right"
+        android:id="@+id/item_wait">
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/btn_item_wait_cancel"
+                    android:layout_width="75dp"
+                    android:layout_height="match_parent"/>
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                tools:ignore="UselessParent">
+
+                <ImageView
+                    android:id="@+id/image_item_wait"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:scaleType="centerCrop" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="80dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text_item_wait_update"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:gravity="start|center_vertical"
+                        android:textSize="13sp"
+                        android:textColor="#993c3c43"
+                        android:singleLine="true"/>
+
+                    <TextView
+                        android:id="@+id/text_item_wait_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:gravity="start|center_vertical"
+                        android:text="节目"
+                        android:textSize="16sp"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        android:singleLine="true"/>
+
+                    <TextView
+                        android:id="@+id/text_item_wait_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:gravity="start|center_vertical"
+                        android:text="播客名"
+                        android:textSize="13sp"
+                        android:textColor="@color/colorPrimary"
+                        android:singleLine="true"/>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_item_wait"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#00000000"/>
+
+            </RelativeLayout>
+        </FrameLayout>
+
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
+

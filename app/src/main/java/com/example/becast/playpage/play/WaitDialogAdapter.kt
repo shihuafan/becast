@@ -15,14 +15,15 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.data.radioDb.RadioData
+import com.example.becast.service.RadioService
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 
 
-class WaitDialogAdapter (private val context: Context, private val mData : MutableList<RadioData>)
-    : RecyclerView.Adapter<WaitDialogAdapter.ViewHolder>() {
+class WaitDialogAdapter (private val context: Context, private val mData : MutableList<RadioData>,
+                         private val mBinder: RadioService.LocalBinder) : RecyclerView.Adapter<WaitDialogAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_wait_dialog, parent, false)
@@ -36,16 +37,19 @@ class WaitDialogAdapter (private val context: Context, private val mData : Mutab
         holder.textItemName.text=mData[position].title
 
         holder.btnItem.setOnClickListener {
-//            val msg= Message()
-//            msg.what=0x103
-//            msg.obj=mData[position]
-//            handler.sendMessage(msg)
+            mBinder.deleteRadioItem(position)
+//            mBinder.playRadio(mData[position])
+        }
+        holder.btnItemDelete.setOnClickListener {
+            mBinder.deleteRadioItem(position)
         }
     }
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
         val btnItem : Button = view.findViewById(R.id.btn_item_radio)
+        val btnItemDelete : Button = view.findViewById(R.id.btn_item_delete)
         val textItemName:TextView= view.findViewById(R.id.text_item_name)
+
 
     }
 

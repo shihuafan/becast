@@ -4,6 +4,9 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.becast.R
@@ -16,7 +19,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_dialog_sleep.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_wait_list.view.*
 
 
-class WaitListBottomSheetDialog(context: Context,mBinder: RadioService.LocalBinder) {
+class WaitListBottomSheetDialog(owner:LifecycleOwner,context: Context,mBinder: RadioService.LocalBinder){
     init {
         val view = View.inflate(context, R.layout.bottom_sheet_dialog_wait_list, null)
         val bottomSheetDialog = BottomSheetDialog(context)
@@ -30,9 +33,11 @@ class WaitListBottomSheetDialog(context: Context,mBinder: RadioService.LocalBind
         bottomSheetDialog.show()
 
         view.list_wait_dialog.layoutManager = LinearLayoutManager(context)
-        view.list_wait_dialog.adapter=WaitDialogAdapter(context,mBinder.getRadioList())
-        view.list_wait_dialog.addItemDecoration(DividerItemDecoration(context,DividerItemDecoration.VERTICAL))
-
+        view.list_wait_dialog.adapter=WaitDialogAdapter(context,
+            mBinder.getLiveData().value!!,mBinder)
+        mBinder.getLiveData().observe(owner, Observer{
+            view.list_wait_dialog.adapter?.notifyDataSetChanged()
+        })
 
 
 

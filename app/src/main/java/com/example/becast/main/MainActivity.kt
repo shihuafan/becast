@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.layout_nav.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.util.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var conn : MyConnection
     internal lateinit var mBinder: RadioService.LocalBinder
     private lateinit var pageFragment: PageFragment
+    private var timer:Timer=Timer()
+    private val context=this
     override fun onCreate(savedInstanceState: Bundle?) {
         UserData.getAll(this)
         this.setTheme(UserData.style)
@@ -183,7 +186,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             "open"->{
                 layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
+            "delay"->{
+                if(UserData.delay==0){
+                    timer.cancel()
+                    timer= Timer()
+                }else{
+                    var delay=0L
+                    when(UserData.delay){
+                        1-> delay=10*60*1000L
+                        2-> delay=30*60*1000L
+                        3-> delay=60*60*1000L
+                    }
+                    timer.cancel()
+                    timer= Timer()
+                    timer.schedule(object : TimerTask() {
+                        override fun run() { context.finish() }}, delay)
+                }
+
+            }
         }
     }
+
+
 
 }

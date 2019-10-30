@@ -7,6 +7,7 @@ import com.example.becast.R
 import com.example.becast.data.user.UserData
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_sleep.view.*
+import org.greenrobot.eventbus.EventBus
 
 
 class SleepBottomSheetDialog(context: Context) {
@@ -23,25 +24,15 @@ class SleepBottomSheetDialog(context: Context) {
         bottomSheetDialog.show()
         val list= mutableListOf(view.btn_sleep_close,
             view.btn_sleep_10,view.btn_sleep_30,view.btn_sleep_60)
-
-        var type=UserData.getSleepType(context)
-        list[type].setBackgroundResource(R.drawable.radius_concern_40_0xf7c325)
+        var delay=UserData.delay
+        list[delay].setBackgroundResource(R.drawable.radius_concern_40_0xf7c325)
 
         for(i in 0 until list.size){
             list[i].setOnClickListener{
-                type=i
-                UserData.saveSleepType(context,type)
-
+                //被点击，通知事件总线，在activity中使用timertask
+                UserData.delay=i
+                EventBus.getDefault().post("delay")
                 bottomSheetDialog.dismiss()
-//                for(j in 0 until list.size){
-//                    if(type==j){
-//                        list[j].setBackgroundResource(R.drawable.radius_concern_40_0xf7c325)
-//                    }
-//                    else{
-//                        list[j].setBackgroundColor(0x00000000)
-//                    }
-//                }
-
             }
         }
 

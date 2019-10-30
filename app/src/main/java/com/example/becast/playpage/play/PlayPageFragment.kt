@@ -87,7 +87,7 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
 //                            .replace(R.id.layout_main_all, ShareFragment(mBinder.getRadioItem(),shareData))
 //                            .addToBackStack(null)
 //                            .commit()
-                        context?.let { ShareBottomSheetDialog(it,shareData,null) }
+                        context?.let { ShareBottomSheetDialog(it,shareData.toString()) }
                     }
                 }
             }
@@ -146,10 +146,10 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
                 context?.let { SleepBottomSheetDialog(it) }
             }
             R.id.btn_play_share->{
-                context?.let { ShareBottomSheetDialog(it,null,mBinder.getRadioItem()) }
+                context?.let { ShareBottomSheetDialog(it,mBinder.getRadioItem().link) }
             }
             R.id.btn_play_wait_list->{
-                context?.let { WaitListBottomSheetDialog(it,mBinder)}
+                context?.let { WaitListBottomSheetDialog(this,it,mBinder)}
             }
             R.id.btn_play_channel->{
                 val rssData= context?.let { playPageViewModel.getRssData(it,mBinder.getRadioItem()) }

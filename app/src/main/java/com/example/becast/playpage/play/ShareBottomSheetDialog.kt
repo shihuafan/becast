@@ -12,7 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_sleep.view.*
 
 
-class ShareBottomSheetDialog(context: Context, shareData: ShareData?, radioData: RadioData?) {
+class ShareBottomSheetDialog(context: Context,content:String) {
     init {
         val view = View.inflate(context, R.layout.bottom_sheet_dialog_share, null)
         val bottomSheetDialog = BottomSheetDialog(context)
@@ -25,11 +25,6 @@ class ShareBottomSheetDialog(context: Context, shareData: ShareData?, radioData:
         }
         bottomSheetDialog.show()
 
-        if(radioData!=null){
-            Toast.makeText(context,"radioData",Toast.LENGTH_SHORT).show()
-        }else{
-            Toast.makeText(context,"shareData",Toast.LENGTH_SHORT).show()
-        }
 
 
 

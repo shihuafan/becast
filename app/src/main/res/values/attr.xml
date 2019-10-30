@@ -5,4 +5,5 @@
     <attr name="textColor1" format="color"/>
 
     <attr name="btnNight" format="reference"/>
+    <attr name="bottomSheetDialogBackground" format="reference"/>
 </resources>
