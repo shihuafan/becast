@@ -3,7 +3,7 @@ package com.example.becast.nav.user.login
 import android.content.Context
 import android.os.Handler
 import android.os.Message
-import com.example.becast.data.user.UserData
+import com.example.becast.data.UserData
 import okhttp3.*
 import java.io.IOException
 

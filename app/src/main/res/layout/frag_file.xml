@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff2f2f2"
-    android:id="@+id/layout_love">
+    android:id="@+id/layout_file">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_height="60dp">
 
             <Button
-                android:id="@+id/btn_love_back"
+                android:id="@+id/btn_file_back"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_centerVertical="true"
@@ -28,14 +28,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="收  藏"
+                android:text="从opml导入"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"
                 android:textSize="16sp" />
+
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_love"
+            android:id="@+id/list_file"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbarSize="5dp"

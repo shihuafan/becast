@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.becast.R
-import com.example.becast.data.user.UserData
+import com.example.becast.data.UserData
 import kotlinx.android.synthetic.main.frag_info.view.*
 import org.greenrobot.eventbus.EventBus
 

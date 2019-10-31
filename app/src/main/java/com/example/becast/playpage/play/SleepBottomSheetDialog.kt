@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import com.example.becast.R
-import com.example.becast.data.user.UserData
+import com.example.becast.data.UserData
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_sleep.view.*
 import org.greenrobot.eventbus.EventBus
@@ -24,7 +24,7 @@ class SleepBottomSheetDialog(context: Context) {
         bottomSheetDialog.show()
         val list= mutableListOf(view.btn_sleep_close,
             view.btn_sleep_10,view.btn_sleep_30,view.btn_sleep_60)
-        var delay=UserData.delay
+        var delay= UserData.delay
         list[delay].setBackgroundResource(R.drawable.radius_concern_40_0xf7c325)
 
         for(i in 0 until list.size){

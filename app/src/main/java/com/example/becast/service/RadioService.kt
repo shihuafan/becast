@@ -102,7 +102,8 @@ class RadioService : Service() {
 
         mediaPlayer.setOnPreparedListener {
             mediaPlayer.start()
-            addToHistory(list[0])
+            list[0].historyTime=System.currentTimeMillis()
+            updateItem(list[0])
             //调用待播放列表并预加载完成
             if(firstFlag){
                 mediaPlayer.pause()
@@ -175,16 +176,6 @@ class RadioService : Service() {
         }
     }
 
-
-    private fun addToHistory(item: RadioData) {
-        val db = Room.databaseBuilder(this, RadioDatabase::class.java, "radio")
-            .allowMainThreadQueries()
-            .build()
-        val mDao=db.radioDao()
-        item.historyTime=System.currentTimeMillis()
-        mDao.updateItem(item)
-    }
-
     fun addItem(item: RadioData){
         item.waitTime=System.currentTimeMillis()
         list.add(item)
@@ -197,7 +188,9 @@ class RadioService : Service() {
         listLiveData.value=list
         item.waitTime=0
         updateItem(item)
-
+        if(index==0){
+            playList()
+        }
     }
 
     fun playPre(){

@@ -3,13 +3,8 @@ package com.example.becast.playpage.play
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.example.becast.R
-import com.example.becast.data.ShareData
-import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.user.UserData
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import kotlinx.android.synthetic.main.bottom_sheet_dialog_sleep.view.*
 
 
 class ShareBottomSheetDialog(context: Context,content:String) {

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.becast.R
-import com.example.becast.data.user.UserData
+import com.example.becast.data.UserData
 import com.example.becast.nav.user.register.RegisterFragment
 import kotlinx.android.synthetic.main.frag_login.*
 import kotlinx.android.synthetic.main.frag_login.view.*
@@ -33,8 +33,8 @@ class LoginFragment :Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        v.edit_login_id.hint=UserData.uid.toString()
-        v.edit_login_password.hint=UserData.uid.toString()
+        v.edit_login_id.hint= UserData.uid.toString()
+        v.edit_login_password.hint= UserData.uid.toString()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

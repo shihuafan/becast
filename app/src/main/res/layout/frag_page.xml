@@ -77,17 +77,20 @@
             android:id="@+id/viewpager_page"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="125dp">
+            android:layout_marginTop="125dp"
+            android:overScrollMode="never">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_page_subscribe"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:overScrollMode="never"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_page_wait"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:overScrollMode="never"/>
 
         </androidx.viewpager.widget.ViewPager>
 

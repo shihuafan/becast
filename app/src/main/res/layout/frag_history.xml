@@ -50,6 +50,7 @@
             android:layout_height="match_parent"
             android:scrollbarSize="5dp"
             android:scrollbarThumbVertical="@color/colorPrimary"
+            android:overScrollMode="never"
             android:scrollbars="vertical"/>
 
     </LinearLayout>

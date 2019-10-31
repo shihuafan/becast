@@ -57,7 +57,6 @@ class DetailFragment(private val radioData: RadioData,private val mBinder: Radio
 
            }
            R.id.btn_detail_wait->{
-               detailViewModel.addToWait()
                mBinder.addRadioItem(radioData)
                Snackbar.make(v, "已加入收听列表", Snackbar.LENGTH_SHORT).show()
            }

@@ -4,19 +4,18 @@ import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.view.Gravity
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.data.user.UserData
+import com.example.becast.data.UserData
 import com.example.becast.main.page.PageFragment
 import com.example.becast.nav.follow.FollowFragment
 import com.example.becast.nav.history.HistoryFragment
@@ -40,6 +39,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var pageFragment: PageFragment
     private var timer:Timer=Timer()
     private val context=this
+    private var path : String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         UserData.getAll(this)
         this.setTheme(UserData.style)
@@ -64,6 +64,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val intent = Intent(this, RadioService::class.java)
         conn=MyConnection()
         bindService(intent,conn,BIND_AUTO_CREATE)
+
+        val opmlIntent =getIntent()
+        val action = opmlIntent.action
+        if (Intent.ACTION_VIEW == action) {
+            val str = opmlIntent.data
+            if (str != null) {
+                path = Uri.decode(str.encodedPath).substring(6)
+            }
+        }
 
         //nav
         btn_nav_user.setOnClickListener(this)
@@ -150,6 +159,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             val bundle=Bundle()
             bundle.putBinder("Binder",mBinder)
+            bundle.putString("path",path)
             val playingFragment=PlayingFragment()
             playingFragment.arguments=bundle
             pageFragment=PageFragment()
@@ -173,7 +183,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        Toast.makeText(this,supportFragmentManager.fragments[supportFragmentManager.fragments.size-1].toString(),Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this,supportFragmentManager.fragments[supportFragmentManager.fragments.size-1].toString(),Toast.LENGTH_SHORT).show()
         supportFragmentManager.fragments[supportFragmentManager.fragments.size-1].onResume()
     }
 
@@ -206,7 +216,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
-
-
 
 }

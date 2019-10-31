@@ -1,6 +1,5 @@
 package com.example.becast.more.from_xml
 
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -29,23 +28,29 @@ class FromXmlFragment : Fragment(), View.OnClickListener {
     private lateinit var mBinder: RadioService.LocalBinder
     private lateinit var url: String
     private val mHandler : Handler = Handler{
+        Toast.makeText(context,it.obj as String,Toast.LENGTH_LONG).show()
         when(it.what){
+
             0x103 ->{
                 mBinder.playRadio(it.obj as RadioData)
-                fragmentManager!!.beginTransaction().replace(R.id.layout_main_all,
-                    PlayPageFragment(mBinder)
-                )
+                fragmentManager!!.beginTransaction()
+                    .replace(R.id.layout_main_all, PlayPageFragment(mBinder))
                     .addToBackStack(null)
                     .commit()
+            }
+            404->{
+                Toast.makeText(context,it.obj as String,Toast.LENGTH_SHORT).show()
             }
         }
         false
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_add_from_xml, container, false)
         mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
         url=arguments!!.getString("url") as String
-        fromXmlViewModel= context?.let { FromXmlViewModel(it,url) }!!
+        Toast.makeText(context,url,Toast.LENGTH_LONG).show()
+        fromXmlViewModel= context?.let { FromXmlViewModel(it,url,mHandler) }!!
 
         v.list_add_from_xml.layoutManager = LinearLayoutManager(context)
         v.list_add_from_xml.adapter = context?.let {
@@ -59,16 +64,16 @@ class FromXmlFragment : Fragment(), View.OnClickListener {
         fromXmlViewModel.radioListLiveData.observe(this, Observer{
             v.list_add_from_xml.adapter?.notifyDataSetChanged()
         })
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            v.scroll_add_from_xml.setOnScrollChangeListener { v, _, Y, _, _ ->
-                if((v.content_scroll_add_from_xml.height-(v.scroll_add_from_xml.height+Y))<1000){
-                    if(fromXmlViewModel.flag){
-                        Toast.makeText(context,"更新",Toast.LENGTH_SHORT).show()
-                        fromXmlViewModel.getMore()
-                    }
-                }
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            v.scroll_add_from_xml.setOnScrollChangeListener { v, _, Y, _, _ ->
+//                if((v.content_scroll_add_from_xml.height-(v.scroll_add_from_xml.height+Y))<1000){
+//                    if(fromXmlViewModel.flag){
+//                        Toast.makeText(context,"更新",Toast.LENGTH_SHORT).show()
+//                        fromXmlViewModel.getMore()
+//                    }
+//                }
+//            }
+//        }
 
 
 

@@ -10,6 +10,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.example.becast.R
+import com.example.becast.more.from_opml.FromFileFragment
+import com.example.becast.more.from_opml.FromOpmlFragment
 import com.example.becast.more.from_xml.FromXmlFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_more.*
@@ -49,7 +51,6 @@ class MoreFragment : Fragment(), View.OnClickListener{
             }
            false
         }
-
         return v
     }
 
@@ -59,7 +60,15 @@ class MoreFragment : Fragment(), View.OnClickListener{
                 activity?.onBackPressed()
             }
             R.id.btn_more_opml->{
-
+                val imm = activity!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(activity!!.window.decorView.windowToken, 0)
+                val bundle=Bundle()
+                bundle.putBinder("Binder",mBinder)
+                val fromFileFragment= FromFileFragment()
+                fromFileFragment.arguments=bundle
+                fragmentManager!!.beginTransaction()
+                    .replace(R.id.layout_more, fromFileFragment)
+                    .commit()
             }
         }
     }

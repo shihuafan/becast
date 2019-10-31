@@ -2,6 +2,8 @@
   <dictionary name="HuafanShi">
     <words>
       <w>fromxml</w>
+      <w>itunes</w>
+      <w>opml</w>
       <w>primarykey</w>
       <w>recyclerview</w>
       <w>sqlite</w>

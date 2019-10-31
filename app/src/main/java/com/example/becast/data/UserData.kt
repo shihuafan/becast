@@ -1,4 +1,4 @@
-package com.example.becast.data.user
+package com.example.becast.data
 
 import android.content.Context
 import com.example.becast.R
@@ -12,13 +12,13 @@ object UserData {
     var style:Int= R.style.AppTheme
     var delay:Int=0
 
-    fun getAll(context:Context) :UserData{
+    fun getAll(context:Context) : UserData {
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
-        uid=sp.getInt("uid", 0)
-        name=sp.getString("name", "")
-        image=sp.getString("image", "")
-        isLogin=sp.getBoolean("is_login",false)
-        style=sp.getInt("style",R.style.DarkTheme)
+        uid =sp.getInt("uid", 0)
+        name =sp.getString("name", "")
+        image =sp.getString("image", "")
+        isLogin =sp.getBoolean("is_login",false)
+        style =sp.getInt("style",R.style.DarkTheme)
         return this
     }
 
@@ -35,10 +35,10 @@ object UserData {
     fun clearAll(context: Context){
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
         val edit=sp.edit()
-        uid=0
-        name=""
-        image=""
-        isLogin=false
+        uid =0
+        name =""
+        image =""
+        isLogin =false
         edit.putInt("uid", 0)
         edit.putString("name", "")
         edit.putString("image", "")
@@ -47,7 +47,7 @@ object UserData {
     }
 
     fun changeStyle(context: Context){
-        style = if(style==R.style.AppTheme){
+        style = if(style ==R.style.AppTheme){
             R.style.DarkTheme
         }else{
             R.style.AppTheme

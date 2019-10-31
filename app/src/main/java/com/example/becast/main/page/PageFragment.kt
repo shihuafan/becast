@@ -16,6 +16,7 @@ import androidx.viewpager.widget.ViewPager
 import com.example.becast.R
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.more.MoreFragment
+import com.example.becast.more.from_opml.FromOpmlFragment
 import com.example.becast.playpage.DetailFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_page.view.*
@@ -51,6 +52,24 @@ class PageFragment : Fragment(), View.OnClickListener,
         v=view
 
         mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
+        val path=arguments!!.getString("path")
+        if(path!=null){
+            val index= path.lastIndexOf('.')+1
+            //这里检验一下文件格式
+            if(index>=0 && "opml"== path.substring(index)){
+                val bundle=Bundle()
+                bundle.putBinder("Binder",mBinder)
+                bundle.putString("path",path)
+                val fromOpmlFragment= FromOpmlFragment()
+                fromOpmlFragment.arguments=bundle
+                fragmentManager!!.beginTransaction()
+                    .replace(R.id.layout_main, fromOpmlFragment)
+                    .commit()
+            }
+            else{
+                Toast.makeText(context, "文件格式错误",Toast.LENGTH_SHORT).show()
+            }
+        }
 
         pageViewModel= context?.let { PageViewModel(it) }!!
 

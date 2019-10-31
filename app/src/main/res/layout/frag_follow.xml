@@ -41,6 +41,7 @@
             android:layout_margin="10dp"
             android:scrollbarSize="5dp"
             android:scrollbarThumbVertical="@color/colorPrimary"
+            android:overScrollMode="never"
             android:scrollbars="vertical"/>
 
     </LinearLayout>
