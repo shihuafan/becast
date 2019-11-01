@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         UserData.getAll(this)
         Glide.with(this)
             .load(UserData.image)
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(10)).circleCrop().error(R.drawable.user))
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(10)).circleCrop())
             .into(image_nav_show)
         if(UserData.uid==0){
             text_nav_name.text="点击头像登录"

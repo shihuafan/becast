@@ -233,7 +233,7 @@
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_centerInParent="true"
-                                    android:background="@drawable/ic_sleep_teim"/>
+                                    android:background="@drawable/moon"/>
 
                             </RelativeLayout>
 
@@ -263,7 +263,7 @@
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_centerInParent="true"
-                                    android:background="@drawable/ic_share"/>
+                                    android:background="@drawable/share"/>
 
                             </RelativeLayout>
 
@@ -277,7 +277,7 @@
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:layout_centerInParent="true"
-                                    android:background="@drawable/ic_waitlist"/>
+                                    android:background="@drawable/ic_wait_list"/>
 
                             </RelativeLayout>
 
@@ -304,7 +304,7 @@
                                 android:layout_height="30dp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:background="@drawable/ic_right"/>
+                                android:background="@drawable/go"/>
 
                         </RelativeLayout>
 
@@ -344,7 +344,7 @@
             android:id="@+id/btn_play_pin"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:background="@drawable/ic_night"
+            android:background="@drawable/moon"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="30dp"
             android:layout_alignParentBottom="true"
