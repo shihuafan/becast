@@ -25,15 +25,40 @@
                 android:layout_marginStart="20dp"
                 android:background="@drawable/back"/>
 
-            <EditText
-                android:id="@+id/edit_more"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="60dp"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="60dp"
-                android:imeOptions="actionSearch"
-                android:singleLine="true"/>
+                android:background="@drawable/radius_concern_40_0xcfcfcf">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:background="?attr/ic_search"
+                    tools:ignore="ContentDescription" />
+
+                <EditText
+                    android:id="@+id/edit_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:imeOptions="actionSearch"
+                    android:gravity="center|start"
+                    android:textSize="14sp"
+                    android:textColor="?attr/textColor1"
+                    android:singleLine="true"
+                    android:background="@null"
+                    android:textCursorDrawable="?attr/textColor1"
+                    tools:ignore="Autofill,LabelFor,TextFields" />
+
+            </RelativeLayout>
 
             <ImageButton
                 android:id="@+id/btn_more_opml"
