@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_nav"
     android:layout_width="240dp"
     android:layout_height="match_parent"
@@ -47,12 +48,13 @@
         android:id="@+id/layout_nav_follow">
 
         <ImageView
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:scaleType="centerCrop"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            android:background="@drawable/ic_follow"/>
+            android:background="?attr/ic_follow"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -70,12 +72,13 @@
         android:id="@+id/layout_nav_collect">
 
         <ImageView
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:scaleType="centerCrop"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            android:background="@drawable/ic_love"/>
+            android:background="?attr/ic_collect"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,11 +96,13 @@
         android:id="@+id/layout_nav_history">
 
         <ImageView
-            android:layout_width="23dp"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="centerCrop"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            android:background="@drawable/ic_history"/>
+            android:background="?attr/ic_history"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -113,23 +118,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageButton
+        <Button
             android:id="@+id/btn_nav_night"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="20dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="30dp"
-            android:background="?attr/btnNight"/>
+            android:background="?attr/ic_theme"/>
 
-        <ImageButton
+        <Button
             android:id="@+id/btn_nav_setting"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_marginStart="65dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="80dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="30dp"
-            android:background="@drawable/ic_setting"/>
+            android:background="?attr/ic_setting"/>
 
     </RelativeLayout>
 

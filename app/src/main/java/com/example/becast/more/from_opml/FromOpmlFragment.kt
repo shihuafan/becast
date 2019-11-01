@@ -30,7 +30,7 @@ class FromOpmlFragment : Fragment() {
                 bundle.putString("url",it.obj as String)
                 fromXmlFragment.arguments=bundle
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.layout_opml, fromXmlFragment)
+                    .replace(R.id.layout_opml_bottom, fromXmlFragment)
                     .commit()
             }
             404->{
@@ -46,6 +46,7 @@ class FromOpmlFragment : Fragment() {
         val path=arguments!!.getString("path") as String
         fromOpmlViewModel=FromOpmlViewModel(path, mHandler)
 
+        v.text_opml_file.text=path.substring( path.lastIndexOf("/") + 1)
         v.list_opml.layoutManager=LinearLayoutManager(context)
         v.list_opml.adapter=  OpmlAdapter(fromOpmlViewModel.listLiveData.value!!,mHandler)
         fromOpmlViewModel.listLiveData.observe(this, Observer {

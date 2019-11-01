@@ -3,7 +3,18 @@
 
     <attr name="navBackground" format="color" />
     <attr name="textColor1" format="color"/>
+    <attr name="textColor2" format="color"/>
+    <attr name="textColor3" format="color"/>
+    <attr name="textColor4" format="color"/>
 
-    <attr name="btnNight" format="reference"/>
+    <attr name="ic_theme" format="reference"/>
+    <attr name="ic_follow" format="reference"/>
+    <attr name="ic_collect" format="reference"/>
+    <attr name="ic_history" format="reference"/>
+    <attr name="ic_setting" format="reference"/>
+    <attr name="ic_search" format="reference"/>
+    <attr name="ic_play" format="reference"/>
+    <attr name="ic_backward" format="reference"/>
+    <attr name="ic_forward" format="reference"/>
     <attr name="bottomSheetDialogBackground" format="reference"/>
 </resources>

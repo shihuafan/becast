@@ -50,10 +50,10 @@ open class PlayingFragment : Fragment(), View.OnClickListener {
                 }
             }
             if(mBinder.isRadioPlaying()){
-                v.btn_playing_pause.setBackgroundResource(R.drawable.pause)
+                v.btn_playing_pause.setBackgroundResource(R.drawable.pause_light)
             }
             else{
-                v.btn_playing_pause.setBackgroundResource(R.drawable.play)
+                v.btn_playing_pause.setBackgroundResource(R.drawable.play_light)
             }
         }
     }
@@ -71,10 +71,10 @@ open class PlayingFragment : Fragment(), View.OnClickListener {
             }
             R.id.btn_playing_pause->{
                 if(mBinder.pauseRadio()){
-                    v.btn_playing_pause.setBackgroundResource(R.drawable.pause)
+                    v.btn_playing_pause.setBackgroundResource(R.drawable.pause_light)
                 }
                 else{
-                    v.btn_playing_pause.setBackgroundResource(R.drawable.play)
+                    v.btn_playing_pause.setBackgroundResource(R.drawable.play_light)
                 }
             }
         }

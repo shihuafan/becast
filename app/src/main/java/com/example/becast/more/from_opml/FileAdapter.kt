@@ -35,7 +35,7 @@ class FileAdapter (private val mData : MutableList<String>, private val handler:
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
         val textItemName:TextView= view.findViewById(R.id.text_item_name)
-        val btnItem : Button = view.findViewById(R.id.btn_item_opml)
+        val btnItem : Button = view.findViewById(R.id.btn_item_file)
 //        val imageItemShow: ImageView = view.findViewById(R.id.image_item_wait)
 //        val textItemTitle:TextView= view.findViewById(R.id.text_item_wait_name)
 //        val textItemDate:TextView=view.findViewById(R.id.text_item_wait_update)

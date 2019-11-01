@@ -132,10 +132,10 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
             }
             R.id.btn_play_pause->{
                 if(mBinder.pauseRadio()){
-                    v.btn_play_pause.setBackgroundResource(R.drawable.pause)
+                    v.btn_play_pause.setBackgroundResource(R.drawable.pause_light)
                 }
                 else{
-                    v.btn_play_pause.setBackgroundResource(R.drawable.play)
+                    v.btn_play_pause.setBackgroundResource(R.drawable.play_light)
                 }
             }
             R.id.btn_play_next->{

@@ -9,8 +9,19 @@
         <item name="colorBackgroundFloating">#fff</item>
         <item name="navBackground">#F7C325</item>
         <item name="textColor1">#000</item>
-        <item name="btnNight">@drawable/ic_night</item>
+        <item name="textColor2">#fff</item>
+        <item name="textColor3">#989898</item>
+        <item name="textColor4">#F7C325</item>
         <item name="bottomSheetDialogBackground">@drawable/radius_top_concern_40_0xcfcfcf</item>
+        <item name="ic_theme">@drawable/moon</item>
+        <item name="ic_follow">@drawable/follow_light</item>
+        <item name="ic_collect">@drawable/collect_light</item>
+        <item name="ic_history">@drawable/history</item>
+        <item name="ic_setting">@drawable/setting_dark</item>
+        <item name="ic_search">@drawable/search_light</item>
+        <item name="ic_play">@drawable/pause_light</item>
+        <item name="ic_forward">@drawable/forward_light</item>
+        <item name="ic_backward">@drawable/backward_light</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -21,8 +32,21 @@
         <item name="colorBackgroundFloating">#000</item>
         <item name="navBackground">#000</item>
         <item name="textColor1">#fff</item>
+        <item name="textColor2">#000</item>
+        <item name="textColor3">#4d4d4d</item>
+        <item name="textColor4">#F3BC13</item>
         <item name="bottomSheetDialogBackground">@drawable/radius_top_concern_40_0x000</item>
-        <item name="btnNight">@drawable/light</item>
+        <item name="ic_theme">@drawable/sun</item>
+        <item name="ic_follow">@drawable/follow_dark</item>
+        <item name="ic_collect">@drawable/collect_dark</item>
+        <item name="ic_history">@drawable/history</item>
+        <item name="ic_setting">@drawable/setting_dark</item>
+        <item name="ic_search">@drawable/search_light</item>
+        <item name="ic_play">@drawable/pause_light</item>
+        <item name="ic_forward">@drawable/forward_light</item>
+        <item name="ic_backward">@drawable/backward_light</item>
+
+
     </style>
 
 </resources>

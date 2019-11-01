@@ -168,10 +168,10 @@
 
                                 <Button
                                     android:id="@+id/btn_play_pre"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
                                     android:layout_centerInParent="true"
-                                    android:background="@drawable/ic_pre"/>
+                                    android:background="?attr/ic_backward"/>
 
                             </RelativeLayout>
 
@@ -184,15 +184,15 @@
 
                                 <Button
                                     android:id="@+id/btn_play_pause"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
                                     android:layout_centerInParent="true"
-                                    android:background="@drawable/pause"/>
+                                    android:background="?attr/ic_play"/>
 
                                 <ImageView
                                     android:id="@+id/image_play_loading"
-                                    android:layout_width="60dp"
-                                    android:layout_height="60dp"
+                                    android:layout_width="70dp"
+                                    android:layout_height="70dp"
                                     android:layout_centerInParent="true"
                                     android:background="@drawable/loading"
                                     tools:ignore="ContentDescription" />
@@ -206,10 +206,10 @@
 
                                 <Button
                                     android:id="@+id/btn_play_next"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
                                     android:layout_centerInParent="true"
-                                    android:background="@drawable/ic_forward"/>
+                                    android:background="?attr/ic_forward"/>
 
                             </RelativeLayout>
 
