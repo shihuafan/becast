@@ -4,7 +4,9 @@ import androidx.room.*
 
 
 @Dao
+
 interface RadioDao {
+
     @Query("SELECT  * FROM radio  ORDER BY up_date DESC limit (:start),(:end)")
     fun getAll(start:Int,end:Int): List<RadioData>
 
@@ -31,5 +33,11 @@ interface RadioDao {
 
     @Query("SELECT * FROM radio WHERE rss_uri = (:link)  ORDER BY up_date DESC ")
     fun getByChannel(link:String):List<RadioData>
+
+    @Query("SELECT* FROM radio WHERE mix = (:mix) ")
+    fun getByMix(mix:Long ):List<RadioData>
+
+//    @Query("UPDATE radio SET love_time = '' & wait_time = '' & history_time = '' & progress = '' WHERE radio_uri = 'Wilson' & rss_uri = 'ddd'")
+//    fun mUpdate(radioData: RadioData)
 
 }

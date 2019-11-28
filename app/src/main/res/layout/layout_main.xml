@@ -10,7 +10,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".main.MainActivity"
-            android:id="@+id/layout_main_all">
+            android:id="@+id/layout_main_all"
+            tools:ignore="UselessParent">
 
                 <FrameLayout
                     android:id="@+id/layout_main_top"

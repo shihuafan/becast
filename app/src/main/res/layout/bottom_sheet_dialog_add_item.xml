@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="30dp"
+    android:paddingEnd="30dp"
+    android:paddingBottom="20dp"
+    android:orientation="vertical"
+    android:background="@drawable/radius_top_concern_40_0xcfcfcf">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="加入"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/btn_add_item_love"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:text="加入收藏"
+        android:background="#00000000"/>
+
+    <Button
+        android:id="@+id/btn_add_item_next"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:text="加入下一首播放"
+        android:background="#00000000"/>
+
+    <Button
+        android:id="@+id/btn_add_item_end"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:text="加入待播放列表"
+        android:background="#00000000"/>
+
+    <Button
+        android:id="@+id/btn_add_item_folder"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:text="加入歌单"
+        android:background="#00000000"/>
+
+
+</LinearLayout>

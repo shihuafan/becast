@@ -7,7 +7,6 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +17,7 @@ import com.example.becast.R
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.data.rss.RssData
 import com.example.becast.main.page.RadioAdapter
-import com.example.becast.playpage.DetailFragment
+import com.example.becast.playpage.detail.DetailFragment
 import com.example.becast.service.RadioService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_channel.*
@@ -35,7 +34,12 @@ class ChannelFragment(private val rssData: RssData,private val mBinder: RadioSer
         when(it.what){
             0x103->{
                 fragmentManager!!.beginTransaction()
-                    .replace(R.id.layout_channel, DetailFragment(it.obj as RadioData,mBinder))
+                    .replace(R.id.layout_channel,
+                        DetailFragment(
+                            it.obj as RadioData,
+                            mBinder
+                        )
+                    )
                     .commitAllowingStateLoss()
             }
         }

@@ -3,7 +3,6 @@ package com.example.becast.data
 import android.content.Context
 import com.example.becast.R
 
-
 object UserData {
     var uid:Int=0
     var name:String?=" "
@@ -11,6 +10,9 @@ object UserData {
     var isLogin:Boolean=false
     var style:Int= R.style.AppTheme
     var delay:Int=0
+    var downloadWhenLove:Boolean=false
+    var downloadWhenWait:Boolean=false
+
 
     fun getAll(context:Context) : UserData {
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
@@ -19,13 +21,16 @@ object UserData {
         image =sp.getString("image", "")
         isLogin =sp.getBoolean("is_login",false)
         style =sp.getInt("style",R.style.DarkTheme)
+        downloadWhenWait=sp.getBoolean("download_when_wait", false)
+        downloadWhenLove=sp.getBoolean("download_when_love", false)
         return this
     }
 
-    fun setAll(context:Context) {
+    fun setAll(context:Context,uid:Int=this.uid) {
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
         val edit=sp.edit()
-        edit.putInt("uid", 9)
+
+        edit.putInt("uid", uid)
         edit.putString("name", "拉普兰德")
         edit.putString("image", "http://raw.yiyoushuo.com/UGC/21f4bb93-9344-4a89-923c-6f9ce4a1b58b.jpg?x-oss-process=image/format,jpg")
         edit.putBoolean("is_login",true)
@@ -58,16 +63,22 @@ object UserData {
         edit.apply()
     }
 
-    fun saveSleepType(context: Context,type:Int){
+    fun changeDownloadWhenLove(context:Context,flag:Boolean){
+        this.downloadWhenLove=flag
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
         val edit=sp.edit()
-        edit.putInt("sleep_type", type)
+        edit.putBoolean("download_when_love", this.downloadWhenLove)
         edit.apply()
     }
 
-    fun getSleepType(context: Context):Int{
+    fun changeDownloadWhenWait(context:Context,flag:Boolean){
+        this.downloadWhenWait=flag
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
-        return sp.getInt("sleep_type", 0)
+        val edit=sp.edit()
+        edit.putBoolean("download_when_wait", this.downloadWhenWait)
+        edit.apply()
+
     }
+
 }
 

@@ -1,66 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#888"
-    android:layout_gravity="center">
+    xmlns:blurkit="http://schemas.android.com/apk/res-auto"
+    android:background="#88888888"
+    android:id="@+id/layout_share">
 
-    <Button
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/close_circle"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp"/>
-
-    <RelativeLayout
+    <io.alterac.blurkit.BlurLayout
+        android:id="@+id/blurLayout"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:padding="20dp"
-        android:background="#fff">
-
-        <ImageView
-            android:id="@+id/image_playpage_pin"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="80dp"
-            android:scaleType="centerCrop"/>
-
-        <ImageView
-            android:id="@+id/image_playpage_pin_code"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:scaleType="centerCrop"/>
-
-        <TextView
-            android:id="@+id/text_share_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="40dp"/>
-
-        <TextView
-            android:id="@+id/text_share_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"/>
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        blurkit:blk_blurRadius="8"
+        blurkit:blk_downscaleFactor="0.12"
+        blurkit:blk_fps="0" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <Button
+                android:id="@+id/btn_share_back"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/back"/>
+
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="160dp"
+                    android:orientation="vertical"
+                    tools:ignore="UselessParent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/list_share"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"/>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_alignParentBottom="true">
+
+                    <TextView
+                        android:layout_width="95dp"
+                        android:layout_height="wrap_content"
+                        android:elevation="1dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginTop="15dp"
+                        android:padding="5dp"
+                        android:background="@drawable/radius_concern_10_0xfff"
+                        android:text="长按开始截取音频，松开结束截取"
+                        android:textColor="?attr/textColor4"
+                        android:textSize="12sp"/>
+
+                    <Button
+                        android:id="@+id/btn_share_add"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:elevation="2dp"
+                        android:background="@drawable/add_fill"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="30dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="30dp"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_share_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:padding="20dp"
+                android:visibility="invisible"
+                android:background="@drawable/radius_concern_10_0xfff"
+                android:orientation="vertical"
+                android:elevation="3dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0:00"
+                        android:textSize="14sp"/>
+
+
+                </RelativeLayout>
+
+                <EditText
+                    android:id="@+id/edit_share"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:textSize="15sp"
+                    android:gravity="start|top"
+                    android:maxLines="4"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+
+                    <Button
+                        android:id="@+id/btn_share_public"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/radius_concern_40_0xf7c325"
+                        android:text="公开"
+                        android:textColor="?attr/textColor1"/>
+
+                    <Button
+                        android:id="@+id/btn_share_cancel"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="60dp"
+                        android:background="#00000000"
+                        android:text="取消"/>
+
+                    <Button
+                        android:id="@+id/btn_share_finish"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:background="#00000000"
+                        android:text="完成"
+                        android:textColor="?attr/textColor4"/>
+
+
+
+                </RelativeLayout>
+
+
+
+
+            </LinearLayout>
+
+        </FrameLayout>
 
 
 
     </LinearLayout>
-</RelativeLayout>
+
+</FrameLayout>
+

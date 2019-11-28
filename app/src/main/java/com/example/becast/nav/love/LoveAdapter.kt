@@ -13,19 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.example.becast.R
-import com.example.becast.data.radioDb.RadioData
-import java.text.SimpleDateFormat
-import java.util.*
-
-
+import com.example.becast.data.mix.MixData
 
 
 class LoveAdapter (private val context: Context,
-                   private val mData : MutableList<RadioData>,
-                   private val handler: Handler,
-                   private val loveViewModel: LoveViewModel)
+                   private val mData : MutableList<MixData>,
+                   private val handler: Handler)
     : RecyclerView.Adapter<LoveAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,49 +32,27 @@ class LoveAdapter (private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         Glide.with(context)
-            .load(mData[position].imageUri)
+            .load(R.drawable.timg)
             .apply(RequestOptions.overrideOf(100,100))
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
             .into(holder.imageItemShow)
 
-        holder.textItemTitle.text=mData[position].title
-        holder.textItemDate.text=getDateString(mData[position].upDate)
+        holder.textItemTitle.text=mData[position].mix
+        holder.textItemNum.text=mData[position].time.toString()
         holder.btnItem.setOnClickListener {
             val msg= Message()
             msg.what=0x001
             msg.obj=mData[position]
             handler.sendMessage(msg)
         }
-        holder.btnLoveAdd.setOnClickListener{
-            loveViewModel.addToRadioList(mData[position])
-            holder.itemLove.close(false)
-        }
-        holder.btnLoveCancel.setOnClickListener{
-            loveViewModel.changeLove(mData[position])
-        }
-        holder.itemLove.close(false)
+
     }
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
-        val btnItem : Button = view.findViewById(R.id.btn_item_love)
         val imageItemShow: ImageView = view.findViewById(R.id.image_item_love)
-        val textItemTitle:TextView= view.findViewById(R.id.text_item_love_name)
-        val textItemDate:TextView=view.findViewById(R.id.text_item_love_update)
-        val btnLoveAdd:Button=view.findViewById(R.id.btn_item_love_add)
-        val btnLoveCancel:Button=view.findViewById(R.id.btn_item_love_cancel)
-        val itemLove: SwipeRevealLayout =view.findViewById(R.id.item_love)
-
+        val btnItem : Button = view.findViewById(R.id.btn_item_love)
+        val textItemTitle:TextView= view.findViewById(R.id.text_item_love)
+        val textItemNum:TextView=view.findViewById(R.id.text_item_love_num)
     }
-
-    private fun getDateString(update:Long):String{
-        val date= Date(update)
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-        return try {
-            sdf.format(date)
-        } catch (e: Exception) {
-            ""
-        }
-    }
-
 }
 

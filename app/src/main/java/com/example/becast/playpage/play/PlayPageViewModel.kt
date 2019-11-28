@@ -6,8 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.room.Room
 import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.radioDb.RadioDatabase
 import com.example.becast.data.rss.RssData
+import com.example.becast.data.rss.RssDatabaseHelper
 import com.example.becast.unit.data.rssDB.RssDatabase
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
@@ -15,6 +15,8 @@ import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
 import java.lang.Exception
 import java.util.*
+import java.util.concurrent.Future
+import java.util.concurrent.FutureTask
 import kotlin.experimental.and
 
 
@@ -77,14 +79,16 @@ class PlayPageViewModel {
         return " "
     }
 
-    fun getRssData(context: Context,radioData: RadioData): RssData {
-        val db= Room.databaseBuilder(context, RssDatabase::class.java,"rss")
-            .allowMainThreadQueries()
-            .build()
-        val mDao=db.rssDao()
-        val temp=mDao.getRssData(radioData.rssUri)
-        db.close()
-        return temp
+    fun getRssData (context: Context,radioData: RadioData){
+        object:Thread(){
+            override fun run() {
+                super.run()
+                val db= RssDatabaseHelper.getDb(context)
+                val mDao=db.rssDao()
+                val temp=mDao.getRssData(radioData.rssUri)
+                RssDatabaseHelper.closeDb()
+            }
+        }
 
 
     }

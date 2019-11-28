@@ -62,11 +62,14 @@ open class PlayingFragment : Fragment(), View.OnClickListener {
         when(v!!.id){
             R.id.btn_playing_page->{
                 if(!mBinder.radioItemEmpty()){
-                    fragmentManager!!.beginTransaction()
-                        .hide(this)
-                        .add(R.id.layout_main_all, PlayPageFragment(mBinder))
-                        .addToBackStack(null)
-                        .commit()
+                    fragmentManager!!.findFragmentByTag("pageFragment")?.let {
+                        fragmentManager!!.beginTransaction()
+                            .hide(it)
+                            .hide(fragmentManager!!.findFragmentByTag("pageFragment")!!)
+                            .add(R.id.layout_main_all, PlayPageFragment(mBinder),"PlayPageFragment")
+                            .addToBackStack(null)
+                            .commit()
+                    }
                 }
             }
             R.id.btn_playing_pause->{

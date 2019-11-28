@@ -9,20 +9,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.data.radioDb.RadioDatabase
+import com.example.becast.data.radioDb.RadioDatabaseHelper
 import com.example.becast.data.rss.RssData
+import com.example.becast.data.rss.RssDatabaseHelper
 import com.example.becast.unit.data.rssDB.RssDatabase
 import okhttp3.*
-import org.w3c.dom.Document
-import org.w3c.dom.Element
 import org.xmlpull.v1.XmlPullParser
 import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.xml.parsers.DocumentBuilderFactory
 
 
-class FromXmlViewModel(val context: Context, private val url:String,private val handler: Handler) {
+class FromXmlViewModel(val context: Context, url:String,private val handler: Handler) {
 
     private lateinit var rssData: RssData
     val rssDataLiveData : MutableLiveData<RssData> = MutableLiveData()
@@ -34,10 +33,7 @@ class FromXmlViewModel(val context: Context, private val url:String,private val 
 
     init {
         radioListLiveData.value=radioList
-        getInfo()
-    }
 
-    private fun getInfo() {
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(url)
@@ -68,7 +64,7 @@ class FromXmlViewModel(val context: Context, private val url:String,private val 
     fun readXml(input: InputStream){
 
         rssData = RssData("","","","","","","","")
-        var radioData = RadioData("","","","","","",0L,"",rssData.rssUri,rssData.title,0L,0L,0L,0)
+        var radioData = RadioData("","","","","","",0L,"",rssData.rssUri,rssData.title,0L,0L,0L,0,0L)
         var flag=true
         val parser= Xml.newPullParser()
         parser.setInput(input,"UTF-8")
@@ -81,7 +77,7 @@ class FromXmlViewModel(val context: Context, private val url:String,private val 
                 }
                 XmlPullParser.START_TAG -> {
                     if("item"==parser.name){
-                        radioData= RadioData("","","",rssData.imageUri,"","",0L,"",rssData.rssUri,rssData.title,0L,0L,0L,0)
+                        radioData= RadioData("","","",rssData.imageUri,"","",0L,"",rssData.rssUri,rssData.title,0L,0L,0L,0,0L)
                         flag=false
                     }
                     if(flag){
@@ -110,14 +106,25 @@ class FromXmlViewModel(val context: Context, private val url:String,private val 
                 XmlPullParser.END_TAG -> {
                     if ("item" == parser.name) {
                         radioData.upDate=getLongTime(radioData.pubDate)
-                        radioList.add(radioData)
+                        radioListCache.add(radioData)
+                    }
+                    if(radioListCache.size==50){
+                        radioList.clear()
+                        radioList.addAll(radioListCache)
+                        rssDataLiveData.postValue(rssData)
+                        radioListLiveData.postValue(radioList)
                     }
                 }
             }
             eventType = parser.next()
         }
-        rssDataLiveData.postValue(rssData)
-        radioListLiveData.postValue(radioList)
+        if(radioListCache.size<50){
+            radioList.clear()
+            radioList.addAll(radioListCache)
+            rssDataLiveData.postValue(rssData)
+            radioListLiveData.postValue(radioList)
+        }
+
 
     }
 
@@ -165,8 +172,7 @@ class FromXmlViewModel(val context: Context, private val url:String,private val 
     }
 
     fun subscribeRss(){
-        val db = Room.databaseBuilder(context, RssDatabase::class.java, "rss")
-            .build()
+        val db = RssDatabaseHelper.getDb(context)
         val mDao=db.rssDao()
         try{
             mDao.insert(rssData)
@@ -175,15 +181,13 @@ class FromXmlViewModel(val context: Context, private val url:String,private val 
                 throw e
             }
         }
-
-        db.close()
+        RssDatabaseHelper.closeDb()
     }
 
     fun subscribeRadio(){
-        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-            .build()
+        val db = RadioDatabaseHelper.getDb(context)
         val mDao=db.radioDao()
-        for(item : RadioData in radioList){
+        for(item : RadioData in radioListCache){
             try{
                 mDao.insert(item)
             }catch (e:Exception){
@@ -195,7 +199,7 @@ class FromXmlViewModel(val context: Context, private val url:String,private val 
                 }
             }
         }
-        db.close()
+        RadioDatabaseHelper.closeDb()
     }
 }
 

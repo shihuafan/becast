@@ -3,7 +3,6 @@ package com.example.becast.main.page
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
-import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,7 @@ import com.example.becast.R
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.more.MoreFragment
 import com.example.becast.more.from_opml.FromOpmlFragment
-import com.example.becast.playpage.DetailFragment
+import com.example.becast.playpage.detail.DetailFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_page.view.*
 import org.greenrobot.eventbus.EventBus
@@ -34,19 +33,29 @@ class PageFragment : Fragment(), View.OnClickListener,
             0x103 ->{
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData, mBinder))
+                    .replace(R.id.layout_main_all,
+                        DetailFragment(
+                            it.obj as RadioData,
+                            mBinder
+                        )
+                    )
                     .addToBackStack(null)
                     .commit()
             }
         }
         false
     }
-    override fun onResume() {
-        super.onResume()
-        EventBus.getDefault().post("open")
-        pageViewModel.getAll()
-    }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        if(!hidden){
+            EventBus.getDefault().post("open")
+            pageViewModel.getAll()
+            for( temp in fragmentManager!!.fragments){
+                println(temp)
+            }
+        }
+        super.onHiddenChanged(hidden)
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view= inflater.inflate(R.layout.frag_page, container, false)
         v=view
@@ -122,7 +131,7 @@ class PageFragment : Fragment(), View.OnClickListener,
                 moreFragment.arguments=bundle
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_all,moreFragment)
+                    .replace(R.id.layout_main_all,moreFragment)
                     .addToBackStack(null)
                     .commit()
             }

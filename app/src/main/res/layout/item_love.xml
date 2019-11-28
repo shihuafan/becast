@@ -1,133 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <com.chauthai.swipereveallayout.SwipeRevealLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        app:mode="same_level"
-        app:dragEdge="right"
-        android:id="@+id/item_love">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/add_wait_list"/>
-
-                    <Button
-                        android:id="@+id/btn_item_love_add"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:background="#00000000"/>
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/cancel_collect"/>
-
-                    <Button
-                        android:id="@+id/btn_item_love_cancel"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:background="#00000000"/>
-
-                </RelativeLayout>
-
-
-            </LinearLayout>
-
-
-        </FrameLayout>
-
-
-        <FrameLayout
+        <ImageView
+            android:id="@+id/image_item_love"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp">
+        <TextView
+            android:id="@+id/text_item_love"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="标题"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:lines="1" />
 
-                <ImageView
-                    android:id="@+id/image_item_love"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="centerCrop" />
+        <TextView
+            android:id="@+id/text_item_love_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="21集"
+            android:textSize="13sp"
+            android:textColor="#989898"
+            android:lines="1" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="80dp"
-                    android:orientation="vertical">
+    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/text_item_love_update"
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:gravity="start|center_vertical"
-                        android:text="更新日期"
-                        android:textSize="13sp"
-                        android:textColor="#993c3c43"
-                        android:singleLine="true"/>
+    <Button
+        android:id="@+id/btn_item_love"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"/>
 
-                    <TextView
-                        android:id="@+id/text_item_love_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:gravity="start|center_vertical"
-                        android:text="节目"
-                        android:textSize="16sp"
-                        android:textColor="#000000"
-                        android:textStyle="bold"
-                        android:singleLine="true"/>
-
-                    <TextView
-                        android:id="@+id/text_item_love_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:gravity="start|center_vertical"
-                        android:text="播客名"
-                        android:textSize="13sp"
-                        android:textColor="@color/colorPrimary"
-                        android:singleLine="true"/>
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btn_item_love"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#00000000"/>
-
-            </RelativeLayout>
-        </FrameLayout>
-
-</com.chauthai.swipereveallayout.SwipeRevealLayout>
-
+</FrameLayout>

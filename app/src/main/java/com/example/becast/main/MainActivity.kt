@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .commit()
 
             supportFragmentManager.beginTransaction()
-                .replace(R.id.layout_main_top,pageFragment)
+                .replace(R.id.layout_main_top,pageFragment,"pageFragment")
                 .commit()
         }
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -179,12 +179,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onDestroy() {
         unbindService(conn)
         super.onDestroy()
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-//        Toast.makeText(this,supportFragmentManager.fragments[supportFragmentManager.fragments.size-1].toString(),Toast.LENGTH_SHORT).show()
-        supportFragmentManager.fragments[supportFragmentManager.fragments.size-1].onResume()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

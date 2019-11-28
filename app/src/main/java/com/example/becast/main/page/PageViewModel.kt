@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.data.radioDb.RadioDatabase
+import com.example.becast.data.radioDb.RadioDatabaseHelper
 
 class PageViewModel(private val context: Context) {
 
@@ -22,7 +23,9 @@ class PageViewModel(private val context: Context) {
     init {
         subscribeListLiveData.value=subscribeList
         waitListLiveData.value=waitList
+        getAll()
     }
+
     fun getAll(){
         subscribeList.clear()
         waitList.clear()
@@ -34,26 +37,25 @@ class PageViewModel(private val context: Context) {
         val start=subscribeList.size
         object : Thread() {
             override fun run() {
-                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-                    .build()
+                val db=RadioDatabaseHelper.getDb(context)
                 val mDao=db.radioDao()
                 subscribeList.addAll(mDao.getAll(start,start+50) as MutableList<RadioData>)
                 subscribeListLiveData.postValue(subscribeList)
-                db.close()
+                RadioDatabaseHelper.closeDb()
             }
         }.start()
+
     }
 
-    fun getWaitList(){
+    private fun getWaitList(){
         val start=waitList.size
         object : Thread() {
             override fun run() {
-                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-                    .build()
+                val db = RadioDatabaseHelper.getDb(context)
                 val mDao=db.radioDao()
                 waitList.addAll(mDao.getWait(start,start+50) as MutableList<RadioData>)
                 waitListLiveData.postValue(subscribeList)
-                db.close()
+                RadioDatabaseHelper.closeDb()
             }
         }.start()
     }

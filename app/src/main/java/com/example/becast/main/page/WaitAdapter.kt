@@ -45,7 +45,7 @@ class WaitAdapter (private val context: Context,
         holder.textItemDate.text=getDateString(mData[position].upDate)
         holder.btnItem.setOnClickListener {
             val msg= Message()
-            msg.what=0x001
+            msg.what=0x103
             msg.obj=mData[position]
             handler.sendMessage(msg)
         }

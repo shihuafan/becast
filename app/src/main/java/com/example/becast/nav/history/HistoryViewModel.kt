@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.data.radioDb.RadioDatabase
-import java.lang.Exception
-import java.util.*
+import com.example.becast.data.radioDb.RadioDatabaseHelper
 
 class HistoryViewModel(private val context:Context) {
 
@@ -20,30 +19,32 @@ class HistoryViewModel(private val context:Context) {
         object :Thread(){
             override fun run() {
                 super.run()
-                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-                    .allowMainThreadQueries()
-                    .build()
+                val db = RadioDatabaseHelper.getDb(context)
                 val mDao=db.radioDao()
                 list.clear()
                 list.addAll(mDao.getHistory() as MutableList<RadioData>)
                 historyModelLiveData.postValue(list)
-                db.close()
+                RadioDatabaseHelper.closeDb()
             }
         }.start()
     }
 
     fun clearList(){
-        val db=Room.databaseBuilder(context, RadioDatabase::class.java,"radio")
-            .allowMainThreadQueries()
-            .build()
-        val mDao=db.radioDao()
-        for(item in list){
-            item.historyTime=0
-            mDao.updateItem(item)
-        }
-        db.close()
-        list.clear()
-        historyModelLiveData.postValue(list)
+        object :Thread(){
+            override fun run() {
+                super.run()
+                val db=RadioDatabaseHelper.getDb(context)
+                val mDao=db.radioDao()
+                for(item in list){
+                    item.historyTime=0
+                    mDao.updateItem(item)
+                }
+                RadioDatabaseHelper.closeDb()
+                list.clear()
+                historyModelLiveData.postValue(list)
+            }
+        }.start()
+
 
 
     }

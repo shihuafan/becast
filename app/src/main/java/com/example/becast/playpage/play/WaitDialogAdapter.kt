@@ -1,25 +1,15 @@
 package com.example.becast.playpage.play
 
 import android.content.Context
-import android.os.Handler
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.service.RadioService
-import java.text.SimpleDateFormat
-import java.util.*
-
-
 
 
 class WaitDialogAdapter (private val context: Context, private val mData : MutableList<RadioData>,

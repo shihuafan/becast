@@ -19,10 +19,5 @@ class ShareBottomSheetDialog(context: Context,content:String) {
             e.printStackTrace()
         }
         bottomSheetDialog.show()
-
-
-
-
-
     }
 }

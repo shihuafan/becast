@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.example.becast.data.rss.RssData
+import com.example.becast.data.rss.RssDatabaseHelper
 import com.example.becast.unit.data.rssDB.RssDatabase
 
 class FollowViewModel(private val context:Context) {
@@ -18,14 +19,12 @@ class FollowViewModel(private val context:Context) {
         object :Thread(){
             override fun run() {
                 super.run()
-                val db = Room.databaseBuilder(context, RssDatabase::class.java, "rss")
-                    .allowMainThreadQueries()
-                    .build()
+                val db = RssDatabaseHelper.getDb(context)
                 val mDao=db.rssDao()
                 list.clear()
                 list.addAll(mDao.getAll() as MutableList<RssData>)
                 followModelLiveData.postValue(list)
-                db.close()
+                RssDatabaseHelper.closeDb()
             }
         }.start()
     }

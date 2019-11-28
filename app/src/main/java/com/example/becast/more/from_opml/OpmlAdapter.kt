@@ -24,7 +24,7 @@ class OpmlAdapter (private val mData : MutableList<OpmlData>,private val handler
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.textItemName.text=mData[position].title
-        holder.textItemHtmlLink.text=mData[position].htmlUrl
+        holder.textItemHtmlLink.text=mData[position].xmlUrl
         holder.btnItem.setOnClickListener {
             val msg=Message()
             msg.what=0x103
@@ -37,12 +37,6 @@ class OpmlAdapter (private val mData : MutableList<OpmlData>,private val handler
         val textItemName:TextView= view.findViewById(R.id.text_item_name)
         val btnItem : Button = view.findViewById(R.id.btn_item_opml)
         val textItemHtmlLink:TextView=view.findViewById(R.id.text_item_html_link)
-//        val imageItemShow: ImageView = view.findViewById(R.id.image_item_wait)
-//        val textItemTitle:TextView= view.findViewById(R.id.text_item_wait_name)
-//        val textItemDate:TextView=view.findViewById(R.id.text_item_wait_update)
-//        val btnWaitCancel:Button=view.findViewById(R.id.btn_item_wait_cancel)
-//        val itemWait: SwipeRevealLayout =view.findViewById(R.id.item_wait)
-
     }
 }
 

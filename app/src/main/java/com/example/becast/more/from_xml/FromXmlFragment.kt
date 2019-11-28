@@ -14,7 +14,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.data.radioDb.RadioData
-import com.example.becast.main.page.RadioAdapter
 import com.example.becast.playpage.play.PlayPageFragment
 import com.example.becast.service.RadioService
 import com.google.android.material.snackbar.Snackbar
@@ -28,13 +27,11 @@ class FromXmlFragment : Fragment(), View.OnClickListener {
     private lateinit var mBinder: RadioService.LocalBinder
     private lateinit var url: String
     private val mHandler : Handler = Handler{
-        Toast.makeText(context,it.obj as String,Toast.LENGTH_LONG).show()
         when(it.what){
-
             0x103 ->{
                 mBinder.playRadio(it.obj as RadioData)
                 fragmentManager!!.beginTransaction()
-                    .replace(R.id.layout_main_all, PlayPageFragment(mBinder))
+                    .replace(R.id.layout_add_from_xml, PlayPageFragment(mBinder))
                     .addToBackStack(null)
                     .commit()
             }
@@ -49,12 +46,11 @@ class FromXmlFragment : Fragment(), View.OnClickListener {
         v= inflater.inflate(R.layout.frag_add_from_xml, container, false)
         mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
         url=arguments!!.getString("url") as String
-        Toast.makeText(context,url,Toast.LENGTH_LONG).show()
         fromXmlViewModel= context?.let { FromXmlViewModel(it,url,mHandler) }!!
 
         v.list_add_from_xml.layoutManager = LinearLayoutManager(context)
         v.list_add_from_xml.adapter = context?.let {
-            RadioAdapter(it, fromXmlViewModel.radioListLiveData.value!!,mHandler) }
+            FromXmlAdapter(it, fromXmlViewModel.radioListLiveData.value!!,mHandler) }
 
         Glide.with(context!!)
             .load(resources.getDrawable(R.drawable.loading_gif,null))
@@ -64,21 +60,6 @@ class FromXmlFragment : Fragment(), View.OnClickListener {
         fromXmlViewModel.radioListLiveData.observe(this, Observer{
             v.list_add_from_xml.adapter?.notifyDataSetChanged()
         })
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            v.scroll_add_from_xml.setOnScrollChangeListener { v, _, Y, _, _ ->
-//                if((v.content_scroll_add_from_xml.height-(v.scroll_add_from_xml.height+Y))<1000){
-//                    if(fromXmlViewModel.flag){
-//                        Toast.makeText(context,"更新",Toast.LENGTH_SHORT).show()
-//                        fromXmlViewModel.getMore()
-//                    }
-//                }
-//            }
-//        }
-
-
-
-
-
         fromXmlViewModel.rssDataLiveData.observe(this, Observer {
             layout_add_from_xml_loading.visibility=View.GONE
             try{

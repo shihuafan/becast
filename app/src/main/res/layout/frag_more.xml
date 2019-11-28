@@ -4,18 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#fff2f2f2"
     android:id="@+id/layout_more">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/layout_more_content"
+        tools:ignore="UselessParent">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="#fff">
+            android:layout_height="60dp">
 
             <Button
                 android:id="@+id/btn_more_back"
@@ -62,8 +62,8 @@
 
             <ImageButton
                 android:id="@+id/btn_more_opml"
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:background="@drawable/ic_opml"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
@@ -75,6 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:ignore="UselessLeaf" />
+
     </LinearLayout>
 
 

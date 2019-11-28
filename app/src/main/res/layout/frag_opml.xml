@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff2f2f2"
     android:id="@+id/layout_opml">
 
     <LinearLayout
@@ -36,21 +35,42 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/layout_opml_bottom">
+            android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_opml"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbarSize="5dp"
-                android:scrollbarThumbVertical="@color/colorPrimary"
-                android:overScrollMode="never"
-                android:scrollbars="vertical"/>
+                android:id="@+id/layout_opml_bottom">
 
-        </RelativeLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list_opml"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbarSize="5dp"
+                    android:scrollbarThumbVertical="@color/colorPrimary"
+                    android:overScrollMode="never"
+                    android:scrollbars="vertical"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#fff"
+                android:id="@+id/layout_opml_loading">
+
+                <ImageView
+                    android:id="@+id/image_opml_loading"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+        </FrameLayout>
+
+
 
 
     </LinearLayout>
