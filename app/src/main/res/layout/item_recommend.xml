@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_item_recommend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/image_item_recommend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:id="@+id/layout_item_recommend"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/radius_concern_10_0xd8d8d8">
+
+            <ImageView
+                android:id="@+id/image_item_recommend_show"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                tools:ignore="ContentDescription"
+                android:scaleType="centerCrop" />
+
+
+
+            <TextView
+                android:id="@+id/text_item_recommend_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:layout_marginEnd="70dp"
+                android:layout_centerVertical="true"
+                android:text="BeCast"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:singleLine="true"
+                android:marqueeRepeatLimit="marquee_forever"/>
+
+            <Button
+                android:id="@+id/btn_item_recommend_radio_play"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="30dp"
+                android:background="?attr/ic_play"
+                android:layout_centerVertical="true"/>
+
+            <Button
+                android:id="@+id/btn_item_recommend_radio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00000000"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

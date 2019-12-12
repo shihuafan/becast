@@ -6,6 +6,7 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -13,7 +14,10 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.playpage.play.PlayPageFragment
 import com.example.becast.service.RadioService
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.frag_playing.view.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 
 open class PlayingFragment : Fragment(), View.OnClickListener {
@@ -43,7 +47,7 @@ open class PlayingFragment : Fragment(), View.OnClickListener {
                 v.text_playing_title.text = mBinder.getRadioItem().title
                 context?.let {
                     Glide.with(context!!)
-                        .load(mBinder.getRadioItem().imageUri)
+                        .load(mBinder.getRadioItem().rssImageUri)
                         .apply(RequestOptions.overrideOf(100,100))
                         .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                         .into(v.image_playing_show)

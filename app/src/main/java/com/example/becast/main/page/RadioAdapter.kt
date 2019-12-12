@@ -36,8 +36,8 @@ class RadioAdapter (private val context: Context, private val mData : MutableLis
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         Glide.with(context)
-            .load(mData[position].imageUri)
-            .apply(RequestOptions.overrideOf(50,50))
+            .load(mData[position].rssImageUri)
+            .apply(RequestOptions.overrideOf(100,100))
             .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
             .into(holder.imageItemShow)
 

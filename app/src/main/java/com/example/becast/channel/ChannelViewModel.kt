@@ -7,7 +7,7 @@ import androidx.room.Room
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.data.radioDb.RadioDatabase
 import com.example.becast.data.rss.RssData
-import com.example.becast.unit.data.rssDB.RssDatabase
+import com.example.becast.data.rss.RssDatabase
 
 class ChannelViewModel(private val context: Context, private val rssData: RssData) {
 

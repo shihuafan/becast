@@ -40,7 +40,7 @@ class AddItemBottomSheetDialog(context: Context,handler: Handler) {
 
         view.btn_add_item_folder.setOnClickListener {
         //    handler.sendEmptyMessage(0x003)
-            SleepBottomSheetDialog(context)
+            AddToMixBottomSheetDialog(context,handler)
             bottomSheetDialog.dismiss()
         }
     }

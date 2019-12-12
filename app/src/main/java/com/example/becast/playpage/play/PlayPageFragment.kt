@@ -16,28 +16,32 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.channel.ChannelFragment
 import com.example.becast.data.ShareData
 import com.example.becast.playpage.share.ShareFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_playpage.view.*
 import java.util.*
 
-
 class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment(),  View.OnClickListener, SeekBar.OnSeekBarChangeListener{
 
     private lateinit var v: View
     private val playPageViewModel= PlayPageViewModel()
     private var shareData=ShareData(0,0,"",null)
+    private var timer=Timer()
+    private val task=object : TimerTask() {
+        override fun run() {
+            setView()
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_playpage, container, false)
 
         context?.let {
             Glide.with(it)
-                .load(Uri.parse(mBinder.getRadioItem().imageUri))
+                .load(Uri.parse(mBinder.getRadioItem().rssImageUri))
                 .apply(RequestOptions.overrideOf(300,300))
-                .apply(RequestOptions.bitmapTransform(RoundedCorners(30)))
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                 .into(v.image_play_show) }
         v.text_play_title.text= mBinder.getRadioItem().title
         v.text_play_title.isSelected=true
@@ -46,6 +50,8 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
         v.layout_pin.visibility=View.GONE
         v.image_play_loading.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate0))
 
+//        v.webview_playpage_describe.loadDataWithBaseURL(
+//            null,mBinder.getRadioItem().description,"text/html","utf-8",null)
 
         v.btn_playpage_back.setOnClickListener(this)
         v.btn_play_pre.setOnClickListener(this)
@@ -62,13 +68,6 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
                 MotionEvent.ACTION_DOWN->{
                 //    shareData.startTime=mBinder.getRadioCurrentPosition()/1000
                     shareData.startTime=System.currentTimeMillis()
-                   // v.layout_pin.visibility=View.VISIBLE
-//                    val alphaAnimation = AlphaAnimation(0.1f, 1.0f)
-//                    alphaAnimation.duration = 500
-//                    alphaAnimation.repeatCount = Animation.INFINITE
-//                    alphaAnimation.repeatMode = Animation.RESTART
-//                    v.image_play_point.animation = alphaAnimation
-//                    alphaAnimation.start()
                 }
                 MotionEvent.ACTION_MOVE->{
                     val time=mBinder.getRadioCurrentPosition()/1000
@@ -90,27 +89,17 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
                         val shareFragment=ShareFragment()
                         shareFragment.arguments=bundle
                         fragmentManager!!.beginTransaction()
-                            .replace(R.id.layout_play, shareFragment)
+                            .add(R.id.layout_main_all, shareFragment)
                             .addToBackStack(null)
                             .commit()
                     }
                     else {
                         Toast.makeText(context,"截取时长不应小于3秒",Toast.LENGTH_SHORT).show()
                     }
-//                        val content=shareData.toString()
-//                        shareData.bitmap= playPageViewModel.createQRCodeBitmap(content)
-//                        fragmentManager!!.beginTransaction()
-//                            .replace(R.id.layout_main_all, ShareFragment(mBinder.getRadioItem(),shareData))
-//                            .addToBackStack(null)
-//                            .commit()
-                     //   context?.let { ShareBottomSheetDialog(it,shareData.toString()) }
-
                 }
             }
             false
         }
-        Timer().schedule(object : TimerTask() {
-            override fun run() { setView() }}, 0, 1000)
 
         return v
     }
@@ -122,18 +111,19 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
                 v.text_play_duration.text= playPageViewModel.timeToStr(mBinder.getRadioDuration()/1000)
                 v.text_play_position.text= playPageViewModel.timeToStr(mBinder.getRadioCurrentPosition()/1000)
 
-                v.image_play_loading.clearAnimation()
-                v.image_play_loading.visibility=View.INVISIBLE
                 if(mBinder.isRadioPlaying()){
                     v.btn_play_pause.setBackgroundResource(R.drawable.pause_light)
+                    v.image_play_loading.clearAnimation()
+                    v.image_play_loading.visibility=View.INVISIBLE
                 }
                 else{
+                    if(!mBinder.isPrepared()){
+                        v.image_play_loading.visibility=View.VISIBLE
+                        v.image_play_loading.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate0))
+                    }
                     v.btn_play_pause.setBackgroundResource(R.drawable.play_light)
-                }
 
-                v.image_play_loading.visibility=View.VISIBLE
-                v.image_play_loading.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate0))
-                v.btn_play_pause.setBackgroundResource(R.drawable.play_light)
+                }
 
         }catch (e:Exception){}
     }
@@ -195,5 +185,15 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
             AnimationUtils.loadAnimation(activity, R.anim.out_from_top)
         }
     }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(hidden){timer.cancel()}
+        else{
+            timer.schedule(task, 0, 1000)
+        }
+
+    }
+
 }
 

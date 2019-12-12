@@ -34,7 +34,7 @@ class FollowAdapter (private val context: Context, private val mData : MutableLi
         Glide.with(context)
             .load(Uri.parse(mData[position].imageUri))
             .apply(RequestOptions.overrideOf(100,100))
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
             .into(holder.imageItemShow)
 
         holder.textItemTitle.text=mData[position].title

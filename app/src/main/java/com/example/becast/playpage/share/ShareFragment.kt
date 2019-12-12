@@ -8,7 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
+ import android.widget.TextView
+ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +40,8 @@ class ShareFragment : Fragment(), View.OnClickListener {
 
         activity!!.window.setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
 
+
+
         var radioUri=arguments!!.getString("radio_uri")
         var rssUri=arguments!!.getString("rss_Uri")
         val startTime=arguments!!.getLong("start_time")
@@ -50,7 +53,9 @@ class ShareFragment : Fragment(), View.OnClickListener {
             rssUri="test"
         }
         shareViewModel= context?.let { ShareViewModel(it,radioUri,rssUri) }!!
-        v.layout_share.setOnClickListener(this)
+        v.layout_share.setOnClickListener{
+            activity!!.onBackPressed()
+        }
         v.btn_share_add.setOnClickListener { addNote(0,0) }
         v.list_share.layoutManager = LinearLayoutManager(context)
         v.list_share.adapter= context?.let {

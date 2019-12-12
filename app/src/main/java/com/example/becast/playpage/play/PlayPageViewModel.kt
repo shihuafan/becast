@@ -4,19 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import androidx.room.Room
 import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.rss.RssData
 import com.example.becast.data.rss.RssDatabaseHelper
-import com.example.becast.unit.data.rssDB.RssDatabase
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
 import java.lang.Exception
 import java.util.*
-import java.util.concurrent.Future
-import java.util.concurrent.FutureTask
 import kotlin.experimental.and
 
 

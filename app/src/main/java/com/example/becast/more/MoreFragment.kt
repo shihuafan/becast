@@ -5,6 +5,7 @@ import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,24 @@ class MoreFragment : Fragment(), View.OnClickListener{
 
     private lateinit var v: View
     private lateinit var mBinder: RadioService.LocalBinder
+
+    private val mHandler= Handler{
+        when(it.what){
+            0x103->{
+                val fromXmlFragment=FromXmlFragment()
+                val bundle=Bundle()
+                bundle.putBinder("Binder",mBinder)
+                bundle.putString("url",it.obj as String)
+                fromXmlFragment.arguments=bundle
+                childFragmentManager.beginTransaction()
+                    .add(R.id.layout_more, fromXmlFragment)
+                    // .addToBackStack(null)
+                    .commit()
+                this.v.layout_more_content.visibility=View.GONE
+            }
+        }
+        false
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_more, container, false)
         mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
@@ -59,7 +78,7 @@ class MoreFragment : Fragment(), View.OnClickListener{
                     val bundle=Bundle()
                     bundle.putBinder("Binder",mBinder)
                     bundle.putString("content",content)
-                    val searchFragment = SearchFragment()
+                    val searchFragment = SearchFragment(mHandler)
                     searchFragment.arguments=bundle
                     childFragmentManager.beginTransaction()
                         .add(R.id.layout_more_show, searchFragment)

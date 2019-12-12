@@ -2,21 +2,19 @@ package com.example.becast.more.search
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.becast.R
-import com.example.becast.more.from_xml.FromXmlFragment
 import com.example.becast.service.RadioService
-import kotlinx.android.synthetic.main.frag_add_from_xml.view.*
 import kotlinx.android.synthetic.main.frag_search.view.*
 
-class SearchFragment : Fragment(){
+class SearchFragment(private val handler: Handler) : Fragment(){
 
     private lateinit var searchViewModel:SearchViewModel
     private lateinit var mBinder: RadioService.LocalBinder
@@ -24,18 +22,11 @@ class SearchFragment : Fragment(){
     private val mHandler=Handler{
         when(it.what){
             0x103->{
-
-                Toast.makeText(context,it.obj as String,Toast.LENGTH_SHORT).show()
-                val fromXmlFragment= FromXmlFragment()
-                val bundle=Bundle()
-                bundle.putBinder("Binder",mBinder)
-                bundle.putString("url",it.obj as String)
-                fromXmlFragment.arguments=bundle
-                fragmentManager!!.beginTransaction()
-                    .hide(this)
-                    .add(R.id.layout_more, fromXmlFragment)
-                    .addToBackStack(null)
-                    .commit()
+                val msg= Message()
+                msg.what=0x103
+                msg.obj= it.obj as String
+                handler.sendMessage(msg)
+                this.onDestroy()
             }
         }
         false

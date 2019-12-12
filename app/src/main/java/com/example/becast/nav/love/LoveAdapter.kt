@@ -38,7 +38,7 @@ class LoveAdapter (private val context: Context,
             .into(holder.imageItemShow)
 
         holder.textItemTitle.text=mData[position].mix
-        holder.textItemNum.text=mData[position].time.toString()
+      //  holder.textItemNum.text=mData[position].time.toString()
         holder.btnItem.setOnClickListener {
             val msg= Message()
             msg.what=0x001

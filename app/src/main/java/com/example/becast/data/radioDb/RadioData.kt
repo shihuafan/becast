@@ -9,6 +9,7 @@ data class RadioData(
     @ColumnInfo (name = "duration") var duration:String ,
     @ColumnInfo (name = "link") var link:String,
     @ColumnInfo (name = "image_uri")var imageUri:String ,
+    @ColumnInfo (name = "rss_image_uri")var rssImageUri:String ,
     @ColumnInfo (name = "radio_uri")var radioUri:String ,
     @ColumnInfo (name = "pub_date")var pubDate:String,
     @ColumnInfo (name = "up_date")var upDate:Long,

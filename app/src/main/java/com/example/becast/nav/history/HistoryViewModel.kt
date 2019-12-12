@@ -7,7 +7,7 @@ import com.example.becast.data.radioDb.RadioData
 import com.example.becast.data.radioDb.RadioDatabase
 import com.example.becast.data.radioDb.RadioDatabaseHelper
 
-class HistoryViewModel(private val context:Context) {
+class HistoryViewModel {
 
     private val list : MutableList<RadioData> = mutableListOf()
     val historyModelLiveData: MutableLiveData<MutableList<RadioData>> = MutableLiveData()
@@ -15,7 +15,7 @@ class HistoryViewModel(private val context:Context) {
         historyModelLiveData.value=list
     }
 
-    fun getList(){
+    fun getList(context:Context){
         object :Thread(){
             override fun run() {
                 super.run()
@@ -29,7 +29,7 @@ class HistoryViewModel(private val context:Context) {
         }.start()
     }
 
-    fun clearList(){
+    fun clearList(context:Context){
         object :Thread(){
             override fun run() {
                 super.run()

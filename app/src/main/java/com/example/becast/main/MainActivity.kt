@@ -21,6 +21,7 @@ import com.example.becast.nav.follow.FollowFragment
 import com.example.becast.nav.history.HistoryFragment
 import com.example.becast.nav.love.LoveFragment
 import com.example.becast.nav.setting.SettingFragment
+import com.example.becast.nav.square.SquareFragment
 import com.example.becast.nav.user.login.LoginFragment
 import com.example.becast.nav.user.personal.InfoFragment
 import com.example.becast.service.RadioService
@@ -80,6 +81,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         layout_nav_follow.setOnClickListener(this)
         layout_nav_collect.setOnClickListener(this)
         layout_nav_history.setOnClickListener(this)
+        layout_nav_square.setOnClickListener(this)
         btn_nav_night.setOnClickListener(this)
         btn_nav_setting.setOnClickListener(this)
         btn_nav_night.setOnClickListener(this)
@@ -136,14 +138,29 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     .addToBackStack(null)
                     .commit()
             }
+            R.id.layout_nav_square->{
+                layout_drawer.closeDrawer(Gravity.START)
+                layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                supportFragmentManager.findFragmentByTag("playingFragment")?.let {
+                    supportFragmentManager.beginTransaction()
+                        .hide(pageFragment)
+                        .hide(it)
+                        .add(R.id.layout_main_all, SquareFragment(mBinder))
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
             R.id.btn_nav_setting->{
                 layout_drawer.closeDrawer(Gravity.START)
                 layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                supportFragmentManager.findFragmentByTag("playingFragment")?.let {
                 supportFragmentManager.beginTransaction()
                     .hide(pageFragment)
+                    .hide(it)
                     .add(R.id.layout_main_all, SettingFragment())
                     .addToBackStack(null)
                     .commit()
+                }
             }
             R.id.btn_nav_night->{
                 layout_drawer.closeDrawer(Gravity.START)
@@ -165,7 +182,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             pageFragment=PageFragment()
             pageFragment.arguments=bundle
             supportFragmentManager.beginTransaction()
-                .replace(R.id.layout_main_bottom, playingFragment)
+                .replace(R.id.layout_main_bottom, playingFragment,"playingFragment")
                 .commit()
 
             supportFragmentManager.beginTransaction()

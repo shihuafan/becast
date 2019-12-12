@@ -2,19 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="30dp"
-    android:paddingEnd="30dp"
-    android:paddingBottom="20dp"
+    android:padding="30dp"
     android:orientation="vertical"
     android:background="@drawable/radius_top_concern_40_0xcfcfcf">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:text="加入"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:layout_height="150dp">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_mix"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"/>
+
+    </RelativeLayout>
 
 
 

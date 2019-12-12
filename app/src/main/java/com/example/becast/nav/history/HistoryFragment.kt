@@ -17,7 +17,8 @@ import kotlinx.android.synthetic.main.frag_history.view.*
 import org.greenrobot.eventbus.EventBus
 
 class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), View.OnClickListener {
-    private lateinit var historyViewModel:HistoryViewModel
+
+    private val historyViewModel:HistoryViewModel=HistoryViewModel()
 
     private val mHandler : Handler = Handler{
         when(it.what){
@@ -40,12 +41,11 @@ class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment()
 
     override fun onResume() {
         super.onResume()
-        historyViewModel.getList()
+        context?.let { historyViewModel.getList(it) }
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view= inflater.inflate(R.layout.frag_history, container, false)
         EventBus.getDefault().post("close")
-        historyViewModel= context?.let { HistoryViewModel(it) }!!
 
         view.list_history.layoutManager = LinearLayoutManager(context)
         view.list_history.adapter = context?.let {
@@ -70,7 +70,7 @@ class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment()
                 activity?.onBackPressed()
             }
             R.id.btn_history_clear->{
-                historyViewModel.clearList()
+                context?.let { historyViewModel.clearList(it) }
             }
         }
     }

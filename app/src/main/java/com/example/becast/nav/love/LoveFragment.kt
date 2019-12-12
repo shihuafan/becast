@@ -15,7 +15,9 @@ import kotlinx.android.synthetic.main.frag_love.view.*
 import org.greenrobot.eventbus.EventBus
 
 class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), View.OnClickListener {
-    private lateinit var loveViewModel: LoveViewModel
+
+    private val loveViewModel: LoveViewModel=LoveViewModel()
+
     private val mHandler : Handler = Handler{
         when(it.what){
             0x001 ->{
@@ -32,7 +34,8 @@ class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), V
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view= inflater.inflate(R.layout.frag_love, container, false)
         EventBus.getDefault().post("close")
-        loveViewModel= context?.let { LoveViewModel(it) }!!
+
+        context?.let { loveViewModel.getMix(it) }
 
         view.list_love.layoutManager = GridLayoutManager(context,3)
         view.list_love.adapter = context?.let {

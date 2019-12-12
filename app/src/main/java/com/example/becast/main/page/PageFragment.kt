@@ -31,16 +31,15 @@ class PageFragment : Fragment(), View.OnClickListener,
     private val mHandler : Handler = Handler{
         when(it.what){
             0x103 ->{
-                fragmentManager!!.beginTransaction()
-                    .hide(this)
-                    .replace(R.id.layout_main_all,
-                        DetailFragment(
-                            it.obj as RadioData,
-                            mBinder
-                        )
-                    )
-                    .addToBackStack(null)
-                    .commit()
+                fragmentManager!!.findFragmentByTag("playingFragment")?.let {it_->
+                    fragmentManager!!.beginTransaction()
+                        .hide(this)
+                        .hide(it_)
+                        .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData, mBinder
+                        ))
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         }
         false
@@ -129,11 +128,14 @@ class PageFragment : Fragment(), View.OnClickListener,
                 val bundle=Bundle()
                 bundle.putBinder("Binder",mBinder)
                 moreFragment.arguments=bundle
-                fragmentManager!!.beginTransaction()
-                    .hide(this)
-                    .replace(R.id.layout_main_all,moreFragment)
-                    .addToBackStack(null)
-                    .commit()
+                fragmentManager!!.findFragmentByTag("playingFragment")?.let {
+                    fragmentManager!!.beginTransaction()
+                        .hide(this)
+                        .hide(it)
+                        .replace(R.id.layout_main_all,moreFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         }
     }

@@ -5,14 +5,12 @@ import android.content.Context
 import android.os.Handler
 import android.os.Message
 import android.util.Xml
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import androidx.room.Room
 import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.radioDb.RadioDatabase
 import com.example.becast.data.radioDb.RadioDatabaseHelper
 import com.example.becast.data.rss.RssData
 import com.example.becast.data.rss.RssDatabaseHelper
-import com.example.becast.unit.data.rssDB.RssDatabase
 import okhttp3.*
 import org.xmlpull.v1.XmlPullParser
 import java.io.IOException
@@ -21,7 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class FromXmlViewModel(val context: Context, url:String,private val handler: Handler) {
+class FromXmlViewModel(val context: Context,private val url:String,private val handler: Handler) {
 
     private lateinit var rssData: RssData
     val rssDataLiveData : MutableLiveData<RssData> = MutableLiveData()
@@ -63,8 +61,8 @@ class FromXmlViewModel(val context: Context, url:String,private val handler: Han
 
     fun readXml(input: InputStream){
 
-        rssData = RssData("","","","","","","","")
-        var radioData = RadioData("","","","","","",0L,"",rssData.rssUri,rssData.title,0L,0L,0L,0,0L)
+        rssData = RssData("","","","","",url,"","")
+        var radioData = RadioData("","","","","","","",0L,"",rssData.rssUri,rssData.title,0L,0L,0L,0,0L)
         var flag=true
         val parser= Xml.newPullParser()
         parser.setInput(input,"UTF-8")
@@ -77,7 +75,7 @@ class FromXmlViewModel(val context: Context, url:String,private val handler: Han
                 }
                 XmlPullParser.START_TAG -> {
                     if("item"==parser.name){
-                        radioData= RadioData("","","",rssData.imageUri,"","",0L,"",rssData.rssUri,rssData.title,0L,0L,0L,0,0L)
+                        radioData= RadioData("","","",rssData.imageUri,rssData.imageUri,"","",0L,"",rssData.rssUri,rssData.title,0L,0L,0L,0,0L)
                         flag=false
                     }
                     if(flag){
@@ -160,8 +158,8 @@ class FromXmlViewModel(val context: Context, url:String,private val handler: Han
         object : Thread() {
             override fun run() {
                 try{
-                    subscribeRadio()
                     subscribeRss()
+                    subscribeRadio()
                     handler.sendEmptyMessage(0x000)
                 }
                 catch(e:Exception){

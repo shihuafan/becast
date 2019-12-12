@@ -7,6 +7,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,12 +35,14 @@ class ChannelFragment(private val rssData: RssData,private val mBinder: RadioSer
         when(it.what){
             0x103->{
                 fragmentManager!!.beginTransaction()
-                    .replace(R.id.layout_channel,
+                    .hide(this)
+                    .replace(R.id.layout_main_all,
                         DetailFragment(
                             it.obj as RadioData,
                             mBinder
                         )
                     )
+                    .addToBackStack(null)
                     .commitAllowingStateLoss()
             }
         }

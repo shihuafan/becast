@@ -18,51 +18,51 @@
                 android:layout_height="match_parent">
 
             <ImageView
-                    android:id="@+id/image_playing_show"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="20dp"
-                    tools:ignore="ContentDescription"
-                    android:scaleType="centerCrop" />
+                android:id="@+id/image_playing_show"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                tools:ignore="ContentDescription"
+                android:scaleType="centerCrop" />
 
 
 
-                <TextView
-                    android:id="@+id/text_playing_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="80dp"
-                    android:layout_marginEnd="70dp"
-                    android:layout_centerVertical="true"
-                    android:text="BeCast"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#000"
-                    android:ellipsize="marquee"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:singleLine="true"
-                    android:marqueeRepeatLimit="marquee_forever"/>
+            <TextView
+                android:id="@+id/text_playing_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:layout_marginEnd="70dp"
+                android:layout_centerVertical="true"
+                android:text="BeCast"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:singleLine="true"
+                android:marqueeRepeatLimit="marquee_forever"/>
 
 
 
             <Button
-                    android:id="@+id/btn_playing_page"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="70dp"
-                    android:background="#00000000"/>
+                android:id="@+id/btn_playing_page"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="70dp"
+                android:background="#00000000"/>
 
             <Button
-                    android:id="@+id/btn_playing_pause"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="30dp"
-                    android:background="?attr/ic_play"
-                    android:layout_centerVertical="true"/>
+                android:id="@+id/btn_playing_pause"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="30dp"
+                android:background="?attr/ic_play"
+                android:layout_centerVertical="true"/>
 
         </RelativeLayout>
 

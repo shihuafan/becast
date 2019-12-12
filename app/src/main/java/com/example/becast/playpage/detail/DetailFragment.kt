@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
+import com.example.becast.channel.ChannelFragment
+import com.example.becast.data.mix.MixData
 import com.example.becast.data.radioDb.RadioData
 import com.example.becast.playpage.play.PlayPageFragment
 import com.example.becast.service.RadioService
@@ -36,11 +38,13 @@ class DetailFragment(private val radioData: RadioData, private val mBinder: Radi
         }!!
 
         Glide.with(context!!)
-            .load(radioData.imageUri)
+            .load(radioData.rssImageUri)
             .apply(RequestOptions.overrideOf(100,100))
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
             .into(v.image_detail_show)
         v.text_detail_name.text=radioData.title
+        v.text_detail_update.text=detailViewModel.getDateString(radioData.upDate)
+        v.webview_detail_describe.loadDataWithBaseURL(null,radioData.description,"text/html","utf-8",null)
         v.btn_detail_back.setOnClickListener(this)
         v.btn_detail_play.setOnClickListener(this)
         v.btn_detail_wait.setOnClickListener(this)
@@ -52,7 +56,7 @@ class DetailFragment(private val radioData: RadioData, private val mBinder: Radi
     override fun onClick(v: View?) {
        when(v?.id){
            R.id.btn_detail_back->{
-
+               activity?.onBackPressed()
            }
            R.id.btn_detail_play->{
                mBinder.playRadio(radioData)
@@ -63,7 +67,12 @@ class DetailFragment(private val radioData: RadioData, private val mBinder: Radi
                    .commit()
            }
            R.id.btn_detail_rss->{
-
+               val rssData=detailViewModel.getRssData(radioData.rssUri)
+               fragmentManager!!.beginTransaction()
+                   .hide(this)
+                   .add(R.id.layout_main_all, ChannelFragment(rssData,mBinder))
+                   .addToBackStack(null)
+                   .commit()
            }
            R.id.btn_detail_wait->{
                val handler=Handler{
@@ -81,7 +90,7 @@ class DetailFragment(private val radioData: RadioData, private val mBinder: Radi
                            Snackbar.make(v, "已加入收听列表", Snackbar.LENGTH_SHORT).show()
                        }
                        0x003->{
-
+                           Snackbar.make(v, (it.obj as MixData).mix, Snackbar.LENGTH_SHORT).show()
                        }
                    }
                    false

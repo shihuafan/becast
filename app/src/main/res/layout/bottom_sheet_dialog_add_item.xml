@@ -8,14 +8,6 @@
     android:orientation="vertical"
     android:background="@drawable/radius_top_concern_40_0xcfcfcf">
 
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:text="加入"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-
     <Button
         android:id="@+id/btn_add_item_love"
         android:layout_width="match_parent"

@@ -32,8 +32,8 @@ class ShareAdapter (private val context: Context, private val mData : MutableLis
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.textNote.text=mData[position].comment
-        @SuppressLint("SetTextI18n")
-        holder.textTime.text=mData[position].startTime.toString()+"-"+mData[position].endTime.toString()
+//        @SuppressLint("SetTextI18n")
+//        holder.textTime.text=mData[position].startTime.toString()+"-"+mData[position].endTime.toString()
         holder.layoutNote.setOnLongClickListener {
             val view = LayoutInflater.from(context).inflate(R.layout.popup_share, null, false)
             val popWindow = PopupWindow(

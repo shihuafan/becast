@@ -5,7 +5,6 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,7 +17,7 @@ import org.greenrobot.eventbus.EventBus
 
 class FollowFragment(private val mBinder: RadioService.LocalBinder):Fragment(), View.OnClickListener {
 
-    private lateinit var followViewModel:FollowViewModel
+    private val followViewModel:FollowViewModel= FollowViewModel()
     private val mHandler= Handler{
         when(it.what){
             0x001->{
@@ -34,13 +33,12 @@ class FollowFragment(private val mBinder: RadioService.LocalBinder):Fragment(), 
 
     override fun onResume() {
         super.onResume()
-        followViewModel.getList()
+        context?.let { followViewModel.getList(it) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.frag_follow, container, false)
         EventBus.getDefault().post("close")
-        followViewModel= context?.let { FollowViewModel(it) }!!
 
         view.list_follow.layoutManager = GridLayoutManager(context,3)
         view.list_follow.adapter = context?.let {

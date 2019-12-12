@@ -36,7 +36,7 @@ class MixAdapter (private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         Glide.with(context)
-            .load(mData[position].imageUri)
+            .load(mData[position].rssImageUri)
             .apply(RequestOptions.overrideOf(100,100))
             .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .into(holder.imageItemShow)

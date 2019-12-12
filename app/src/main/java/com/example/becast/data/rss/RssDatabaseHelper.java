@@ -4,8 +4,6 @@ import android.content.Context;
 
 import androidx.room.Room;
 
-import com.example.becast.unit.data.rssDB.RssDatabase;
-
 public class RssDatabaseHelper {
 
     public static volatile RssDatabase db;
