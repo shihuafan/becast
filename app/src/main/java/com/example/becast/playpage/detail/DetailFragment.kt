@@ -12,13 +12,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.channel.ChannelFragment
 import com.example.becast.data.mix.MixData
-import com.example.becast.data.radioDb.RadioData
+import com.example.becast.data.radio.RadioData
 import com.example.becast.playpage.play.PlayPageFragment
 import com.example.becast.service.RadioService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_detail.view.*
 
-class DetailFragment(private val radioData: RadioData, private val mBinder: RadioService.LocalBinder):Fragment(), View.OnClickListener {
+class DetailFragment(private val radioData: RadioData, private val mBinder: RadioService.LocalBinder,private val fromChannel:Boolean=false):Fragment(), View.OnClickListener {
 
     private lateinit var v:View
     private lateinit var detailViewModel: DetailViewModel
@@ -38,7 +38,7 @@ class DetailFragment(private val radioData: RadioData, private val mBinder: Radi
         }!!
 
         Glide.with(context!!)
-            .load(radioData.rssImageUri)
+            .load(radioData.xmlImageUrl)
             .apply(RequestOptions.overrideOf(100,100))
             .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
             .into(v.image_detail_show)
@@ -62,15 +62,15 @@ class DetailFragment(private val radioData: RadioData, private val mBinder: Radi
                mBinder.playRadio(radioData)
                fragmentManager!!.beginTransaction()
                    .hide(this)
-                   .add(R.id.layout_main_all, PlayPageFragment(mBinder))
+                   .add(R.id.layout_main_all, PlayPageFragment(mBinder,fromChannel))
                    .addToBackStack(null)
                    .commit()
            }
            R.id.btn_detail_rss->{
-               val rssData=detailViewModel.getRssData(radioData.rssUri)
+               val xmlData=detailViewModel.getRssData(radioData.xmlUrl)
                fragmentManager!!.beginTransaction()
                    .hide(this)
-                   .add(R.id.layout_main_all, ChannelFragment(rssData,mBinder))
+                   .add(R.id.layout_main_all, ChannelFragment(xmlData,mBinder))
                    .addToBackStack(null)
                    .commit()
            }

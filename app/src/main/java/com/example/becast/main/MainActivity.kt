@@ -3,6 +3,7 @@ package com.example.becast.main
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.net.Uri
 import android.os.Bundle
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
+import com.example.becast.broadcastReceiver.MBroadcastReceiver
 import com.example.becast.data.UserData
 import com.example.becast.main.page.PageFragment
 import com.example.becast.nav.follow.FollowFragment
@@ -85,6 +87,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btn_nav_night.setOnClickListener(this)
         btn_nav_setting.setOnClickListener(this)
         btn_nav_night.setOnClickListener(this)
+
+        val receiver=MBroadcastReceiver()
+        val intentFilter=IntentFilter()
+        intentFilter.addAction("android.intent.action.HEADSET_PLUG")
+        registerReceiver(receiver,intentFilter)
     }
 
     @SuppressLint("WrongConstant")
@@ -223,7 +230,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     timer.schedule(object : TimerTask() {
                         override fun run() { context.finish() }}, delay)
                 }
-
+            }
+            "stop_radio"->{
+                if(mBinder.isRadioPlaying()) {
+                    mBinder.pauseRadio()
+                }
             }
         }
     }

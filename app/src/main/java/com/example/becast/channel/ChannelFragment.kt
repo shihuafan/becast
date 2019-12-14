@@ -7,7 +7,6 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,8 +14,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.rss.RssData
+import com.example.becast.data.radio.RadioData
+import com.example.becast.data.xml.XmlData
 import com.example.becast.main.page.RadioAdapter
 import com.example.becast.playpage.detail.DetailFragment
 import com.example.becast.service.RadioService
@@ -25,7 +24,7 @@ import kotlinx.android.synthetic.main.frag_channel.*
 import kotlinx.android.synthetic.main.frag_channel.view.*
 
 @SuppressLint("NewApi")
-class ChannelFragment(private val rssData: RssData,private val mBinder: RadioService.LocalBinder):Fragment(), View.OnClickListener,
+class ChannelFragment(private val xmlData: XmlData, private val mBinder: RadioService.LocalBinder):Fragment(), View.OnClickListener,
     View.OnScrollChangeListener {
 
     private lateinit var v:View
@@ -50,7 +49,7 @@ class ChannelFragment(private val rssData: RssData,private val mBinder: RadioSer
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_channel, container, false)
-        channelViewModel= context?.let { ChannelViewModel(it,rssData) }!!
+        channelViewModel= context?.let { ChannelViewModel(it,xmlData) }!!
 
         v.list_channel.layoutManager = LinearLayoutManager(context)
         v.list_channel.adapter = context?.let {
@@ -62,17 +61,17 @@ class ChannelFragment(private val rssData: RssData,private val mBinder: RadioSer
             v.list_channel.adapter?.notifyDataSetChanged()
         })
 
-        v.text_channel_head_title.text=rssData.title
-        v.text_channel_title.text=rssData.title
-        v.text_channel_update.text=rssData.pubDate
-        v.text_channel_describe.text=rssData.description
+        v.text_channel_head_title.text=xmlData.title
+        v.text_channel_title.text=xmlData.title
+        v.text_channel_update.text=xmlData.pubDate
+        v.text_channel_describe.text=xmlData.description
 
         v.scrollView_channel.setOnScrollChangeListener(this)
         v.btn_channel_back.setOnClickListener(this)
         v.btn_channel_subscribe.setOnClickListener(this)
 
         Glide.with(context!!)
-            .load(rssData.imageUri)
+            .load(xmlData.imageUrl)
             .apply(RequestOptions.overrideOf(100,100))
             .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .into(v.image_channel_show)

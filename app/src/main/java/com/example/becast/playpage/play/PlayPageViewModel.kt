@@ -1,15 +1,17 @@
 package com.example.becast.playpage.play
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Color
-import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.rss.RssDatabaseHelper
+import android.graphics.*
+import android.os.Handler
+import android.os.Message
+import com.example.becast.data.radio.RadioData
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
 import java.lang.Exception
 import java.util.*
 import kotlin.experimental.and
@@ -25,36 +27,7 @@ class PlayPageViewModel {
         }
     }
 
-    fun createQRCodeBitmap(content: String): Bitmap? {
-        val width=400
-        val height=400
-        try {
-            val hints = Hashtable<EncodeHintType, String>()
 
-            hints[EncodeHintType.CHARACTER_SET] = "UTF-8"
-            hints[EncodeHintType.ERROR_CORRECTION] = "L"
-            hints[EncodeHintType.MARGIN] = "1"
-
-            val bitMatrix = QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints)
-
-            val pixels = IntArray(width * height)
-            for (y in 0 until height) {
-                for (x in 0 until width) {
-                    if (bitMatrix.get(x, y)) {
-                        pixels[y * width + x] = Color.BLACK//黑色色块像素设置
-                    } else {
-                        pixels[y * width + x] = Color.WHITE// 白色色块像素设置
-                    }
-                }
-            }
-            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
-            return bitmap
-        } catch (e: WriterException) {
-            e.printStackTrace()
-            return null
-        }
-    }
 
     @SuppressLint("DefaultLocale")
     fun md5(password:String):String{
@@ -74,19 +47,36 @@ class PlayPageViewModel {
         return " "
     }
 
-    fun getRssData (context: Context,radioData: RadioData){
-        object:Thread(){
-            override fun run() {
-                super.run()
-                val db= RssDatabaseHelper.getDb(context)
-                val mDao=db.rssDao()
-                val temp=mDao.getRssData(radioData.rssUri)
-                RssDatabaseHelper.closeDb()
-            }
-        }
+//    fun getSharePic(radioData: RadioData,handler: Handler){
+//        object :Thread(){
+//            override fun run() {
+//                super.run()
+//                try {
+//                    val request= Request.Builder()
+//                        .url(radioData.xmlImageUrl)
+//                        .method("GET",null)
+//                        .build()
+//                    val okHttpClient= OkHttpClient()
+//                    val response=okHttpClient.newCall(request).execute()
+//                    val inputStream = response.body()!!.byteStream()
+//                    var bitmap = BitmapFactory.decodeStream(inputStream)
+//                    bitmap=size(bitmap,1000,1000)
+//                    val canvas= Canvas(bitmap)
+//                    val qrBitmap= createQRCodeBitmap("shihuafan")?.let { size(it,150,150) }
+//                    canvas.drawBitmap(qrBitmap,700f,700f,null)
+//                    val paint=Paint()
+//                    paint.color=Color.WHITE
+//                    paint.textSize=24f
+//                    canvas.drawText(radioData.title,100f,100f,paint)
+//
+//                    val msg=Message()
+//                    msg.obj=bitmap
+//                    handler.sendMessage(msg)
+//                } catch (e: IOException) { }
+//            }
+//        }.start()
+//    }
 
-
-    }
 
 
 

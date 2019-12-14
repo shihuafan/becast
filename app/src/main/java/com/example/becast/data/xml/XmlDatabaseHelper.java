@@ -1,22 +1,22 @@
-package com.example.becast.data.rss;
+package com.example.becast.data.xml;
 
 import android.content.Context;
 
 import androidx.room.Room;
 
-public class RssDatabaseHelper {
+public class XmlDatabaseHelper {
 
-    public static volatile RssDatabase db;
+    public static volatile XmlDatabase db;
     private static volatile int num=0;
 
-    public static RssDatabase getDb(final Context context){
-        synchronized (RssDatabaseHelper.class){
+    public static XmlDatabase getDb(final Context context){
+        synchronized (XmlDatabaseHelper.class){
             num++;
         }
         if(db==null){
-            synchronized (RssDatabaseHelper.class){
+            synchronized (XmlDatabaseHelper.class){
                 if(db==null){
-                    db= Room.databaseBuilder(context,RssDatabase.class, "rss").build();
+                    db= Room.databaseBuilder(context, XmlDatabase.class, "xml_db").build();
                 }
             }
         }

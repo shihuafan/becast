@@ -4,12 +4,13 @@ import android.content.Context
 import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
-import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.radioDb.RadioDatabase
-import com.example.becast.data.rss.RssData
-import com.example.becast.data.rss.RssDatabase
+import com.example.becast.data.radio.RadioData
+import com.example.becast.data.radio.RadioDatabase
+import com.example.becast.data.radio.RadioDatabaseHelper
+import com.example.becast.data.xml.XmlData
+import com.example.becast.data.xml.XmlDatabase
 
-class ChannelViewModel(private val context: Context, private val rssData: RssData) {
+class ChannelViewModel(private val context: Context, private val xmlData: XmlData) {
 
     private var flag =true
     val list : MutableList<RadioData> = mutableListOf()
@@ -20,11 +21,10 @@ class ChannelViewModel(private val context: Context, private val rssData: RssDat
         object : Thread(){
             override fun run() {
                 super.run()
-                val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-                    .build()
+                val db = RadioDatabaseHelper.getDb(context)
                 val mDao=db.radioDao()
                 list.clear()
-                list.addAll(mDao.getByChannel(rssData.rssUri) as MutableList<RadioData>)
+                list.addAll(mDao.getByChannel(xmlData.xmlUrl) as MutableList<RadioData>)
                 channelLiveData.postValue(list)
                 db.close()
             }
@@ -58,10 +58,10 @@ class ChannelViewModel(private val context: Context, private val rssData: RssDat
     }
 
     fun cancelChannel(){
-        val db = Room.databaseBuilder(context, RssDatabase::class.java, "rss")
+        val db = Room.databaseBuilder(context, XmlDatabase::class.java, "rss")
             .build()
-        val mDao=db.rssDao()
-        mDao.delete(rssData)
+        val mDao=db.xmlDao()
+        mDao.delete(xmlData)
         db.close()
     }
 
@@ -69,7 +69,7 @@ class ChannelViewModel(private val context: Context, private val rssData: RssDat
         val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
             .build()
         val mDao=db.radioDao()
-        mDao.deleteByChannel(rssData.rssUri)
+        mDao.deleteByChannel(xmlData.xmlUrl)
         db.close()
     }
 
@@ -90,11 +90,11 @@ class ChannelViewModel(private val context: Context, private val rssData: RssDat
     }
 
     fun subscribeRss(){
-        val db = Room.databaseBuilder(context, RssDatabase::class.java, "rss")
+        val db = Room.databaseBuilder(context, XmlDatabase::class.java, "rss")
             .build()
-        val mDao=db.rssDao()
+        val mDao=db.xmlDao()
         try{
-            mDao.insert(rssData)
+            mDao.insert(xmlData)
         }catch (e:Exception){
             if(!e.message!!.contains("SQLITE_CONSTRAINT_PRIMARYKEY")){
                 throw e

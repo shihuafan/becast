@@ -14,8 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.data.radioDb.RadioData
-import java.nio.ByteOrder
+import com.example.becast.data.radio.RadioData
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,13 +35,13 @@ class RadioAdapter (private val context: Context, private val mData : MutableLis
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         Glide.with(context)
-            .load(mData[position].rssImageUri)
+            .load(mData[position].xmlImageUrl)
             .apply(RequestOptions.overrideOf(100,100))
             .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
             .into(holder.imageItemShow)
 
         holder.textItemName.text=mData[position].title
-        holder.textItemTitle.text=mData[position].rssTitle
+        holder.textItemTitle.text=mData[position].xmlTitle
         holder.textItemDate.text=getDateString(mData[position].upDate)
 
         holder.btnItem.setOnClickListener {

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.becast.R
-import com.example.becast.data.radioDb.RadioData
+import com.example.becast.data.radio.RadioData
 import com.example.becast.more.MoreFragment
 import com.example.becast.more.from_opml.FromOpmlFragment
 import com.example.becast.playpage.detail.DetailFragment

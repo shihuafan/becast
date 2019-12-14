@@ -4,10 +4,6 @@ import android.content.Context;
 
 import androidx.room.Room;
 
-import com.example.becast.data.radioDb.RadioDatabase;
-
-import kotlin.jvm.JvmOverloads;
-
 public class CommentDatabaseHelper {
         public static volatile CommentDatabase db;
         private static volatile int num=0;

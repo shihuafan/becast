@@ -3,7 +3,6 @@ package com.example.becast.more.from_opml
 import android.os.Handler
 import android.util.Xml
 import androidx.lifecycle.MutableLiveData
-import com.example.becast.data.OpmlData
 import org.xmlpull.v1.XmlPullParser
 import java.io.FileInputStream
 import java.io.InputStream
@@ -32,7 +31,7 @@ class FromOpmlViewModel(path: String, private val handler: Handler) {
     }
 
     fun readOpml(xml:InputStream){
-        var opmlData:OpmlData?=null
+        var opmlData: OpmlData?=null
         val parser= Xml.newPullParser()
         parser.setInput(xml,"UTF-8")
         var eventType=parser.eventType
@@ -48,7 +47,13 @@ class FromOpmlViewModel(path: String, private val handler: Handler) {
                         val type=parser.getAttributeValue(2)
                         val xmlUrl=parser.getAttributeValue(3)
                         val htmlUrl=parser.getAttributeValue(4)
-                        opmlData= OpmlData(text, title, type, xmlUrl, htmlUrl)
+                        opmlData= OpmlData(
+                            text,
+                            title,
+                            type,
+                            xmlUrl,
+                            htmlUrl
+                        )
                     }
                 }
                 XmlPullParser.END_TAG->{

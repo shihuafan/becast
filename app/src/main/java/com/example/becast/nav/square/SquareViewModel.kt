@@ -1,17 +1,23 @@
 package com.example.becast.nav.square
 
-import com.example.becast.data.RecommendData
+import android.os.Handler
+import androidx.lifecycle.MutableLiveData
+import com.example.becast.nav.square.recommend.RecommendData
 import com.google.gson.Gson
-import io.reactivex.Observable
-import io.reactivex.Observer
 import okhttp3.*
 import java.io.IOException
 
 class SquareViewModel {
 
-    var recommend : RecommendData= RecommendData()
+    private var squareModel : RecommendData =
+        RecommendData()
+    val squareModelLiveData: MutableLiveData<RecommendData> = MutableLiveData()
 
-    fun getJson(url:String,observer:Observer<RecommendData>){
+    init {
+        squareModelLiveData.value=squareModel
+    }
+
+    fun getJson(url:String,handler:Handler){
         val okHttpClient = OkHttpClient()
         val request = Request.Builder()
             .url("https://raw.githubusercontent.com/shihuafan/cubing/master/shf1211.json")
@@ -19,13 +25,11 @@ class SquareViewModel {
         val call = okHttpClient.newCall(request)
         call.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Observable.error<RecommendData>(e)
-                    .subscribe(observer)
+                handler.sendEmptyMessage(0x404)
             }
             override fun onResponse(call: Call, response: Response) {
-                recommend= Gson().fromJson(response.body()!!.string(), RecommendData::class.java)
-                Observable.just(recommend)
-                    .subscribe(observer)
+                squareModel= Gson().fromJson(response.body()!!.string(), RecommendData::class.java)
+                squareModelLiveData.postValue(squareModel)
             }
         })
     }

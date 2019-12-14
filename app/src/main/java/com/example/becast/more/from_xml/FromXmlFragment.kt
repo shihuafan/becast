@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.data.radioDb.RadioData
+import com.example.becast.data.radio.RadioData
 import com.example.becast.playpage.play.PlayPageFragment
 import com.example.becast.service.RadioService
 import com.google.android.material.snackbar.Snackbar
@@ -60,15 +60,15 @@ class FromXmlFragment : Fragment(), View.OnClickListener {
         fromXmlViewModel.radioListLiveData.observe(this, Observer{
             v.list_add_from_xml.adapter?.notifyDataSetChanged()
         })
-        fromXmlViewModel.rssDataLiveData.observe(this, Observer {
+        fromXmlViewModel.xmlDataLiveData.observe(this, Observer {
             layout_add_from_xml_loading.visibility=View.GONE
             try{
                 Glide.with(this)
-                    .load(fromXmlViewModel.rssDataLiveData.value!!.imageUri)
+                    .load(fromXmlViewModel.xmlDataLiveData.value!!.imageUrl)
                     .apply(RequestOptions.overrideOf(100,100))
                     .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                     .into(image_add_from_xml)
-                v.text_add_from_xml.text=fromXmlViewModel.rssDataLiveData.value!!.title
+                v.text_add_from_xml.text=fromXmlViewModel.xmlDataLiveData.value!!.title
             }catch (e:Exception){}
         })
         v.layout_add_from_xml.setOnClickListener(this)

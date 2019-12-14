@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.becast.R
-import com.example.becast.data.radioDb.RadioData
+import com.example.becast.data.radio.RadioData
 import com.example.becast.service.RadioService
 
 

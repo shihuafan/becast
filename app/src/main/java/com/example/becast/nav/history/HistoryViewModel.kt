@@ -2,10 +2,8 @@ package com.example.becast.nav.history
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
-import androidx.room.Room
-import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.radioDb.RadioDatabase
-import com.example.becast.data.radioDb.RadioDatabaseHelper
+import com.example.becast.data.radio.RadioData
+import com.example.becast.data.radio.RadioDatabaseHelper
 
 class HistoryViewModel {
 

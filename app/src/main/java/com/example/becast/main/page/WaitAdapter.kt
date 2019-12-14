@@ -15,7 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.example.becast.R
-import com.example.becast.data.radioDb.RadioData
+import com.example.becast.data.radio.RadioData
 import com.example.becast.service.RadioService
 import java.text.SimpleDateFormat
 import java.util.*
@@ -36,7 +36,7 @@ class WaitAdapter (private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         Glide.with(context)
-            .load(mData[position].rssImageUri)
+            .load(mData[position].xmlImageUrl)
             .apply(RequestOptions.overrideOf(100,100))
             .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .into(holder.imageItemShow)

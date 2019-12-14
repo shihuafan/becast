@@ -1,4 +1,4 @@
-package com.example.becast.data
+package com.example.becast.more.from_opml
 
 data class OpmlData (
     var text:String,

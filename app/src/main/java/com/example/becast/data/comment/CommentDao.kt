@@ -6,8 +6,8 @@ import androidx.room.*
 @Dao
 interface CommentDao {
 
-    @Query("SELECT  * FROM comment_db WHERE radio_uri = (:radioUri)")
-    fun getAll(radioUri:String): List<CommentData>
+    @Query("SELECT  * FROM comment_db WHERE radio_url = (:radioUrl)")
+    fun getAll(radioUrl:String): List<CommentData>
 
     @Insert
     fun insert(comment: CommentData?)

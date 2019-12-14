@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -31,13 +32,17 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.RadioService"/>
+        <service
+            android:name=".service.RadioService"
+            android:priority = "1000"/>
 
-        <receiver android:name=".broadcast.MyBroadcastReceiver">
+        <receiver android:name=".broadcastReceiver.MBroadcastReceiver">
             <intent-filter>
-                <action android:name="com.example.broadcasttest.MY_BROADCAST"/>
+                <action android:name="android.intent.action.HEADSET_PLUG"/>
+                <action android:name = "android.intent.cation.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

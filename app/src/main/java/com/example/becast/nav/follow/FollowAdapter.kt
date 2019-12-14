@@ -15,9 +15,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.data.rss.RssData
+import com.example.becast.data.xml.XmlData
 
-class FollowAdapter (private val context: Context, private val mData : MutableList<RssData>,
+class FollowAdapter (private val context: Context, private val mData : MutableList<XmlData>,
                      private val handler: Handler)
     : RecyclerView.Adapter<FollowAdapter.ViewHolder>() {
 
@@ -32,7 +32,7 @@ class FollowAdapter (private val context: Context, private val mData : MutableLi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         Glide.with(context)
-            .load(Uri.parse(mData[position].imageUri))
+            .load(Uri.parse(mData[position].imageUrl))
             .apply(RequestOptions.overrideOf(100,100))
             .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
             .into(holder.imageItemShow)

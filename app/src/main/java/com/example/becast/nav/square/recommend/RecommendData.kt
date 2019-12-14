@@ -1,6 +1,4 @@
-package com.example.becast.data
-
-import com.example.becast.data.radioDb.RadioData
+package com.example.becast.nav.square.recommend
 
 data class RecommendData (
     var title:String?=null,
@@ -11,7 +9,7 @@ data class RecommendData (
 data class Part(
     var text:String?=null,
     var image:String?=null,
-    var radio:Radio?=null
+    var radio: Radio?=null
 
 )
 data class Radio(
@@ -26,9 +24,5 @@ data class Radio(
     var description:String,
     var rss_uri:String,
     var rss_title:String,
-    var love_time:String,
-    var history_time:String,
-    var wait_time:String,
-    var progress:String,
-    var mix:String
+    var progress:String
 )

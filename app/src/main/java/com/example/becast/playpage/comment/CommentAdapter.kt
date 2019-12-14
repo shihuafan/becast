@@ -1,6 +1,5 @@
-package com.example.becast.playpage.share
+package com.example.becast.playpage.comment
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Message
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupWindow
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.becast.R
@@ -18,7 +16,7 @@ import kotlinx.android.synthetic.main.item_note.view.*
 import kotlinx.android.synthetic.main.popup_share.view.*
 
 
-class ShareAdapter (private val context: Context, private val mData : MutableList<CommentData>,private val handler: Handler) : RecyclerView.Adapter<ShareAdapter.ViewHolder>() {
+class CommentAdapter (private val context: Context, private val mData : MutableList<CommentData>, private val handler: Handler) : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
 
     private lateinit var v:View
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

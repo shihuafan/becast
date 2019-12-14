@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.becast.R
+import com.example.becast.nav.square.recommend.RecommendFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_square.view.*
 
 
 class SquareFragment(private var mBinder: RadioService.LocalBinder): Fragment(){
 
-
+    private val squareViewModel:SquareViewModel=SquareViewModel()
     private val mHandler=Handler{
         when(it.what){
             0x001->{
@@ -22,7 +23,9 @@ class SquareFragment(private var mBinder: RadioService.LocalBinder): Fragment(){
                 url="https://raw.githubusercontent.com/shihuafan/cubing/master/shf1211.json"
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_all,RecommendFragment(url,mBinder))
+                    .add(R.id.layout_main_all,
+                        RecommendFragment(url, mBinder)
+                    )
                     .addToBackStack(null)
                     .commit()
             }
@@ -31,7 +34,9 @@ class SquareFragment(private var mBinder: RadioService.LocalBinder): Fragment(){
                 url="https://raw.githubusercontent.com/shihuafan/cubing/master/shf1211.json"
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_all,RecommendFragment(url,mBinder))
+                    .add(R.id.layout_main_all,
+                        RecommendFragment(url, mBinder)
+                    )
                     .addToBackStack(null)
                     .commit()
 
@@ -41,7 +46,9 @@ class SquareFragment(private var mBinder: RadioService.LocalBinder): Fragment(){
                 url="https://raw.githubusercontent.com/shihuafan/cubing/master/shf1211.json"
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_all,RecommendFragment(url,mBinder))
+                    .add(R.id.layout_main_all,
+                        RecommendFragment(url, mBinder)
+                    )
                     .addToBackStack(null)
                     .commit()
 
@@ -63,7 +70,5 @@ class SquareFragment(private var mBinder: RadioService.LocalBinder): Fragment(){
             context?.let { SquareAdapter(it, MutableList(20) { index->index.toString()},mHandler) }
 
         return view
-
     }
-
 }

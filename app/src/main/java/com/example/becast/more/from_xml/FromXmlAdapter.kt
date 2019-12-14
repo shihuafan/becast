@@ -10,7 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.becast.R
-import com.example.becast.data.radioDb.RadioData
+import com.example.becast.data.radio.RadioData
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,7 +29,7 @@ class FromXmlAdapter (private val context: Context, private val mData : MutableL
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.textItemName.text=mData[position].title
-        holder.textItemTitle.text=mData[position].rssTitle
+        holder.textItemTitle.text=mData[position].xmlTitle
         holder.textItemDate.text=getDateString(mData[position].upDate)
 
         holder.btnItem.setOnClickListener {

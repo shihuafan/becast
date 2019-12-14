@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="500dp"
     android:paddingStart="30dp"
     android:paddingEnd="30dp"
     android:paddingBottom="50dp"
     android:orientation="vertical"
     android:background="@drawable/radius_top_concern_40_0xcfcfcf">
+
 
     <TextView
             android:layout_width="match_parent"
@@ -16,21 +17,20 @@
             android:textSize="18sp"
             android:textStyle="bold"/>
 
-
-
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
+            <ImageView
+                android:id="@+id/image_show"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/qq"/>
 
 
-            <Button
+            <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
@@ -38,7 +38,5 @@
 
 
         </LinearLayout>
-
-
 
 </LinearLayout>

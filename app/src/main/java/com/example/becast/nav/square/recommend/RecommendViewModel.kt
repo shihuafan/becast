@@ -1,15 +1,15 @@
-package com.example.becast.nav.square
+package com.example.becast.nav.square.recommend
 
 import android.os.Handler
 import androidx.lifecycle.MutableLiveData
-import com.example.becast.data.RecommendData
 import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
 
 class RecommendViewModel {
 
-    private var recommend : RecommendData= RecommendData()
+    private var recommend : RecommendData =
+        RecommendData()
     val recommendModelLiveData: MutableLiveData<RecommendData> = MutableLiveData()
 
     init {

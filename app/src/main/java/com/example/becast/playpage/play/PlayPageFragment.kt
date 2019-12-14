@@ -1,8 +1,11 @@
 package com.example.becast.playpage.play
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -16,36 +19,59 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.data.ShareData
+import com.example.becast.playpage.comment.CommentFragment
+import com.example.becast.playpage.share.ShareData
 import com.example.becast.playpage.share.ShareFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_playpage.view.*
 import java.util.*
 
-class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment(),  View.OnClickListener, SeekBar.OnSeekBarChangeListener{
+class PlayPageFragment(private val mBinder: RadioService.LocalBinder,private val fromChannel:Boolean=false) : Fragment(),  View.OnClickListener, SeekBar.OnSeekBarChangeListener{
 
     private lateinit var v: View
     private val playPageViewModel= PlayPageViewModel()
-    private var shareData=ShareData(0,0,"",null)
+    private var shareData= ShareData()
     private var timer=Timer()
-    private val task=object : TimerTask() {
-        override fun run() {
-            setView()
-        }
-    }
+    private val mHandler= Handler{
+        if(mBinder.isPrepared()){
+            try {
+                v.seekBar_play.progress = mBinder.getRadioCurrentPosition()
+                v.seekBar_play.max = mBinder.getRadioDuration()
+                v.text_play_duration.text = playPageViewModel.timeToStr(mBinder.getRadioDuration()/1000)
+                v.text_play_position.text = playPageViewModel.timeToStr(mBinder.getRadioCurrentPosition()/1000)
 
+                if (mBinder.isRadioPlaying()) {
+                    v.btn_play_pause.setBackgroundResource(R.drawable.pause_light)
+                    v.image_play_loading.clearAnimation()
+                    v.image_play_loading.visibility = View.INVISIBLE
+                } else {
+                    if (!mBinder.isPrepared()) {
+                        v.image_play_loading.visibility = View.VISIBLE
+                        v.image_play_loading.startAnimation(
+                            AnimationUtils.loadAnimation(
+                                context,
+                                R.anim.rotate0
+                            )
+                        )
+                    }
+                    v.btn_play_pause.setBackgroundResource(R.drawable.play_light)
+                }
+            }catch (e:Exception){}
+        }
+        false
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_playpage, container, false)
 
         context?.let {
             Glide.with(it)
-                .load(Uri.parse(mBinder.getRadioItem().rssImageUri))
+                .load(Uri.parse(mBinder.getRadioItem().xmlImageUrl))
                 .apply(RequestOptions.overrideOf(300,300))
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                 .into(v.image_play_show) }
         v.text_play_title.text= mBinder.getRadioItem().title
         v.text_play_title.isSelected=true
-        v.text_play_rsstitle.text= mBinder.getRadioItem().rssTitle
+        v.text_play_rsstitle.text= mBinder.getRadioItem().xmlTitle
 
         v.layout_pin.visibility=View.GONE
         v.image_play_loading.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate0))
@@ -63,6 +89,7 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
         v.btn_play_share.setOnClickListener(this)
         v.btn_play_wait_list.setOnClickListener(this)
         v.btn_play_channel.setOnClickListener(this)
+
         v.btn_play_pin.setOnTouchListener{ _: View, motionEvent: MotionEvent ->
             when(motionEvent.action){
                 MotionEvent.ACTION_DOWN->{
@@ -82,11 +109,11 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
                     if((shareData.endTime-shareData.startTime)<500  || (shareData.endTime-shareData.startTime)>3000){
                         val bundle=Bundle()
                         bundle.putBinder("Binder",mBinder)
-                        bundle.putString("radio_uri",mBinder.getRadioItem().radioUri)
-                        bundle.putString("rss_uri",mBinder.getRadioItem().rssUri)
+                        bundle.putString("radio_uri",mBinder.getRadioItem().radioUrl)
+                        bundle.putString("rss_uri",mBinder.getRadioItem().xmlUrl)
                         bundle.putLong("start_time",shareData.startTime)
                         bundle.putLong("end_time",shareData.endTime)
-                        val shareFragment=ShareFragment()
+                        val shareFragment= CommentFragment()
                         shareFragment.arguments=bundle
                         fragmentManager!!.beginTransaction()
                             .add(R.id.layout_main_all, shareFragment)
@@ -100,32 +127,7 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
             }
             false
         }
-
         return v
-    }
-
-    private fun setView(){
-        try {
-                v.seekBar_play.progress = mBinder.getRadioCurrentPosition()
-                v.seekBar_play.max=mBinder.getRadioDuration()
-                v.text_play_duration.text= playPageViewModel.timeToStr(mBinder.getRadioDuration()/1000)
-                v.text_play_position.text= playPageViewModel.timeToStr(mBinder.getRadioCurrentPosition()/1000)
-
-                if(mBinder.isRadioPlaying()){
-                    v.btn_play_pause.setBackgroundResource(R.drawable.pause_light)
-                    v.image_play_loading.clearAnimation()
-                    v.image_play_loading.visibility=View.INVISIBLE
-                }
-                else{
-                    if(!mBinder.isPrepared()){
-                        v.image_play_loading.visibility=View.VISIBLE
-                        v.image_play_loading.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate0))
-                    }
-                    v.btn_play_pause.setBackgroundResource(R.drawable.play_light)
-
-                }
-
-        }catch (e:Exception){}
     }
 
     override fun onClick(v: View?) {
@@ -134,7 +136,8 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
                 activity?.onBackPressed()
             }
             R.id.btn_play_pre->{
-                mBinder.playPreRadio()
+                timer.cancel()
+             //   mBinder.playPreRadio()
             }
             R.id.btn_play_pause->{
                 if(mBinder.pauseRadio()){
@@ -148,11 +151,27 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
                 mBinder.playNextRadio()
             }
             R.id.layout_play->{ }
+
             R.id.btn_play_sleep->{
                 context?.let { SleepBottomSheetDialog(it) }
             }
             R.id.btn_play_share->{
-                context?.let { ShareBottomSheetDialog(it,mBinder.getRadioItem().link) }
+//                val handler=Handler {
+//                    this.v.image_play_show.setImageBitmap(it.obj as Bitmap)
+//                    false
+//                }
+//                playPageViewModel.getSharePic(mBinder.getRadioItem() ,handler)
+                val radioData=mBinder.getRadioItem()
+                shareData.xmlUrl=radioData.xmlUrl
+                shareData.radioUrl=radioData.radioUrl
+                shareData.xmlTitle=radioData.xmlTitle
+                shareData.title=radioData.title
+                shareData.xmlImageUrl=radioData.xmlImageUrl
+                shareData.radioImageUrl=radioData.imageUrl
+                fragmentManager!!.beginTransaction()
+                    .add(R.id.layout_main_all,ShareFragment(shareData))
+                    .addToBackStack(null)
+                    .commit()
             }
             R.id.btn_play_wait_list->{
                 context?.let { WaitListBottomSheetDialog(this,it,mBinder)}
@@ -186,13 +205,20 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder) : Fragment
         }
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if(hidden){timer.cancel()}
-        else{
-            timer.schedule(task, 0, 1000)
-        }
+    override fun onStop() {
+        Log.d(TAG,"timer停止")
+        timer.cancel()
+        super.onStop()
+    }
 
+    override fun onStart() {
+        super.onStart()
+        timer=Timer()
+        timer.schedule(object :TimerTask(){
+            override fun run() {
+                mHandler.sendEmptyMessage(0x001)
+            }
+        }, 0, 100)
     }
 
 }

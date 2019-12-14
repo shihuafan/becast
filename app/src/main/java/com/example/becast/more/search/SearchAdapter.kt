@@ -14,9 +14,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.data.rss.RssData
+import com.example.becast.data.xml.XmlData
 
-class SearchAdapter (private val context: Context,private val mData : MutableList<RssData>, private val handler: Handler)
+class SearchAdapter (private val context: Context, private val mData : MutableList<XmlData>, private val handler: Handler)
     : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,16 +29,16 @@ class SearchAdapter (private val context: Context,private val mData : MutableLis
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         Glide.with(context)
-            .load(mData[position].imageUri)
+            .load(mData[position].imageUrl)
             .apply(RequestOptions.overrideOf(100,100))
             .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .into(holder.imageItemShow)
         holder.textItemName.text=mData[position].title
-        holder.textItemUrl.text=mData[position].rssUri
+        holder.textItemUrl.text=mData[position].xmlUrl
         holder.btnItem.setOnClickListener {
             val msg=Message()
             msg.what=0x103
-            msg.obj= mData[position].rssUri
+            msg.obj= mData[position].xmlUrl
             handler.sendMessage(msg)
         }
     }

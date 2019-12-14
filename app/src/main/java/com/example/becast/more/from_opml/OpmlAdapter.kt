@@ -9,9 +9,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.becast.R
-import com.example.becast.data.OpmlData
 
-class OpmlAdapter (private val mData : MutableList<OpmlData>,private val handler: Handler)
+class OpmlAdapter (private val mData : MutableList<OpmlData>, private val handler: Handler)
     : RecyclerView.Adapter<OpmlAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

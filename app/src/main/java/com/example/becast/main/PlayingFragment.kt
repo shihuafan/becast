@@ -47,7 +47,7 @@ open class PlayingFragment : Fragment(), View.OnClickListener {
                 v.text_playing_title.text = mBinder.getRadioItem().title
                 context?.let {
                     Glide.with(context!!)
-                        .load(mBinder.getRadioItem().rssImageUri)
+                        .load(mBinder.getRadioItem().xmlImageUrl)
                         .apply(RequestOptions.overrideOf(100,100))
                         .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                         .into(v.image_playing_show)

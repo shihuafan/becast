@@ -2,12 +2,10 @@ package com.example.becast.playpage.detail
 
 import android.content.Context
 import androidx.room.Room
-import com.example.becast.data.mix.MixDatabase
-import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.radioDb.RadioDatabase
-import com.example.becast.data.radioDb.RadioDatabaseHelper
-import com.example.becast.data.rss.RssData
-import com.example.becast.data.rss.RssDatabase
+import com.example.becast.data.radio.RadioData
+import com.example.becast.data.radio.RadioDatabaseHelper
+import com.example.becast.data.xml.XmlData
+import com.example.becast.data.xml.XmlDatabase
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,11 +30,11 @@ class DetailViewModel(private val context: Context,private val radioData: RadioD
 
     }
 
-    fun getRssData(url:String):RssData{
-        val db = Room.databaseBuilder<RssDatabase>(context, RssDatabase::class.java, "rss")
+    fun getRssData(url:String):XmlData{
+        val db = Room.databaseBuilder<XmlDatabase>(context, XmlDatabase::class.java, "rss")
             .allowMainThreadQueries()
             .build()
-        val mDao=db.rssDao()
+        val mDao=db.xmlDao()
         val rssData=mDao.getRssData(url)
         db.close()
         return rssData

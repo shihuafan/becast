@@ -1,4 +1,4 @@
-package com.example.becast.data.radioDb;
+package com.example.becast.data.radio;
 
 import android.content.Context;
 
@@ -16,7 +16,7 @@ public class RadioDatabaseHelper {
         if(db==null){
             synchronized (RadioDatabaseHelper.class){
                 if(db==null){
-                    db= Room.databaseBuilder(context,RadioDatabase.class, "radio").build();
+                    db= Room.databaseBuilder(context,RadioDatabase.class, "radio_db").build();
                 }
             }
         }

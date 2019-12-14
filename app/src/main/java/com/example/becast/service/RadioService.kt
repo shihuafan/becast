@@ -11,15 +11,14 @@ import android.os.Handler
 import android.os.IBinder
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.room.Room
-import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.radioDb.RadioDatabase
-import com.example.becast.data.radioDb.RadioDatabaseHelper
+import com.example.becast.data.radio.RadioData
+import com.example.becast.data.radio.RadioDatabaseHelper
 import java.io.IOException
 import java.util.*
 
 
-class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener{
+
 
     private val mBinder = LocalBinder()
     private val mediaPlayer = MediaPlayer()
@@ -36,53 +35,11 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
     @Volatile
     private var isPrepared=false
 
-    internal interface MediaIBinder {
-        fun playPreRadio()
-        fun playNextRadio()
-        fun pauseRadio():Boolean
-        fun getRadioDuration():Int
-        fun getRadioCurrentPosition():Int
-        fun seekRadioTo( progress: Int)
-        fun isRadioPlaying():Boolean
-        fun isPrepared():Boolean
-    }
-
-    internal interface ListIBinder{
-        fun playRadio(item: RadioData)
-        fun addRadioItem(item: RadioData)
-        fun addRadioItemToNext(item: RadioData)
-        fun deleteRadioItem(index:Int)
-
-        fun radioItemEmpty():Boolean
-        fun getRadioItem(): RadioData
-        fun getLiveData():MutableLiveData<MutableList<RadioData>>
-    }
-
-    inner class LocalBinder : Binder() , MediaIBinder , ListIBinder {
-        override fun playPreRadio(){ playPre() }
-        override fun playNextRadio(){  playNext() }
-        override fun pauseRadio():Boolean{ return pause() }
-        override fun getRadioDuration(): Int { return mediaPlayer.duration }
-        override fun getRadioCurrentPosition(): Int { return mediaPlayer.currentPosition }
-        override fun seekRadioTo( progress: Int){ mediaPlayer.seekTo(progress) }
-        override fun isRadioPlaying():Boolean{return mediaPlayer.isPlaying }
-        override fun isPrepared():Boolean{return isPrepared}
-
-        override fun playRadio(item: RadioData){ play(item) }
-        override fun addRadioItem(item: RadioData){ addItem(item) }
-        override fun addRadioItemToNext(item: RadioData){ addItemToNext(item) }
-        override fun deleteRadioItem(index:Int){deleteItem(index)}
-
-
-        override fun radioItemEmpty():Boolean{ return list.size<=0 }
-        override fun getRadioItem(): RadioData { return list[0] }
-        override fun getLiveData(): MutableLiveData<MutableList<RadioData>>{return listLiveData}
-
-    }
 
     override fun onBind(intent: Intent?): IBinder { return mBinder }
 
     override fun onCreate() {
+        Log.d(TAG,"service创建")
         super.onCreate()
         context=this
         listLiveData.value=list
@@ -108,7 +65,7 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
-        println("准备好了")
+        Log.d(TAG,"准备好了")
         list[0].historyTime=System.currentTimeMillis()
         updateItem(list[0])
         //调用待播放列表并预加载完成
@@ -141,6 +98,9 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
             playList()
         }
     }
+
+
+
 /*
     1、取消TimerTask的更新进度
     2、判断是否是当前播放，是则不处理
@@ -175,10 +135,13 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
             isPrepared=false
             try {
                 mediaPlayer.reset()
-                mediaPlayer.setDataSource(list[0].radioUri)
-                mediaPlayer.prepareAsync()
+                mediaPlayer.setDataSource(list[0].radioUrl)
                 mediaPlayer.setOnPreparedListener(this)
                 mediaPlayer.setOnCompletionListener(this)
+                mediaPlayer.prepareAsync()
+                Log.d(TAG,"准备"+list[0].title)
+                Log.d(TAG,list[0].radioUrl)
+
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -241,7 +204,7 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
         }
     }
 
-    fun changeplayerSpeed(speed: Float) {
+    fun changeSpeed(speed: Float) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (mediaPlayer.isPlaying) {
                 mediaPlayer.playbackParams = mediaPlayer.playbackParams.setSpeed(speed)
@@ -271,6 +234,52 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
                 RadioDatabaseHelper.closeDb()
             }
         }.start()
+    }
+
+    internal interface MediaIBinder {
+        fun playPreRadio()
+        fun playNextRadio()
+        fun pauseRadio():Boolean
+        fun getRadioDuration():Int
+        fun getRadioCurrentPosition():Int
+        fun seekRadioTo( progress: Int)
+        fun isRadioPlaying():Boolean
+        fun isPrepared():Boolean
+        fun changeRadioSpeed(speed: Float)
+    }
+
+    internal interface ListIBinder{
+        fun playRadio(item: RadioData)
+        fun addRadioItem(item: RadioData)
+        fun addRadioItemToNext(item: RadioData)
+        fun deleteRadioItem(index:Int)
+
+        fun radioItemEmpty():Boolean
+        fun getRadioItem(): RadioData
+        fun getLiveData():MutableLiveData<MutableList<RadioData>>
+    }
+
+    inner class LocalBinder : Binder() , MediaIBinder , ListIBinder {
+        override fun playPreRadio(){ playPre() }
+        override fun playNextRadio(){  playNext() }
+        override fun pauseRadio():Boolean{ return pause() }
+        override fun getRadioDuration(): Int { return mediaPlayer.duration }
+        override fun getRadioCurrentPosition(): Int { return mediaPlayer.currentPosition }
+        override fun seekRadioTo( progress: Int){ mediaPlayer.seekTo(progress) }
+        override fun isRadioPlaying():Boolean{return mediaPlayer.isPlaying }
+        override fun isPrepared():Boolean{return isPrepared}
+        override fun changeRadioSpeed(speed: Float){ changeSpeed(speed)}
+
+        override fun playRadio(item: RadioData){ play(item) }
+        override fun addRadioItem(item: RadioData){ addItem(item) }
+        override fun addRadioItemToNext(item: RadioData){ addItemToNext(item) }
+        override fun deleteRadioItem(index:Int){deleteItem(index)}
+
+
+        override fun radioItemEmpty():Boolean{ return list.size<=0 }
+        override fun getRadioItem(): RadioData { return list[0] }
+        override fun getLiveData(): MutableLiveData<MutableList<RadioData>>{return listLiveData}
+
     }
 
 }

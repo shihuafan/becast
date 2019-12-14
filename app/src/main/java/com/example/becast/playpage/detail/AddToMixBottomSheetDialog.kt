@@ -4,21 +4,13 @@ import android.content.Context
 import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.becast.R
 import com.example.becast.data.mix.MixData
 import com.example.becast.data.mix.MixDatabase
-import com.example.becast.data.mix.MixDatabaseHelper
-import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.radioDb.RadioDatabase
-import com.example.becast.playpage.play.SleepBottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import kotlinx.android.synthetic.main.bottom_sheet_dialog_add_item.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_add_to_mix.view.*
-import kotlinx.android.synthetic.main.frag_love.view.*
 
 
 class AddToMixBottomSheetDialog(context: Context, handler: Handler) {

@@ -5,12 +5,11 @@ import android.content.Context
 import android.os.Handler
 import android.os.Message
 import android.util.Xml
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import com.example.becast.data.radioDb.RadioData
-import com.example.becast.data.radioDb.RadioDatabaseHelper
-import com.example.becast.data.rss.RssData
-import com.example.becast.data.rss.RssDatabaseHelper
+import com.example.becast.data.radio.RadioData
+import com.example.becast.data.radio.RadioDatabaseHelper
+import com.example.becast.data.xml.XmlData
+import com.example.becast.data.xml.XmlDatabaseHelper
 import okhttp3.*
 import org.xmlpull.v1.XmlPullParser
 import java.io.IOException
@@ -21,8 +20,8 @@ import java.util.*
 
 class FromXmlViewModel(val context: Context,private val url:String,private val handler: Handler) {
 
-    private lateinit var rssData: RssData
-    val rssDataLiveData : MutableLiveData<RssData> = MutableLiveData()
+    private lateinit var xmlData: XmlData
+    val xmlDataLiveData : MutableLiveData<XmlData> = MutableLiveData()
     private val radioList : MutableList<RadioData> = mutableListOf()
     private val radioListCache : MutableList<RadioData> = mutableListOf()
     val radioListLiveData : MutableLiveData<MutableList<RadioData>> = MutableLiveData()
@@ -61,8 +60,8 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
 
     fun readXml(input: InputStream){
 
-        rssData = RssData("","","","","",url,"","")
-        var radioData = RadioData("","","","","","","",0L,"",rssData.rssUri,rssData.title,0L,0L,0L,0,0L)
+        xmlData = XmlData(xmlUrl = url)
+        var radioData = RadioData()
         var flag=true
         val parser= Xml.newPullParser()
         parser.setInput(input,"UTF-8")
@@ -75,26 +74,30 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
                 }
                 XmlPullParser.START_TAG -> {
                     if("item"==parser.name){
-                        radioData= RadioData("","","",rssData.imageUri,rssData.imageUri,"","",0L,"",rssData.rssUri,rssData.title,0L,0L,0L,0,0L)
+                        radioData= RadioData(
+                            imageUrl = xmlData.imageUrl,
+                            xmlImageUrl = xmlData.imageUrl,
+                            xmlUrl = xmlData.xmlUrl,
+                            xmlTitle = xmlData.title)
                         flag=false
                     }
                     if(flag){
                         when(parser.name){
-                            "title"->rssData.title=parser.nextText()
-                            "link"->rssData.link=parser.nextText()
-                            "pubDate"->rssData.pubDate=parser.nextText()
-                            "image"->rssData.imageUri=parser.getAttributeValue(null,"href")
-                            "description"->rssData.description=parser.nextText()
-                            "author"->rssData.author=parser.nextText()
-                            "language"->rssData.language=parser.nextText()
+                            "title"->xmlData.title=parser.nextText()
+                            "link"->xmlData.link=parser.nextText()
+                            "pubDate"->xmlData.pubDate=parser.nextText()
+                            "image"->xmlData.imageUrl=parser.getAttributeValue(null,"href")
+                            "description"->xmlData.description=parser.nextText()
+                            "author"->xmlData.author=parser.nextText()
+                            "language"->xmlData.language=parser.nextText()
                         }
                     }else
                     {
                         when(parser.name){
                             "title"->radioData.title=parser.nextText()
                             "duration"->radioData.duration=parser.nextText()
-                            "enclosure"->radioData.radioUri=parser.getAttributeValue(null,"url")
-                            "image"->radioData.imageUri=parser.getAttributeValue(null,"href")
+                            "enclosure"->radioData.radioUrl=parser.getAttributeValue(null,"url")
+                            "image"->radioData.imageUrl=parser.getAttributeValue(null,"href")
                             "description"->radioData.description=parser.nextText()
                             "pubDate"->radioData.pubDate=parser.nextText()
                             "link"->radioData.link=parser.nextText()
@@ -109,7 +112,7 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
                     if(radioListCache.size==50){
                         radioList.clear()
                         radioList.addAll(radioListCache)
-                        rssDataLiveData.postValue(rssData)
+                        xmlDataLiveData.postValue(xmlData)
                         radioListLiveData.postValue(radioList)
                     }
                 }
@@ -119,7 +122,7 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
         if(radioListCache.size<50){
             radioList.clear()
             radioList.addAll(radioListCache)
-            rssDataLiveData.postValue(rssData)
+            xmlDataLiveData.postValue(xmlData)
             radioListLiveData.postValue(radioList)
         }
 
@@ -170,16 +173,16 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
     }
 
     fun subscribeRss(){
-        val db = RssDatabaseHelper.getDb(context)
-        val mDao=db.rssDao()
+        val db = XmlDatabaseHelper.getDb(context)
+        val mDao=db.xmlDao()
         try{
-            mDao.insert(rssData)
+            mDao.insert(xmlData)
         }catch (e:Exception){
             if(!e.message!!.contains("SQLITE_CONSTRAINT_PRIMARYKEY")){
                 throw e
             }
         }
-        RssDatabaseHelper.closeDb()
+        XmlDatabaseHelper.closeDb()
     }
 
     fun subscribeRadio(){
@@ -209,7 +212,7 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
 //        val doc = builder.parse(url)
 //
 //        rssData=getRssFromXml(url,doc)
-//        rssDataLiveData.postValue(rssData)
+//        xmlDataLiveData.postValue(rssData)
 //        getListFromXml(url,doc)
 //        if(radioListCache.size<50){
 //            radioList.clear()
@@ -287,7 +290,7 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
 //    }
 //}
 //
-//private fun getRssFromXml(url:String,doc:Document): RssData {
+//private fun getRssFromXml(url:String,doc:Document): XmlData {
 //
 //    var title=""
 //    if(doc.getElementsByTagName("title").length != 0){
@@ -324,7 +327,7 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
 //    if(doc.getElementsByTagName("language").length != 0){
 //        language = doc.getElementsByTagName("language").item(0).firstChild.nodeValue
 //    }
-//    return RssData(
+//    return XmlData(
 //        title,
 //        link,
 //        imageUri,

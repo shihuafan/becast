@@ -22,7 +22,7 @@ class AddMixDialog(context: Context,loveViewModel: LoveViewModel) {
         view.btn_add_mix_yes.setOnClickListener {
             val name=view.edit_add_mix_name.text.toString()
             if(name!=""){
-                loveViewModel.createMix(name)
+                loveViewModel.createMix(context,name)
                 alert.dismiss()
             }
         }
