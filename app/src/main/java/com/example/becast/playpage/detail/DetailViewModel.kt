@@ -3,7 +3,7 @@ package com.example.becast.playpage.detail
 import android.content.Context
 import androidx.room.Room
 import com.example.becast.data.radio.RadioData
-import com.example.becast.data.radio.RadioDatabaseHelper
+import com.example.becast.data.radio.RadioDatabase
 import com.example.becast.data.xml.XmlData
 import com.example.becast.data.xml.XmlDatabase
 import java.text.SimpleDateFormat
@@ -21,10 +21,10 @@ class DetailViewModel(private val context: Context,private val radioData: RadioD
         object:Thread(){
             override fun run() {
                 super.run()
-                val db= RadioDatabaseHelper.getDb(context)
+                val db= RadioDatabase.getDb(context)
                 val mDao=db.radioDao()
                 mDao.updateItem(radioData)
-                RadioDatabaseHelper.closeDb()
+                RadioDatabase.closeDb()
             }
         }.start()
 

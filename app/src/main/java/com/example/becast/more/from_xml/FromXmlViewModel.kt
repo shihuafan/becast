@@ -4,18 +4,29 @@ package com.example.becast.more.from_xml
 import android.content.Context
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.util.Xml
 import androidx.lifecycle.MutableLiveData
+import com.example.becast.data.UserData
 import com.example.becast.data.radio.RadioData
-import com.example.becast.data.radio.RadioDatabaseHelper
+import com.example.becast.data.radio.RadioDatabase
 import com.example.becast.data.xml.XmlData
-import com.example.becast.data.xml.XmlDatabaseHelper
+import com.example.becast.data.xml.XmlDatabase
+import com.example.becast.data.xml.XmlHttpHelper
+import io.reactivex.Observer
 import okhttp3.*
 import org.xmlpull.v1.XmlPullParser
 import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import io.reactivex.internal.disposables.DisposableHelper.dispose
+import io.reactivex.disposables.Disposable
+import io.reactivex.internal.disposables.DisposableHelper.dispose
+
+
+
+
 
 
 class FromXmlViewModel(val context: Context,private val url:String,private val handler: Handler) {
@@ -60,7 +71,7 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
 
     fun readXml(input: InputStream){
 
-        xmlData = XmlData(xmlUrl = url)
+        xmlData = XmlData(uid=UserData.uid.toString(),xmlUrl = url)
         var radioData = RadioData()
         var flag=true
         val parser= Xml.newPullParser()
@@ -173,7 +184,7 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
     }
 
     fun subscribeRss(){
-        val db = XmlDatabaseHelper.getDb(context)
+        val db = XmlDatabase.getDb(context)
         val mDao=db.xmlDao()
         try{
             mDao.insert(xmlData)
@@ -182,28 +193,29 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
                 throw e
             }
         }
-        XmlDatabaseHelper.closeDb()
+        XmlDatabase.closeDb()
+        XmlHttpHelper().addToNet(xmlData)
     }
 
     fun subscribeRadio(){
-        val db = RadioDatabaseHelper.getDb(context)
+        val db = RadioDatabase.getDb(context)
         val mDao=db.radioDao()
-        for(item : RadioData in radioListCache){
-            try{
-                mDao.insert(item)
-            }catch (e:Exception){
-                if(e.message!!.contains("SQLITE_CONSTRAINT_PRIMARYKEY")){
-                    continue
-                }
-                else{
-                    throw e
-                }
-            }
-        }
-        RadioDatabaseHelper.closeDb()
+        mDao.insertAll(radioListCache)
+//        for(item : RadioData in radioListCache){
+//            try{
+//                mDao.insert(item)
+//            }catch (e:Exception){
+//                if(e.message!!.contains("SQLITE_CONSTRAINT_PRIMARYKEY")){
+//                    continue
+//                }
+//                else{
+//                    throw e
+//                }
+//            }
+//        }
+        RadioDatabase.closeDb()
     }
 }
-
 
 //private fun getInfoFromXml() = object : Thread() {
 //    override fun run() {

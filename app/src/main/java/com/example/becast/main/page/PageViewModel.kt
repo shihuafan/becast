@@ -8,7 +8,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.radio.RadioData
-import com.example.becast.data.radio.RadioDatabaseHelper
+import com.example.becast.data.radio.RadioDatabase
 
 class PageViewModel(private val context: Context) {
 
@@ -35,11 +35,13 @@ class PageViewModel(private val context: Context) {
         val start=subscribeList.size
         object : Thread() {
             override fun run() {
-                val db=RadioDatabaseHelper.getDb(context)
+                val db= RadioDatabase.getDb(context)
                 val mDao=db.radioDao()
                 subscribeList.addAll(mDao.getAll(start,start+50) as MutableList<RadioData>)
                 subscribeListLiveData.postValue(subscribeList)
-                RadioDatabaseHelper.closeDb()
+                RadioDatabase.closeDb()
+
+
             }
         }.start()
 
@@ -49,11 +51,11 @@ class PageViewModel(private val context: Context) {
         val start=waitList.size
         object : Thread() {
             override fun run() {
-                val db = RadioDatabaseHelper.getDb(context)
+                val db = RadioDatabase.getDb(context)
                 val mDao=db.radioDao()
                 waitList.addAll(mDao.getWait(start,start+50) as MutableList<RadioData>)
                 waitListLiveData.postValue(subscribeList)
-                RadioDatabaseHelper.closeDb()
+                RadioDatabase.closeDb()
             }
         }.start()
     }

@@ -12,7 +12,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.radio.RadioData
-import com.example.becast.data.radio.RadioDatabaseHelper
+import com.example.becast.data.radio.RadioDatabase
 import java.io.IOException
 import java.util.*
 
@@ -52,12 +52,12 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
         object:Thread(){
             override fun run() {
                 super.run()
-                val db = RadioDatabaseHelper.getDb(context)
+                val db = RadioDatabase.getDb(context)
                 val mDao=db.radioDao()
                 list.clear()
                 list.addAll(mDao.getWait(0,50) as MutableList<RadioData>)
                 listLiveData.postValue(list)
-                RadioDatabaseHelper.closeDb()
+                RadioDatabase.closeDb()
                 handler.sendEmptyMessage(0x000)
             }
         }.start()
@@ -228,10 +228,10 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
         object :Thread(){
             override fun run() {
                 super.run()
-                val db=RadioDatabaseHelper.getDb(context)
+                val db= RadioDatabase.getDb(context)
                 val mDao=db.radioDao()
                 mDao.updateItem(item)
-                RadioDatabaseHelper.closeDb()
+                RadioDatabase.closeDb()
             }
         }.start()
     }

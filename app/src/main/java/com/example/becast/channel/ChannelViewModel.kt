@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.example.becast.data.radio.RadioData
 import com.example.becast.data.radio.RadioDatabase
-import com.example.becast.data.radio.RadioDatabaseHelper
 import com.example.becast.data.xml.XmlData
 import com.example.becast.data.xml.XmlDatabase
 
@@ -21,7 +20,7 @@ class ChannelViewModel(private val context: Context, private val xmlData: XmlDat
         object : Thread(){
             override fun run() {
                 super.run()
-                val db = RadioDatabaseHelper.getDb(context)
+                val db = RadioDatabase.getDb(context)
                 val mDao=db.radioDao()
                 list.clear()
                 list.addAll(mDao.getByChannel(xmlData.xmlUrl) as MutableList<RadioData>)
@@ -58,7 +57,7 @@ class ChannelViewModel(private val context: Context, private val xmlData: XmlDat
     }
 
     fun cancelChannel(){
-        val db = Room.databaseBuilder(context, XmlDatabase::class.java, "rss")
+        val db = Room.databaseBuilder(context, XmlDatabase::class.java, "xml_db")
             .build()
         val mDao=db.xmlDao()
         mDao.delete(xmlData)
@@ -66,7 +65,7 @@ class ChannelViewModel(private val context: Context, private val xmlData: XmlDat
     }
 
     fun cancelRadio(){
-        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
+        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio_db")
             .build()
         val mDao=db.radioDao()
         mDao.deleteByChannel(xmlData.xmlUrl)

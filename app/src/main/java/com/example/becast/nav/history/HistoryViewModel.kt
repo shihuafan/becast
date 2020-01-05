@@ -3,7 +3,7 @@ package com.example.becast.nav.history
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.radio.RadioData
-import com.example.becast.data.radio.RadioDatabaseHelper
+import com.example.becast.data.radio.RadioDatabase
 
 class HistoryViewModel {
 
@@ -17,12 +17,12 @@ class HistoryViewModel {
         object :Thread(){
             override fun run() {
                 super.run()
-                val db = RadioDatabaseHelper.getDb(context)
+                val db = RadioDatabase.getDb(context)
                 val mDao=db.radioDao()
                 list.clear()
                 list.addAll(mDao.getHistory() as MutableList<RadioData>)
                 historyModelLiveData.postValue(list)
-                RadioDatabaseHelper.closeDb()
+                RadioDatabase.closeDb()
             }
         }.start()
     }
@@ -31,13 +31,13 @@ class HistoryViewModel {
         object :Thread(){
             override fun run() {
                 super.run()
-                val db=RadioDatabaseHelper.getDb(context)
+                val db= RadioDatabase.getDb(context)
                 val mDao=db.radioDao()
                 for(item in list){
                     item.historyTime=0
                     mDao.updateItem(item)
                 }
-                RadioDatabaseHelper.closeDb()
+                RadioDatabase.closeDb()
                 list.clear()
                 historyModelLiveData.postValue(list)
             }

@@ -7,17 +7,17 @@ import androidx.room.Query
 
 @Dao
 interface XmlDao {
+
     @Query("SELECT * FROM xml_db")
     fun getAll(): List<XmlData>
 
     @Insert
-    fun insert(users: XmlData?)
+    fun insert(xmlData: XmlData?)
 
     @Delete
-    fun delete(user: XmlData)
+    fun delete(xmlData: XmlData)
 
     @Query("SELECT * FROM xml_db WHERE xml_url == (:xml_url)")
     fun getRssData(xml_url:String):XmlData
-
 
 }

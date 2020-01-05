@@ -11,5 +11,4 @@ data class CommentData(
     @ColumnInfo (name = "xml_url") var xnlUrl:String="",
     @ColumnInfo (name = "star_time") var startTime:Long=0,
     @ColumnInfo (name = "end_time") var endTime:Long=0
-
 )

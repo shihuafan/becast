@@ -3,7 +3,7 @@ package com.example.becast.nav.love
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.mix.MixData
-import com.example.becast.data.mix.MixDatabaseHelper
+import com.example.becast.data.mix.MixDatabase
 
 class LoveViewModel {
 
@@ -19,11 +19,11 @@ class LoveViewModel {
         object : Thread(){
             override fun run() {
                 super.run()
-                val db = MixDatabaseHelper.getDb(context)
+                val db = MixDatabase.getDb(context)
                 val mDao=db.mixDao()
                 list.addAll(mDao.getAll() as MutableList<MixData>)
                 loveModelLiveData.postValue(list)
-                MixDatabaseHelper.closeDb()
+                MixDatabase.closeDb()
             }
         }.start()
     }
@@ -36,10 +36,10 @@ class LoveViewModel {
         object:Thread(){
             override fun run() {
                 super.run()
-                val db=MixDatabaseHelper.getDb(context)
+                val db= MixDatabase.getDb(context)
                 val mDao=db.mixDao()
                 mDao.insert(mixData)
-                MixDatabaseHelper.closeDb()
+                MixDatabase.closeDb()
             }
         }.start()
     }

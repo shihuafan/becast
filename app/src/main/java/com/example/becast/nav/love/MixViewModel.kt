@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.mix.MixData
 import com.example.becast.data.radio.RadioData
-import com.example.becast.data.radio.RadioDatabaseHelper
+import com.example.becast.data.radio.RadioDatabase
 import java.lang.Exception
 import java.util.*
 
@@ -18,7 +18,7 @@ class MixViewModel(private val mixData: MixData,private val context:Context) {
         object : Thread(){
             override fun run() {
                 super.run()
-                val db = RadioDatabaseHelper.getDb(context)
+                val db = RadioDatabase.getDb(context)
                 val mDao=db.radioDao()
                 if(mixData.time==1L){
                     list.addAll(mDao.getLove() as MutableList<RadioData>)
@@ -27,7 +27,7 @@ class MixViewModel(private val mixData: MixData,private val context:Context) {
                     list.addAll(mDao.getByMix(mixData.time) as MutableList<RadioData>)
                 }
                 mixModelLiveData.postValue(list)
-                RadioDatabaseHelper.closeDb()
+                RadioDatabase.closeDb()
             }
         }.start()
 
@@ -35,11 +35,11 @@ class MixViewModel(private val mixData: MixData,private val context:Context) {
 
     fun addToRadioList(radioData: RadioData):Boolean{
         radioData.waitTime=Date().time
-        val db=RadioDatabaseHelper.getDb(context)
+        val db= RadioDatabase.getDb(context)
         val mDao=db.radioDao()
         try{
             mDao.updateItem(radioData)
-            RadioDatabaseHelper.closeDb()
+            RadioDatabase.closeDb()
         }catch(e: Exception){
             return false
         }
@@ -54,10 +54,10 @@ class MixViewModel(private val mixData: MixData,private val context:Context) {
         else{
             radioData.loveTime= Date().time
         }
-        val db=RadioDatabaseHelper.getDb(context)
+        val db= RadioDatabase.getDb(context)
         val mDao=db.radioDao()
         mDao.updateItem(radioData)
-        RadioDatabaseHelper.closeDb()
+        RadioDatabase.closeDb()
         mixModelLiveData.postValue(list)
     }
 }

@@ -4,9 +4,11 @@ import android.content.Context
 import com.example.becast.R
 
 object UserData {
-    var uid:Int=0
-    var name:String?=" "
-    var image:String?=" "
+    var uid:String?="0294374072"
+    var name:String?=""
+    var image:String?=""
+    var phone:String?=""
+    var password:String?=""
     var isLogin:Boolean=false
     var style:Int= R.style.AppTheme
     var delay:Int=0
@@ -16,7 +18,7 @@ object UserData {
 
     fun getAll(context:Context) : UserData {
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
-        uid =sp.getInt("uid", 0)
+        uid =sp.getString("uid", "")
         name =sp.getString("name", "")
         image =sp.getString("image", "")
         isLogin =sp.getBoolean("is_login",false)
@@ -26,11 +28,11 @@ object UserData {
         return this
     }
 
-    fun setAll(context:Context,uid:Int=this.uid) {
+    fun setAll(context:Context,uid:String?=this.uid) {
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
         val edit=sp.edit()
 
-        edit.putInt("uid", uid)
+        edit.putString("uid", uid)
         edit.putString("name", "拉普兰德")
         edit.putString("image", "http://raw.yiyoushuo.com/UGC/21f4bb93-9344-4a89-923c-6f9ce4a1b58b.jpg?x-oss-process=image/format,jpg")
         edit.putBoolean("is_login",true)
@@ -40,11 +42,12 @@ object UserData {
     fun clearAll(context: Context){
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
         val edit=sp.edit()
-        uid =0
+        uid =""
         name =""
         image =""
         isLogin =false
-        edit.putInt("uid", 0)
+        edit.putString("uid", "")
+        edit.putString("password","")
         edit.putString("name", "")
         edit.putString("image", "")
         edit.putBoolean("is_login",false)

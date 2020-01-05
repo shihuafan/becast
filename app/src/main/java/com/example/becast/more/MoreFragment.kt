@@ -129,6 +129,7 @@ class MoreFragment : Fragment(), View.OnClickListener{
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+
     private fun openFromFileFragment(){
         val imm = activity!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(activity!!.window.decorView.windowToken, 0)

@@ -4,7 +4,6 @@ import androidx.room.*
 
 
 @Dao
-
 interface RadioDao {
 
     @Query("SELECT  * FROM radio_db  ORDER BY up_date DESC limit (:start),(:end)")
@@ -13,6 +12,8 @@ interface RadioDao {
     @Insert
     fun insert(users: RadioData?)
 
+    @Insert
+    fun insertAll(radioList: MutableList<RadioData>)
     @Delete
     fun delete(user: RadioData)
 

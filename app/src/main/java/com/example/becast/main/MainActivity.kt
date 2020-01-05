@@ -12,9 +12,6 @@ import android.view.Gravity
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.broadcastReceiver.MBroadcastReceiver
 import com.example.becast.data.UserData
@@ -24,7 +21,7 @@ import com.example.becast.nav.history.HistoryFragment
 import com.example.becast.nav.love.LoveFragment
 import com.example.becast.nav.setting.SettingFragment
 import com.example.becast.nav.square.SquareFragment
-import com.example.becast.nav.user.login.LoginFragment
+import com.example.becast.login_signup.login.login.LoginFragment
 import com.example.becast.nav.user.personal.InfoFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.activity_main.*
@@ -36,38 +33,28 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-
     private lateinit var conn : MyConnection
+    private lateinit var receiver : MBroadcastReceiver
     internal lateinit var mBinder: RadioService.LocalBinder
-    private lateinit var pageFragment: PageFragment
     private var timer:Timer=Timer()
     private val context=this
     private var path : String?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         UserData.getAll(this)
         this.setTheme(UserData.style)
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        //注册EventBus
         EventBus.getDefault().register(this)
-        UserData.getAll(this)
-        Glide.with(this)
-            .load(UserData.image)
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(10)).circleCrop())
-            .into(image_nav_show)
-        if(UserData.uid==0){
-            text_nav_name.text="点击头像登录"
-        }
-        else{
-            @SuppressLint("SetTextI18n")
-            text_nav_name.text="昵称:"+ UserData.name
-        }
 
+        //连接Service
         val intent = Intent(this, RadioService::class.java)
         conn=MyConnection()
         bindService(intent,conn,BIND_AUTO_CREATE)
 
+        //使用opml直接进入
         val opmlIntent =getIntent()
         val action = opmlIntent.action
         if (Intent.ACTION_VIEW == action) {
@@ -88,7 +75,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btn_nav_setting.setOnClickListener(this)
         btn_nav_night.setOnClickListener(this)
 
-        val receiver=MBroadcastReceiver()
+        //广播动态注册
+        receiver=MBroadcastReceiver()
         val intentFilter=IntentFilter()
         intentFilter.addAction("android.intent.action.HEADSET_PLUG")
         registerReceiver(receiver,intentFilter)
@@ -103,105 +91,91 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btn_nav_user->{
                 layout_drawer.closeDrawer(Gravity.START)
                 layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                if(UserData.uid == 0){
-                    supportFragmentManager.beginTransaction()
-                        .hide(pageFragment)
-                        .add(R.id.layout_main_all, LoginFragment())
-                        .addToBackStack(null)
-                        .commit()
+                supportFragmentManager.findFragmentByTag("pageFragment")?.let {it1->
+                    supportFragmentManager.findFragmentByTag("playingFragment")?.let { it2 ->
+                        supportFragmentManager.beginTransaction()
+                            .hide(it1)
+                            .hide(it2)
+                            .add(R.id.layout_main_all, InfoFragment())
+                            .addToBackStack(null)
+                            .commit()
+                    }
                 }
-                else{
-                    supportFragmentManager.beginTransaction()
-                        .hide(pageFragment)
-                        .add(R.id.layout_main_all, InfoFragment())
-                        .addToBackStack(null)
-                        .commit()
-                }
+
             }
             R.id.layout_nav_follow->{
                 layout_drawer.closeDrawer(Gravity.START)
                 layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                supportFragmentManager.beginTransaction()
-                    .hide(pageFragment)
-                    .add(R.id.layout_main_top, FollowFragment(mBinder))
-                    .addToBackStack(null)
-                    .commit()
+                supportFragmentManager.findFragmentByTag("pageFragment")?.let {
+                    supportFragmentManager.beginTransaction()
+                        .hide(it)
+                        .add(R.id.layout_main_top, FollowFragment(mBinder))
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
             R.id.layout_nav_collect->{
                 layout_drawer.closeDrawer(Gravity.START)
                 layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                supportFragmentManager.beginTransaction()
-                    .hide(pageFragment)
-                    .add(R.id.layout_main_top, LoveFragment(mBinder))
-                    .addToBackStack(null)
-                    .commit()
+                supportFragmentManager.findFragmentByTag("pageFragment")?.let {
+                    supportFragmentManager.beginTransaction()
+                        .hide(it)
+                        .add(R.id.layout_main_top, LoveFragment(mBinder))
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
             R.id.layout_nav_history->{
                 layout_drawer.closeDrawer(Gravity.START)
                 layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                supportFragmentManager.beginTransaction()
-                    .hide(pageFragment)
-                    .add(R.id.layout_main_top, HistoryFragment(mBinder))
-                    .addToBackStack(null)
-                    .commit()
+                supportFragmentManager.findFragmentByTag("pageFragment")?.let {
+                    supportFragmentManager.beginTransaction()
+                        .hide(it)
+                        .add(R.id.layout_main_top, HistoryFragment(mBinder))
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
             R.id.layout_nav_square->{
                 layout_drawer.closeDrawer(Gravity.START)
                 layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                supportFragmentManager.findFragmentByTag("playingFragment")?.let {
-                    supportFragmentManager.beginTransaction()
-                        .hide(pageFragment)
-                        .hide(it)
-                        .add(R.id.layout_main_all, SquareFragment(mBinder))
-                        .addToBackStack(null)
-                        .commit()
+                supportFragmentManager.findFragmentByTag("pageFragment")?.let {it1->
+                    supportFragmentManager.findFragmentByTag("playingFragment")?.let { it2 ->
+                        supportFragmentManager.beginTransaction()
+                            .hide(it1)
+                            .hide(it2)
+                            .add(R.id.layout_main_top, SquareFragment(mBinder))
+                            .addToBackStack(null)
+                            .commit()
+                    }
                 }
             }
             R.id.btn_nav_setting->{
                 layout_drawer.closeDrawer(Gravity.START)
                 layout_drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                supportFragmentManager.findFragmentByTag("playingFragment")?.let {
-                supportFragmentManager.beginTransaction()
-                    .hide(pageFragment)
-                    .hide(it)
-                    .add(R.id.layout_main_all, SettingFragment())
-                    .addToBackStack(null)
-                    .commit()
+                supportFragmentManager.findFragmentByTag("pageFragment")?.let {it1->
+                    supportFragmentManager.findFragmentByTag("playingFragment")?.let {it2->
+                        supportFragmentManager.beginTransaction()
+                            .hide(it1)
+                            .hide(it2)
+                            .add(R.id.layout_main_all, SettingFragment())
+                            .addToBackStack(null)
+                            .commit()
+                    }
                 }
             }
             R.id.btn_nav_night->{
                 layout_drawer.closeDrawer(Gravity.START)
                 UserData.changeStyle(this)
-                recreate()
+                startActivity(Intent(this,MainActivity::class.java))
+                this.finish()
             }
-        }
-    }
-
-    internal inner class MyConnection : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            mBinder = service as RadioService.LocalBinder
-
-            val bundle=Bundle()
-            bundle.putBinder("Binder",mBinder)
-            bundle.putString("path",path)
-            val playingFragment=PlayingFragment()
-            playingFragment.arguments=bundle
-            pageFragment=PageFragment()
-            pageFragment.arguments=bundle
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.layout_main_bottom, playingFragment,"playingFragment")
-                .commit()
-
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.layout_main_top,pageFragment,"pageFragment")
-                .commit()
-        }
-        override fun onServiceDisconnected(name: ComponentName?) {
         }
     }
 
     override fun onDestroy() {
         unbindService(conn)
+        unregisterReceiver(receiver)
         super.onDestroy()
     }
 
@@ -239,4 +213,39 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    internal inner class MyConnection : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            mBinder = service as RadioService.LocalBinder
+
+            val bundle = Bundle()
+            bundle.putBinder("Binder", mBinder)
+            bundle.putString("path", path)
+
+            if(UserData.uid==""){
+                val loginFragment = LoginFragment()
+                loginFragment.arguments = bundle
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.layout_main_all, loginFragment)
+                    .commit()
+            }
+            else {
+                @SuppressLint("SetTextI18n")
+                text_nav_name.text = "Uid:" + UserData.uid
+
+                val playingFragment = PlayingFragment()
+                playingFragment.arguments = bundle
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.layout_main_bottom, playingFragment, "playingFragment")
+                    .commit()
+
+                val pageFragment = PageFragment()
+                pageFragment.arguments = bundle
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.layout_main_top, pageFragment, "pageFragment")
+                    .commit()
+            }
+        }
+        override fun onServiceDisconnected(name: ComponentName?) {
+        }
+    }
 }

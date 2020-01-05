@@ -48,7 +48,6 @@ class SearchAdapter (private val context: Context, private val mData : MutableLi
         val textItemName:TextView= view.findViewById(R.id.text_item_title)
         val textItemUrl:TextView= view.findViewById(R.id.text_item_url)
         val btnItem : Button = view.findViewById(R.id.btn_item_search)
-
     }
 }
 

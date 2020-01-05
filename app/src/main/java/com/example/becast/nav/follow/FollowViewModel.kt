@@ -3,7 +3,10 @@ package com.example.becast.nav.follow
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.xml.XmlData
-import com.example.becast.data.xml.XmlDatabaseHelper
+import com.example.becast.data.xml.XmlDatabase
+import com.example.becast.data.xml.XmlHttpHelper
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 
 class FollowViewModel {
 
@@ -18,13 +21,15 @@ class FollowViewModel {
         object :Thread(){
             override fun run() {
                 super.run()
-                val db = XmlDatabaseHelper.getDb(context)
+                val db = XmlDatabase.getDb(context)
                 val mDao=db.xmlDao()
                 list.clear()
                 list.addAll(mDao.getAll() as MutableList<XmlData>)
                 followModelLiveData.postValue(list)
-                XmlDatabaseHelper.closeDb()
+                XmlDatabase.closeDb()
             }
         }.start()
+
+        XmlHttpHelper().getListFromNet()
     }
 }

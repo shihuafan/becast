@@ -13,48 +13,31 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp">
+            android:layout_height="80dp">
 
-            <Button
-                android:id="@+id/btn_register_back"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/back"/>
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="SignUp"
+                android:textColor="#000"
+                android:textSize="22sp"
+                android:textStyle="bold"/>
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:orientation="vertical">
 
+
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:text="SignUp"
-                        android:textColor="#000"
-                        android:textSize="22sp"
-                        android:textStyle="bold"/>
-
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp">
+                    android:layout_height="60dp"
+                    android:layout_marginTop="40dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -129,8 +112,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
-        </RelativeLayout>
 
     </LinearLayout>
 

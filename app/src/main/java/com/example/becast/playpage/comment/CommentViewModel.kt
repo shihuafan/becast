@@ -2,10 +2,8 @@ package com.example.becast.playpage.comment
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
-import androidx.room.Room
 import com.example.becast.data.comment.CommentData
 import com.example.becast.data.comment.CommentDatabase
-import com.example.becast.data.comment.CommentDatabaseHelper
 
 class CommentViewModel{
 
@@ -20,11 +18,11 @@ class CommentViewModel{
         object : Thread(){
             override fun run() {
                 super.run()
-                val db = CommentDatabaseHelper.getDb(context)
+                val db = CommentDatabase.getDb(context)
                 val mDao=db.commentDao()
                 list.addAll(mDao.getAll(radioUrl))
                 listLiveData.postValue(list)
-                CommentDatabaseHelper.closeDb()
+                CommentDatabase.closeDb()
             }
         }.start()
     }
@@ -33,11 +31,11 @@ class CommentViewModel{
         object : Thread(){
             override fun run() {
                 super.run()
-                val db = CommentDatabaseHelper.getDb(context)
+                val db = CommentDatabase.getDb(context)
                 val mDao=db.commentDao()
                 mDao.delete(list.removeAt(position))
                 listLiveData.postValue(list)
-                CommentDatabaseHelper.closeDb()
+                CommentDatabase.closeDb()
             }
         }.start()
     }
@@ -48,10 +46,10 @@ class CommentViewModel{
         object : Thread(){
             override fun run() {
                 super.run()
-                val db = CommentDatabaseHelper.getDb(context)
+                val db = CommentDatabase.getDb(context)
                 val mDao=db.commentDao()
                 mDao.updateItem(list[position])
-                CommentDatabaseHelper.closeDb()
+                CommentDatabase.closeDb()
             }
         }.start()
 
@@ -63,10 +61,10 @@ class CommentViewModel{
         object : Thread(){
             override fun run() {
                 super.run()
-                val db = CommentDatabaseHelper.getDb(context)
+                val db = CommentDatabase.getDb(context)
                 val mDao=db.commentDao()
                 mDao.insert(list[list.size-1])
-                CommentDatabaseHelper.closeDb()
+                CommentDatabase.closeDb()
             }
         }.start()
     }
