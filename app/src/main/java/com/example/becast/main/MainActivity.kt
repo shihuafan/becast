@@ -21,8 +21,8 @@ import com.example.becast.nav.history.HistoryFragment
 import com.example.becast.nav.love.LoveFragment
 import com.example.becast.nav.setting.SettingFragment
 import com.example.becast.nav.square.SquareFragment
-import com.example.becast.login_signup.login.login.LoginFragment
-import com.example.becast.nav.user.personal.InfoFragment
+import com.example.becast.login_signup.login.LoginFragment
+import com.example.becast.nav.user.UserFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_nav.*
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         supportFragmentManager.beginTransaction()
                             .hide(it1)
                             .hide(it2)
-                            .add(R.id.layout_main_all, InfoFragment())
+                            .add(R.id.layout_main_all, UserFragment())
                             .addToBackStack(null)
                             .commit()
                     }

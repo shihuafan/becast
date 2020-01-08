@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.data.radio.RadioData
 import com.example.becast.playpage.play.PlayPageFragment
 import com.example.becast.service.RadioService
@@ -28,16 +29,20 @@ class FromXmlFragment : Fragment(), View.OnClickListener {
     private lateinit var url: String
     private val mHandler : Handler = Handler{
         when(it.what){
-            0x103 ->{
+            Becast.OPEN_PLAY_PAGE_FRAGMENT ->{
                 mBinder.playRadio(it.obj as RadioData)
                 fragmentManager!!.beginTransaction()
                     .replace(R.id.layout_add_from_xml, PlayPageFragment(mBinder))
                     .addToBackStack(null)
                     .commit()
             }
-            404->{
-                Toast.makeText(context,it.obj as String,Toast.LENGTH_SHORT).show()
+            Becast.FILE_ERROR->{
+                Toast.makeText(context,"xml文档解析出错",Toast.LENGTH_SHORT).show()
             }
+            Becast.NET_ERROR->{
+                Toast.makeText(context,"网络连接失败",Toast.LENGTH_SHORT).show()
+            }
+
         }
         false
     }

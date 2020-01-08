@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.data.radio.RadioData
 import com.example.becast.more.MoreFragment
 import com.example.becast.more.from_opml.FromOpmlFragment
@@ -30,13 +31,12 @@ class PageFragment : Fragment(), View.OnClickListener,
     private lateinit var mBinder: RadioService.LocalBinder
     private val mHandler : Handler = Handler{
         when(it.what){
-            0x103 ->{
+            Becast.OPEN_DETAIL_FRAGMENT ->{
                 fragmentManager!!.findFragmentByTag("playingFragment")?.let {it_->
                     fragmentManager!!.beginTransaction()
                         .hide(this)
                         .hide(it_)
-                        .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData, mBinder
-                        ))
+                        .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData, mBinder))
                         .addToBackStack(null)
                         .commit()
                 }

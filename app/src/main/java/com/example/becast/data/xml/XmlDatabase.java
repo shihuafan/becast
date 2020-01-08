@@ -36,7 +36,7 @@ public abstract class XmlDatabase extends RoomDatabase{
         num--;
         if(num==0){
             db.close();
-            db=null;
+            db = null;
         }
     }
 

@@ -1,35 +1,28 @@
-package com.example.becast.data.xml
+package com.example.becast.data.mix
 
 import com.example.becast.data.UserData
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import io.reactivex.Observable
-import io.reactivex.Observer
 import okhttp3.*
 import java.io.IOException
-import java.lang.Exception
 
-class XmlHttpHelper {
+class MixHttpHelper {
 
 
-    fun getListFromNet(observer : Observer<MutableList<XmlData>>){
-        val url= UserData.BaseUrl+"/xml/get"
+    fun getListFromNet(){
+        val url= UserData.BaseUrl+"/radio/get"
         val formBody= FormBody.Builder()
-            .add("uid", UserData.uid.toString())
+            .add("uid", "0294374072")
             .build()
+        val okHttpClient = OkHttpClient()
         val request = Request.Builder()
             .url(url)
             .post(formBody)
             .build()
-        OkHttpClient().newCall(request).enqueue(object : Callback {
+        okHttpClient.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val dataString= response.body()!!.string()
-                val xmlListData= Gson().fromJson(dataString , XmlListData::class.java)
-                try{
-                    Observable.just(xmlListData.xmlList).subscribe(observer)
-                }catch (e:Exception){
-                    observer.onComplete()
-                }
+                val radioListData= Gson().fromJson(dataString , MixListData::class.java)
             }
             override fun onFailure(call: Call, e: IOException) {
 
@@ -37,10 +30,10 @@ class XmlHttpHelper {
         })
     }
 
-    fun addToNet(xmlData: XmlData){
-        val url= UserData.BaseUrl+"/xml/add"
+    fun addToNet(mixData: MixData){
+        val url= UserData.BaseUrl+"/mix/add"
         val requestBody = RequestBody.create(
-            MediaType.parse("application/json; charset=utf-8"), Gson().toJson(xmlData))
+            MediaType.parse("application/json; charset=utf-8"), Gson().toJson(mixData))
         val okHttpClient = OkHttpClient()
         val request = Request.Builder()
             .url(url)
@@ -57,10 +50,10 @@ class XmlHttpHelper {
     }
 
     fun delList(uid:String,xmlUrl:String){
-        val url= UserData.BaseUrl+"/xml/del"
+        val url= UserData.BaseUrl+"/mix/del"
         val formBody=FormBody.Builder()
             .add("uid",UserData.uid.toString())
-            .add("xml_url",xmlUrl)
+            .add("radio_url",xmlUrl)
             .build()
         val okHttpClient = OkHttpClient()
         val request = Request.Builder()
@@ -77,8 +70,8 @@ class XmlHttpHelper {
         })
     }
 
-    data class XmlListData (
-        @SerializedName("xml_list")
-        var xmlList:MutableList<XmlData> = mutableListOf()
+    data class MixListData (
+        @SerializedName("mix_list")
+        var radioList:MutableList<MixData>
     )
 }

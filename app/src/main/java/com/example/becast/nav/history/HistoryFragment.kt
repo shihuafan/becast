@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.data.radio.RadioData
 import com.example.becast.main.page.RadioAdapter
 import com.example.becast.playpage.detail.DetailFragment
@@ -22,7 +23,7 @@ class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment()
 
     private val mHandler : Handler = Handler{
         when(it.what){
-            0x103 ->{
+            Becast.OPEN_DETAIL_FRAGMENT ->{
              //   mBinder.playRadio(it.obj as RadioData)
                 fragmentManager!!.beginTransaction()
                     .hide(this)

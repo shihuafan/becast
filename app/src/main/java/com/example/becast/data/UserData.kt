@@ -14,6 +14,7 @@ object UserData {
     var delay:Int=0
     var downloadWhenLove:Boolean=false
     var downloadWhenWait:Boolean=false
+    val BaseUrl="http://104.168.140.16:8080"
 
 
     fun getAll(context:Context) : UserData {
@@ -42,9 +43,10 @@ object UserData {
     fun clearAll(context: Context){
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
         val edit=sp.edit()
-        uid =""
-        name =""
-        image =""
+        uid = ""
+        password = ""
+        name = ""
+        image = ""
         isLogin =false
         edit.putString("uid", "")
         edit.putString("password","")

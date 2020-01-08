@@ -29,7 +29,5 @@ class FollowViewModel {
                 XmlDatabase.closeDb()
             }
         }.start()
-
-        XmlHttpHelper().getListFromNet()
     }
 }

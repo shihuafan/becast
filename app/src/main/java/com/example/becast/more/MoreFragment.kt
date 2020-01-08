@@ -82,7 +82,6 @@ class MoreFragment : Fragment(), View.OnClickListener{
                     searchFragment.arguments=bundle
                     childFragmentManager.beginTransaction()
                         .add(R.id.layout_more_show, searchFragment)
-                       // .addToBackStack(null)
                         .commit()
                 }
             }

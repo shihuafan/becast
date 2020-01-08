@@ -1,19 +1,15 @@
 package com.example.becast.playpage.share
 
- import android.content.ContentValues.TAG
  import android.os.Bundle
  import android.os.Handler
- import android.util.Log
  import android.view.LayoutInflater
  import android.view.View
  import android.view.ViewGroup
- import android.widget.Toast
  import androidx.fragment.app.Fragment
  import com.bumptech.glide.Glide
  import com.bumptech.glide.request.RequestOptions
  import com.example.becast.R
  import kotlinx.android.synthetic.main.frag_share.view.*
- import java.util.*
 
 
 class ShareFragment(private val shareData: ShareData) : Fragment(), View.OnClickListener {

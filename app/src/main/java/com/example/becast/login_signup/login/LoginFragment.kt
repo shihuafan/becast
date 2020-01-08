@@ -1,4 +1,4 @@
-package com.example.becast.login_signup.login.login
+package com.example.becast.login_signup.login
 
 import android.content.Context
 import android.content.Intent
@@ -11,9 +11,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.data.UserData
 import com.example.becast.main.MainActivity
-import com.example.becast.login_signup.login.register.RegisterFragment
+import com.example.becast.login_signup.register.RegisterFragment
 import kotlinx.android.synthetic.main.frag_login.*
 import kotlinx.android.synthetic.main.frag_login.view.*
 import org.greenrobot.eventbus.EventBus
@@ -21,18 +22,27 @@ import org.greenrobot.eventbus.EventBus
 class LoginFragment :Fragment(), View.OnClickListener {
     private lateinit var v:View
     private val loginViewModel= LoginViewModel()
+    private var flag:Int=0
     val mHandler=Handler{
         when(it.what){
-            0x001->{
-                val message=it.obj as String
-                Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
-
-                startActivity(Intent(activity, MainActivity::class.java))
-                activity?.finish()
+            Becast.LOGIN_SUCCESS->{
+                Toast.makeText(context,"登录成功",Toast.LENGTH_SHORT).show()
             }
-            0x002->{
-                Toast.makeText(context,"fail",Toast.LENGTH_SHORT).show()
+            Becast.LOGIN_FAIL->{
+                Toast.makeText(context,"账号不存在或密码错误",Toast.LENGTH_SHORT).show()
                 onResume()
+            }
+            Becast.NET_ERROR->{
+                Toast.makeText(context,"网络错误",Toast.LENGTH_SHORT).show()
+                onResume()
+            }
+            Becast.LOADING_SUCCESS->{
+                flag++
+                if(flag==2){
+                    startActivity(Intent(activity, MainActivity::class.java))
+                    activity?.finish()
+                }
+
             }
         }
         false

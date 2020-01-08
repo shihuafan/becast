@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.data.radio.RadioData
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,7 +47,7 @@ class RadioAdapter (private val context: Context, private val mData : MutableLis
 
         holder.btnItem.setOnClickListener {
             val msg= Message()
-            msg.what=0x103
+            msg.what= Becast.OPEN_DETAIL_FRAGMENT
             msg.obj=mData[position]
             handler.sendMessage(msg)
         }

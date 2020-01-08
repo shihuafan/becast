@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.data.radio.RadioData
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,7 +35,7 @@ class FromXmlAdapter (private val context: Context, private val mData : MutableL
 
         holder.btnItem.setOnClickListener {
             val msg= Message()
-            msg.what=0x103
+            msg.what=Becast.OPEN_PLAY_PAGE_FRAGMENT
             msg.obj=mData[position]
             handler.sendMessage(msg)
         }

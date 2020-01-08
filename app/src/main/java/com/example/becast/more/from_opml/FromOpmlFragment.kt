@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.more.from_xml.FromXmlFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_opml.view.*
@@ -24,7 +25,7 @@ class FromOpmlFragment : Fragment() {
     private val mHandler : Handler = Handler{
 
         when(it.what){
-            0x103 ->{
+            Becast.OPEN_XML_FRAGMENT ->{
                 val fromXmlFragment= FromXmlFragment()
                 val bundle=Bundle()
                 bundle.putBinder("Binder",mBinder)
@@ -36,7 +37,7 @@ class FromOpmlFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
             }
-            404->{
+            Becast.FILE_ERROR->{
                 Toast.makeText(context,"文件解析加载异常",Toast.LENGTH_SHORT).show()
                 activity?.onBackPressed()
             }
@@ -61,10 +62,6 @@ class FromOpmlFragment : Fragment() {
             }
             v.list_opml.adapter?.notifyDataSetChanged()
         })
-
-        val frag_count= fragmentManager!!.fragments.size
-        val pop_count= fragmentManager!!.backStackEntryCount
-        Toast.makeText(context,frag_count.toString()+"\n"+pop_count.toString(), Toast.LENGTH_SHORT).show()
 
         return v
     }

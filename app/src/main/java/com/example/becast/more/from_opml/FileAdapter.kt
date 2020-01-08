@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.becast.R
+import com.example.becast.data.Becast
 
 class FileAdapter (private val mData : MutableList<String>, private val handler: Handler)
     : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
@@ -27,7 +28,7 @@ class FileAdapter (private val mData : MutableList<String>, private val handler:
         holder.textItemName.text=name
         holder.btnItem.setOnClickListener {
             val msg=Message()
-            msg.what=0x103
+            msg.what=Becast.OPEN_OPML_FRAGMENT
             msg.obj=mData[position]
             handler.sendMessage(msg)
         }

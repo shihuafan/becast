@@ -40,8 +40,6 @@ class PageViewModel(private val context: Context) {
                 subscribeList.addAll(mDao.getAll(start,start+50) as MutableList<RadioData>)
                 subscribeListLiveData.postValue(subscribeList)
                 RadioDatabase.closeDb()
-
-
             }
         }.start()
 

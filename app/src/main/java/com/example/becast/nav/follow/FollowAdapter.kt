@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.data.xml.XmlData
 
 class FollowAdapter (private val context: Context, private val mData : MutableList<XmlData>,
@@ -40,7 +41,7 @@ class FollowAdapter (private val context: Context, private val mData : MutableLi
         holder.textItemTitle.text=mData[position].title
         holder.btnItem.setOnClickListener{
             val msg= Message()
-            msg.what=0x001
+            msg.what= Becast.OPEN_CHANNEL_FRAGMENT
             msg.obj=mData[position]
             handler.sendMessage(msg)
         }

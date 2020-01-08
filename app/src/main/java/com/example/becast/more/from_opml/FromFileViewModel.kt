@@ -14,6 +14,11 @@ class FromFileViewModel(private val context: Context) {
 
     init {
         listLiveData.value=list
+        getFile()
+
+
+    }
+    private fun getFile(){
         object :Thread(){
             override fun run() {
                 super.run()
@@ -40,7 +45,5 @@ class FromFileViewModel(private val context: Context) {
                 cursor!!.close()
             }
         }.start()
-
     }
-
 }

@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.data.radio.RadioData
 import com.example.becast.service.RadioService
 import java.text.SimpleDateFormat
@@ -45,7 +46,7 @@ class WaitAdapter (private val context: Context,
         holder.textItemDate.text=getDateString(mData[position].upDate)
         holder.btnItem.setOnClickListener {
             val msg= Message()
-            msg.what=0x103
+            msg.what= Becast.OPEN_DETAIL_FRAGMENT
             msg.obj=mData[position]
             handler.sendMessage(msg)
         }

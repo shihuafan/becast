@@ -14,8 +14,12 @@ interface RadioDao {
 
     @Insert
     fun insertAll(radioList: MutableList<RadioData>)
+
     @Delete
     fun delete(user: RadioData)
+
+    @Query("DELETE FROM radio_db")
+    fun deleteAll()
 
     @Update
     fun updateItem(user: RadioData)

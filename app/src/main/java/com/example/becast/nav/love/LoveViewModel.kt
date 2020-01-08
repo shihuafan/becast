@@ -15,7 +15,6 @@ class LoveViewModel {
     }
 
     fun getMix(context:Context){
-        list.add(MixData("我喜欢",1L))
         object : Thread(){
             override fun run() {
                 super.run()
@@ -28,20 +27,20 @@ class LoveViewModel {
         }.start()
     }
 
-    fun createMix(context:Context,name:String){
-        val mixData=MixData(name,System.currentTimeMillis())
-        list.add(mixData)
-        loveModelLiveData.value=list
-
-        object:Thread(){
-            override fun run() {
-                super.run()
-                val db= MixDatabase.getDb(context)
-                val mDao=db.mixDao()
-                mDao.insert(mixData)
-                MixDatabase.closeDb()
-            }
-        }.start()
-    }
+//    fun createMix(context:Context,name:String){
+//        val mixData=MixData(name,time=System.currentTimeMillis())
+//        list.add(mixData)
+//        loveModelLiveData.value=list
+//
+//        object:Thread(){
+//            override fun run() {
+//                super.run()
+//                val db= MixDatabase.getDb(context)
+//                val mDao=db.mixDao()
+//                mDao.insert(mixData)
+//                MixDatabase.closeDb()
+//            }
+//        }.start()
+//    }
 
 }

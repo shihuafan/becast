@@ -3,6 +3,7 @@ package com.example.becast.more.from_opml
 import android.os.Handler
 import android.util.Xml
 import androidx.lifecycle.MutableLiveData
+import com.example.becast.data.Becast
 import org.xmlpull.v1.XmlPullParser
 import java.io.FileInputStream
 import java.io.InputStream
@@ -24,7 +25,7 @@ class FromOpmlViewModel(path: String, private val handler: Handler) {
                     listLiveData.postValue(list)
                     input.close()
                 }catch (e:Exception){
-                    handler.sendEmptyMessage(404)
+                    handler.sendEmptyMessage(Becast.FILE_ERROR)
                 }
             }
         }.start()

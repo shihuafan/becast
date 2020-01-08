@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.becast.R
+import com.example.becast.data.Becast
 
 class OpmlAdapter (private val mData : MutableList<OpmlData>, private val handler: Handler)
     : RecyclerView.Adapter<OpmlAdapter.ViewHolder>() {
@@ -26,7 +27,7 @@ class OpmlAdapter (private val mData : MutableList<OpmlData>, private val handle
         holder.textItemHtmlLink.text=mData[position].xmlUrl
         holder.btnItem.setOnClickListener {
             val msg=Message()
-            msg.what=0x103
+            msg.what=Becast.OPEN_XML_FRAGMENT
             msg.obj=mData[position].xmlUrl
             handler.sendMessage(msg)
         }

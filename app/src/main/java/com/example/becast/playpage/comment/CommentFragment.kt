@@ -13,6 +13,7 @@ package com.example.becast.playpage.comment
  import androidx.lifecycle.Observer
  import androidx.recyclerview.widget.LinearLayoutManager
  import com.example.becast.R
+ import com.example.becast.data.Becast
  import kotlinx.android.synthetic.main.frag_comment.view.*
  import kotlinx.android.synthetic.main.frag_share.view.layout_share
 
@@ -20,16 +21,16 @@ package com.example.becast.playpage.comment
 class CommentFragment : Fragment(), View.OnClickListener {
 
     lateinit var v:View
-    private val shareViewModel: CommentViewModel= CommentViewModel()
+    private val commentViewModel: CommentViewModel= CommentViewModel()
     private val mHandler=Handler{
         when(it.what){
-            0x001->{
+            Becast.OPEN_NOTE->{
                 openNote(it.obj as Int)
             }
-            0x002->{
-                context?.let { it1 -> shareViewModel.delete(it1,it.obj as Int) }
+            Becast.DELETE_NOTE->{
+                context?.let { it1 -> commentViewModel.delete(it1,it.obj as Int) }
             }
-            0x003->{
+            Becast.SHARE_NOTE->{
 
             }
         }
@@ -51,7 +52,7 @@ class CommentFragment : Fragment(), View.OnClickListener {
             rssUri="test"
         }
 
-        context?.let { shareViewModel.getComment(it,radioUri) }
+        context?.let { commentViewModel.getComment(it,radioUri) }
         v.layout_share.setOnClickListener{
             activity!!.onBackPressed()
         }
@@ -60,12 +61,12 @@ class CommentFragment : Fragment(), View.OnClickListener {
         v.list_share.adapter= context?.let {
             CommentAdapter(
                 it,
-                shareViewModel.listLiveData.value!!,
+                commentViewModel.listLiveData.value!!,
                 mHandler
             )
         }
         addNote(startTime,endTime)
-        shareViewModel.listLiveData.observe(this, Observer{
+        commentViewModel.listLiveData.observe(this, Observer{
             v.list_share.adapter?.notifyDataSetChanged()
         })
 
@@ -82,7 +83,7 @@ class CommentFragment : Fragment(), View.OnClickListener {
         if(v.layout_share_note.visibility==View.VISIBLE){
             v.layout_share_note.visibility=View.GONE
         }
-        v.edit_share.setText(shareViewModel.list[position].comment)
+        v.edit_share.setText(commentViewModel.list[position].comment)
         v.layout_share_note.visibility=View.VISIBLE
         v.btn_share_finish.setOnClickListener{
             val str=v.edit_share.text.toString()
@@ -92,7 +93,7 @@ class CommentFragment : Fragment(), View.OnClickListener {
                 v.layout_share_note.visibility = View.GONE
                 val imm = activity!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(activity!!.window.decorView.windowToken, 0)
-                context?.let { it1 -> shareViewModel.changeNote(it1,str, position) }
+                context?.let { it1 -> commentViewModel.changeNote(it1,str, position) }
             }
         }
         v.btn_share_cancel.setOnClickListener{
@@ -113,7 +114,7 @@ class CommentFragment : Fragment(), View.OnClickListener {
             if(str.isEmpty()){
                 Toast.makeText(context,"内容不能为空",Toast.LENGTH_SHORT).show()
             }else{
-                context?.let { it1 -> shareViewModel.addNote(it1,str,startTime,endTime,"i","b") }
+                context?.let { it1 -> commentViewModel.addNote(it1,str,startTime,endTime,"i","b") }
                 v.layout_share_note.visibility=View.GONE
                 val imm = activity!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(activity!!.window.decorView.windowToken, 0)

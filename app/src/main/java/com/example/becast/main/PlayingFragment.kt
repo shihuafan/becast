@@ -24,6 +24,7 @@ open class PlayingFragment : Fragment(), View.OnClickListener {
 
     private lateinit var v:View
     private lateinit var mBinder: RadioService.LocalBinder
+
     private val mHandler: Handler = Handler{
         setView()
         false

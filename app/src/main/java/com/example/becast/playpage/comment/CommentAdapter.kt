@@ -11,6 +11,7 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.data.comment.CommentData
 import kotlinx.android.synthetic.main.item_note.view.*
 import kotlinx.android.synthetic.main.popup_share.view.*
@@ -43,21 +44,21 @@ class CommentAdapter (private val context: Context, private val mData : MutableL
             view.btn_note_edit.setOnClickListener {
                 val msg=Message()
                 msg.obj=position
-                msg.what=0x001
+                msg.what= Becast.OPEN_NOTE
                 handler.sendMessage(msg)
                 popWindow.dismiss()
             }
             view.btn_note_delete.setOnClickListener {
                 val msg=Message()
                 msg.obj=position
-                msg.what=0x002
+                msg.what=Becast.DELETE_NOTE
                 handler.sendMessage(msg)
                 popWindow.dismiss()
             }
             view.btn_note_share.setOnClickListener {
                 val msg=Message()
                 msg.obj=position
-                msg.what=0x003
+                msg.what=Becast.SHARE_NOTE
                 handler.sendMessage(msg)
                 popWindow.dismiss()
             }

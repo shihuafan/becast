@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_file.view.*
 
@@ -25,7 +26,7 @@ class FromFileFragment : Fragment() {
     private lateinit var mBinder: RadioService.LocalBinder
     private val mHandler : Handler = Handler{
         when(it.what){
-            0x103 ->{
+            Becast.OPEN_OPML_FRAGMENT ->{
                 val bundle=Bundle()
                 bundle.putBinder("Binder",mBinder)
                 bundle.putString("path",it.obj as String)

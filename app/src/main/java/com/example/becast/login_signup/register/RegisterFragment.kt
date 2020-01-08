@@ -1,4 +1,4 @@
-package com.example.becast.login_signup.login.register
+package com.example.becast.login_signup.register
 
 import android.os.Bundle
 import android.os.Handler
@@ -8,25 +8,25 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.becast.R
-import com.example.becast.main.MainActivity
+import com.example.becast.data.Becast
 import kotlinx.android.synthetic.main.frag_register.*
 import kotlinx.android.synthetic.main.frag_register.view.*
-import org.greenrobot.eventbus.EventBus
-import java.util.*
 
 class RegisterFragment :Fragment(), View.OnClickListener {
 
-    private val registerViewModel=
-        RegisterViewModel()
+    private val registerViewModel= RegisterViewModel()
     val mHandler=Handler{
         when(it.what){
-            0x001->{
-                val message=it.obj as String
-                Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
+            Becast.SIGN_UP_SUCCESS->{
+                Toast.makeText(context,"注册成功",Toast.LENGTH_SHORT).show()
                 activity?.onBackPressed()
             }
-            0x002->{
-                Toast.makeText(context,"fail",Toast.LENGTH_SHORT).show()
+            Becast.SIGN_UP_FAIL->{
+                Toast.makeText(context,"注册失败",Toast.LENGTH_SHORT).show()
+                onResume()
+            }
+            Becast.NET_ERROR->{
+                Toast.makeText(context,"网络错误",Toast.LENGTH_SHORT).show()
                 onResume()
             }
         }

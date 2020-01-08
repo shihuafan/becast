@@ -1,8 +1,8 @@
-package com.example.becast.login_signup.login.register
+package com.example.becast.login_signup.register
 
 import android.os.Handler
 import android.os.Message
-import com.example.becast.data.MURL
+import com.example.becast.data.Becast
 import com.example.becast.data.UserData
 import okhttp3.*
 import org.json.JSONException
@@ -12,7 +12,7 @@ import java.io.IOException
 class RegisterViewModel {
 
     fun login(id:String,code:String,password:String,handler: Handler){
-        val url= MURL.BaseUrl+"/sign_up"
+        val url= UserData.BaseUrl+"/sign_up"
         val okHttpClient = OkHttpClient()
         val formBody = FormBody.Builder()
             .add("phone", id)
@@ -27,30 +27,21 @@ class RegisterViewModel {
                 val dataString=response.body()!!.string()
                 try {
                     val dataJson = JSONObject(dataString)
-                    val msg=Message()
                     if(dataJson.getString("status") == "success"){
                         UserData.uid = dataJson.getString("uid")
                         UserData.phone = dataJson.getString("phone")
                         UserData.password = dataJson.getString("password")
-                        msg.what=0x001
-                        msg.obj=dataJson.getString("status")
+                        handler.sendEmptyMessage(Becast.SIGN_UP_SUCCESS)
                     }
                     else{
-                        msg.what=0x002
-                        msg.obj=dataJson.getString("status")
+                        handler.sendEmptyMessage(Becast.SIGN_UP_FAIL)
                     }
-                    handler.sendMessage(msg)
                 } catch (e: JSONException) {
-                    e.printStackTrace()
-                    val msg = Message()
-                    msg.what = 0x002
-                    handler.sendMessage(msg)
+                    handler.sendEmptyMessage(Becast.SIGN_UP_FAIL)
                 }
             }
             override fun onFailure(call: Call, e: IOException) {
-                val msg=Message()
-                msg.what=0x002
-                handler.sendMessage(msg)
+                handler.sendEmptyMessage(Becast.NET_ERROR)
             }
         })
     }

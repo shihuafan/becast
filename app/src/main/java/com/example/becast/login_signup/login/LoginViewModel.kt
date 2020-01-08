@@ -1,65 +1,122 @@
-package com.example.becast.login_signup.login.login
+package com.example.becast.login_signup.login
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Handler
-import android.os.Message
-import com.example.becast.data.MURL
+import android.util.Log
+import com.example.becast.data.Becast
 import com.example.becast.data.UserData
+import com.example.becast.data.radio.RadioData
+import com.example.becast.data.radio.RadioDatabase
+import com.example.becast.data.radio.RadioHttpHelper
+import com.example.becast.data.xml.XmlData
+import com.example.becast.data.xml.XmlDatabase
+import com.example.becast.data.xml.XmlHttpHelper
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 import okhttp3.*
-import java.io.IOException
-import okhttp3.RequestBody
-import okhttp3.FormBody
 import org.json.JSONException
-import android.R.string
 import org.json.JSONObject
-
+import java.io.IOException
 
 
 class LoginViewModel {
 
+
     fun login(id:String,password:String,handler: Handler,context: Context){
-        val url=MURL.BaseUrl+"/login"
+        val url= UserData.BaseUrl+"/login"
         val formBody = FormBody.Builder()
             .add("phone", id)
             .add("password", password)
             .build()
-        val okHttpClient = OkHttpClient()
         val request = Request.Builder()
             .url(url)
             .post(formBody)
             .build()
-        okHttpClient.newCall(request).enqueue(object : Callback {
+        val call= OkHttpClient().newCall(request)
+        call.enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val dataString= response.body()!!.string()
                 try {
                     val dataJson = JSONObject(dataString)
-                    val msg=Message()
                     if(dataJson.getString("status") == "success"){
                         UserData.uid = dataJson.getString("uid")
                         UserData.phone = dataJson.getString("phone")
                         UserData.password = dataJson.getString("password")
                         UserData.setAll(context)
-                        msg.what=0x001
-                        msg.obj=dataJson.getString("status")
+                        getXml(context,handler)
+                        getRadio(context,handler)
+                        handler.sendEmptyMessage(Becast.LOGIN_SUCCESS)
                     }
                     else{
                         UserData.setAll(context)
-                        msg.what=0x001
-                        msg.obj=dataJson.getString("status")
+                        handler.sendEmptyMessage(Becast.LOGIN_FAIL)
                     }
-                    handler.sendMessage(msg)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    val msg = Message()
-                    msg.what = 0x002
-                    handler.sendMessage(msg)
+                } catch (e:Exception){
+                    UserData.setAll(context)
+                    handler.sendEmptyMessage(Becast.LOGIN_FAIL)
                 }
             }
             override fun onFailure(call: Call, e: IOException) {
-                val msg=Message()
-                msg.what=0x002
-                handler.sendMessage(msg)
+                handler.sendEmptyMessage(Becast.NET_ERROR)
             }
         })
     }
+
+    //同步xml和radio的数据
+    fun getXml(context:Context,handler: Handler){
+        val observer= object : Observer<MutableList<XmlData>> {
+            override fun onError(e: Throwable) {}
+
+            override fun onSubscribe(d: Disposable) {}
+
+            override fun onComplete() {
+                handler.sendEmptyMessage(Becast.LOADING_SUCCESS)
+            }
+
+            override fun onNext(value: MutableList<XmlData>) {
+                Runnable {
+                    val db = XmlDatabase.getDb(context)
+                    val mDao=db.xmlDao()
+                    try {
+                        mDao.insertAll(value)
+                    } catch (e:Exception){
+                        Log.d(TAG,e.toString())
+                    }
+                    XmlDatabase.closeDb()
+                }.run()
+            }
+        }
+
+        XmlHttpHelper().getListFromNet(observer)
+
+    }
+
+    fun getRadio(context:Context,handler:Handler){
+        val observer= object : Observer<MutableList<RadioData>> {
+            override fun onError(e: Throwable) {}
+
+            override fun onSubscribe(d: Disposable) {}
+
+            override fun onComplete() {
+                handler.sendEmptyMessage(Becast.LOADING_SUCCESS)
+            }
+
+            override fun onNext(value: MutableList<RadioData>) {
+                Runnable {
+                    val db = RadioDatabase.getDb(context)
+                    val mDao=db.radioDao()
+                    try {
+                        mDao.insertAll(value)
+                    }
+                    catch (e:Exception){
+                        Log.d(TAG,e.toString())
+                    }
+                    RadioDatabase.closeDb()
+                }.run()
+            }
+        }
+        RadioHttpHelper().getListFromNet(observer)
+    }
+
 }
