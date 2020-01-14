@@ -77,6 +77,41 @@ class RadioHttpHelper {
         })
     }
 
+    fun updateToNet(radio: RadioData){
+        val url= UserData.BaseUrl+"/radio/update"
+        val requestBody = RequestBody.create(
+            MediaType.parse("application/json; charset=utf-8"), Gson().toJson(radio))
+        val okHttpClient = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+        okHttpClient.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+            }
+            override fun onFailure(call: Call, e: IOException) {
+            }
+        })
+    }
+
+    fun clearHistory(){
+        val url= UserData.BaseUrl+"/radio/clear_history"
+        val body=FormBody.Builder()
+            .add("uid",UserData.uid.toString())
+            .build()
+        val okHttpClient = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+        okHttpClient.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+            }
+            override fun onFailure(call: Call, e: IOException) {
+            }
+        })
+    }
+
     data class RadioListData (
         @SerializedName("radio_list")
         var radioList:MutableList<RadioData>

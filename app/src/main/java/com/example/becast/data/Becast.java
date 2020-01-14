@@ -17,6 +17,8 @@ public class Becast {
     public static int OPEN_NOTE=114;
     public static int DELETE_NOTE=115;
     public static int SHARE_NOTE=116;
+    public static int CHANGE_REST_TIME=117;
+    public static int SET_CAPTCHA=118;
 
 
 }

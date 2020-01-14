@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
+import com.example.becast.channel.ChannelFragment
 import com.example.becast.playpage.comment.CommentFragment
 import com.example.becast.playpage.share.ShareData
 import com.example.becast.playpage.share.ShareFragment
@@ -26,7 +27,7 @@ import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_playpage.view.*
 import java.util.*
 
-class PlayPageFragment(private val mBinder: RadioService.LocalBinder,private val fromChannel:Boolean=false) : Fragment(),  View.OnClickListener, SeekBar.OnSeekBarChangeListener{
+class PlayPageFragment(private val mBinder: RadioService.LocalBinder,private val fromChannel:Boolean = false) : Fragment(),  View.OnClickListener, SeekBar.OnSeekBarChangeListener{
 
     private lateinit var v: View
     private val playPageViewModel= PlayPageViewModel()
@@ -177,13 +178,19 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder,private val
                 context?.let { WaitListBottomSheetDialog(this,it,mBinder)}
             }
             R.id.btn_play_channel->{
-//                val rssData= context?.let { playPageViewModel.getRssData(it,mBinder.getRadioItem()) }
-//                if(rssData!=null){
-//                    fragmentManager!!.beginTransaction()
-//                        .replace(R.id.layout_play,ChannelFragment(rssData.call(),mBinder))
-//                        .addToBackStack(null)
-//                        .commit()
-//                }
+                if(fromChannel){
+                    activity?.onBackPressed()
+                }
+                else{
+//                    val rssData= context?.let { playPageViewModel.getXmlData(it,mBinder.getRadioItem()) }
+//                    if(rssData!=null){
+//                        fragmentManager!!.beginTransaction()
+//                            .replace(R.id.layout_play, ChannelFragment(rssData,mBinder))
+//                            .addToBackStack(null)
+//                            .commit()
+//                    }
+                }
+
 
             }
         }

@@ -21,15 +21,9 @@ class MixFragment(private val mixData: MixData,private val mBinder: RadioService
     private val mHandler : Handler = Handler{
         when(it.what){
             0x001 ->{
-                mBinder.playRadio(it.obj as RadioData)
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_all,
-                        DetailFragment(
-                            it.obj as RadioData,
-                            mBinder
-                        )
-                    )
+                    .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData, mBinder))
                     .addToBackStack(null)
                     .commit()
             }
@@ -43,6 +37,7 @@ class MixFragment(private val mixData: MixData,private val mBinder: RadioService
 
         mixViewModel= context?.let { MixViewModel(mixData,it) }!!
 
+        view.text_mix_title.text="我喜欢"
         view.list_mix.layoutManager = LinearLayoutManager(context)
         view.list_mix.adapter = context?.let {
             MixAdapter(it,mixViewModel.mixModelLiveData.value!!, mHandler,mixViewModel)
@@ -52,7 +47,6 @@ class MixFragment(private val mixData: MixData,private val mBinder: RadioService
         mixViewModel.mixModelLiveData.observe(this, Observer{
             view.list_mix.adapter?.notifyDataSetChanged()
         })
-
 
         view.layout_mix.setOnClickListener(this)
         view.btn_mix_back.setOnClickListener(this)

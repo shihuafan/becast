@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -27,8 +28,8 @@ class MixAdapter (private val context: Context,
                   private val mixViewModel: MixViewModel)
     : RecyclerView.Adapter<MixAdapter.ViewHolder>() {
 
-    var flag=false
-    val list= mutableListOf<SwipeRevealLayout>()
+    private var flag=false
+    private var swipeRevealLayout:SwipeRevealLayout ? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_mix, parent, false)
         return ViewHolder(v)
@@ -38,9 +39,6 @@ class MixAdapter (private val context: Context,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        if(!list.contains(holder.itemLove)){
-            list.add(holder.itemLove)
-        }
         Glide.with(context)
             .load(mData[position].xmlImageUrl)
             .apply(RequestOptions.overrideOf(100,100))
@@ -50,10 +48,15 @@ class MixAdapter (private val context: Context,
         holder.textItemTitle.text=mData[position].title
         holder.textItemDate.text=getDateString(mData[position].upDate)
         holder.btnItem.setOnClickListener {
-            val msg= Message()
-            msg.what=0x001
-            msg.obj=mData[position]
-            handler.sendMessage(msg)
+            if (swipeRevealLayout !=null){
+                swipeRevealLayout?.close(false)
+                swipeRevealLayout=null
+            }else{
+                val msg= Message()
+                msg.what=0x001
+                msg.obj=mData[position]
+                handler.sendMessage(msg)
+            }
         }
         holder.btnLoveAdd.setOnClickListener{
             mixViewModel.addToRadioList(mData[position])
@@ -61,11 +64,19 @@ class MixAdapter (private val context: Context,
         }
         holder.btnLoveCancel.setOnClickListener{
             mixViewModel.changeLove(mData[position])
+            holder.itemLove.close(false)
         }
+
         holder.itemLove.setSwipeListener(object : SwipeListener {
-            override fun onSlide(view: SwipeRevealLayout?, slideOffset: Float) {}
-            override fun onClosed(view: SwipeRevealLayout?) { flag=false}
-            override fun onOpened(view: SwipeRevealLayout?) { flag=true}
+            override fun onSlide(view: SwipeRevealLayout?, slideOffset: Float) {
+                swipeRevealLayout?.close(false)
+                swipeRevealLayout=null
+            }
+            override fun onClosed(view: SwipeRevealLayout?) {
+                if(view==swipeRevealLayout)
+                    swipeRevealLayout=null
+            }
+            override fun onOpened(view: SwipeRevealLayout?) { swipeRevealLayout=view }
         })
 
     }

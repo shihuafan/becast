@@ -22,7 +22,7 @@ interface XmlDao {
     fun delete(xmlData: XmlData)
 
     @Query("SELECT * FROM xml_db WHERE xml_url == (:xml_url)")
-    fun getRssData(xml_url:String):XmlData
+    fun getXmlData(xml_url:String):XmlData
 
     @Query("DELETE FROM xml_db")
     fun deleteAll()

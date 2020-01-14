@@ -11,7 +11,6 @@ import java.lang.Exception
 
 class XmlHttpHelper {
 
-
     fun getListFromNet(observer : Observer<MutableList<XmlData>>){
         val url= UserData.BaseUrl+"/xml/get"
         val formBody= FormBody.Builder()

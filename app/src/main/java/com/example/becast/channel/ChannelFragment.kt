@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
+import com.example.becast.data.Becast
 import com.example.becast.data.radio.RadioData
 import com.example.becast.data.xml.XmlData
 import com.example.becast.main.page.RadioAdapter
@@ -32,13 +33,14 @@ class ChannelFragment(private val xmlData: XmlData, private val mBinder: RadioSe
 
     private val mHandler=Handler{
         when(it.what){
-            0x103->{
+            Becast.OPEN_DETAIL_FRAGMENT->{
                 fragmentManager!!.beginTransaction()
                     .hide(this)
                     .replace(R.id.layout_main_all,
                         DetailFragment(
                             it.obj as RadioData,
-                            mBinder
+                            mBinder,
+                            true
                         )
                     )
                     .addToBackStack(null)

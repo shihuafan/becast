@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.becast.data.radio.RadioData
 import com.example.becast.data.radio.RadioDatabase
+import com.example.becast.data.radio.RadioHttpHelper
 import com.example.becast.data.xml.XmlData
 import com.example.becast.data.xml.XmlDatabase
 import java.text.SimpleDateFormat
@@ -25,19 +26,17 @@ class DetailViewModel(private val context: Context,private val radioData: RadioD
                 val mDao=db.radioDao()
                 mDao.updateItem(radioData)
                 RadioDatabase.closeDb()
+                RadioHttpHelper().updateToNet(radioData)
             }
         }.start()
-
     }
 
-    fun getRssData(url:String):XmlData{
-        val db = Room.databaseBuilder<XmlDatabase>(context, XmlDatabase::class.java, "rss")
-            .allowMainThreadQueries()
-            .build()
+    fun getXmlData(url:String):XmlData{
+        val db = XmlDatabase.getDb(context)
         val mDao=db.xmlDao()
-        val rssData=mDao.getRssData(url)
+        val xmlData=mDao.getXmlData(url)
         db.close()
-        return rssData
+        return xmlData
     }
 
     fun getDateString(update:Long):String{

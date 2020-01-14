@@ -23,11 +23,6 @@ class DetailFragment(private val radioData: RadioData, private val mBinder: Radi
     private lateinit var v:View
     private lateinit var detailViewModel: DetailViewModel
 
-    override fun onHiddenChanged(hidden:Boolean){
-        for( temp in fragmentManager!!.fragments){
-            println(temp)
-        }
-    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_detail, container, false)
         detailViewModel= context?.let {
@@ -67,7 +62,7 @@ class DetailFragment(private val radioData: RadioData, private val mBinder: Radi
                    .commit()
            }
            R.id.btn_detail_rss->{
-               val xmlData=detailViewModel.getRssData(radioData.xmlUrl)
+               val xmlData=detailViewModel.getXmlData(radioData.xmlUrl)
                fragmentManager!!.beginTransaction()
                    .hide(this)
                    .add(R.id.layout_main_all, ChannelFragment(xmlData,mBinder))

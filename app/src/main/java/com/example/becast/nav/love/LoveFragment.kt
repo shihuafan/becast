@@ -23,7 +23,7 @@ class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), V
             0x001 ->{
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_all, MixFragment(it.obj as MixData,mBinder))
+                    .add(R.id.layout_main_top, MixFragment(it.obj as MixData,mBinder))
                     .addToBackStack(null)
                     .commit()
             }

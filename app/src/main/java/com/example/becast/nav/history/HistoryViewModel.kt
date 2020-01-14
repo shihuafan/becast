@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.radio.RadioData
 import com.example.becast.data.radio.RadioDatabase
+import com.example.becast.data.radio.RadioHttpHelper
 
 class HistoryViewModel {
 
@@ -28,6 +29,7 @@ class HistoryViewModel {
     }
 
     fun clearList(context:Context){
+        RadioHttpHelper().clearHistory()
         object :Thread(){
             override fun run() {
                 super.run()

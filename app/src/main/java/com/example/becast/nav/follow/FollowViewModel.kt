@@ -4,9 +4,6 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.xml.XmlData
 import com.example.becast.data.xml.XmlDatabase
-import com.example.becast.data.xml.XmlHttpHelper
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
 
 class FollowViewModel {
 
@@ -18,6 +15,7 @@ class FollowViewModel {
     }
 
     fun getList(context:Context){
+
         object :Thread(){
             override fun run() {
                 super.run()

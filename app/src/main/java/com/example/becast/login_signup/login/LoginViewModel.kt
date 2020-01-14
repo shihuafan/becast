@@ -15,16 +15,15 @@ import com.example.becast.data.xml.XmlHttpHelper
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import okhttp3.*
-import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
 
 class LoginViewModel {
 
-
     fun login(id:String,password:String,handler: Handler,context: Context){
         val url= UserData.BaseUrl+"/login"
+
         val formBody = FormBody.Builder()
             .add("phone", id)
             .add("password", password)
@@ -75,22 +74,21 @@ class LoginViewModel {
             }
 
             override fun onNext(value: MutableList<XmlData>) {
-                Runnable {
-                    val db = XmlDatabase.getDb(context)
-                    val mDao=db.xmlDao()
-                    try {
-                        mDao.insertAll(value)
-                    } catch (e:Exception){
-                        Log.d(TAG,e.toString())
-                    }
-                    XmlDatabase.closeDb()
-                }.run()
+                val db = XmlDatabase.getDb(context)
+                val mDao=db.xmlDao()
+                try {
+                    mDao.insertAll(value)
+                } catch (e:Exception){
+                    Log.d(TAG,e.toString())
+                }
+                XmlDatabase.closeDb()
             }
         }
 
         XmlHttpHelper().getListFromNet(observer)
 
     }
+
 
     fun getRadio(context:Context,handler:Handler){
         val observer= object : Observer<MutableList<RadioData>> {

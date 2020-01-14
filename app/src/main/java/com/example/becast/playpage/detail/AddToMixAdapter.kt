@@ -29,7 +29,6 @@ class AddToMixAdapter (private val context: Context,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-
         holder.textItemTitle.text=mData[position].mix
         holder.btnItem.setOnClickListener {
             val msg= Message()

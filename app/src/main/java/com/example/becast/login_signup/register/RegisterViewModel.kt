@@ -17,6 +17,7 @@ class RegisterViewModel {
         val formBody = FormBody.Builder()
             .add("phone", id)
             .add("password", password)
+            .add("captcha",code)
             .build()
         val request = Request.Builder()
             .post(formBody)
@@ -44,5 +45,24 @@ class RegisterViewModel {
                 handler.sendEmptyMessage(Becast.NET_ERROR)
             }
         })
+    }
+
+    fun getCaptcha(phone : String){
+        val url= UserData.BaseUrl+"/captcha"
+        val formBody = FormBody.Builder()
+            .add("phone", phone)
+            .build()
+        val request = Request.Builder()
+            .post(formBody)
+            .url(url)
+            .build()
+        val call=OkHttpClient().newCall(request)
+            call.enqueue(object : Callback {
+            override fun onResponse(call: Call, response: Response) {
+            }
+            override fun onFailure(call: Call, e: IOException) {
+            }
+        })
+
     }
 }

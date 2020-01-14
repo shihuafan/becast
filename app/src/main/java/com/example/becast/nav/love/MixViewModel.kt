@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.mix.MixData
 import com.example.becast.data.radio.RadioData
 import com.example.becast.data.radio.RadioDatabase
+import com.example.becast.data.radio.RadioHttpHelper
 import java.lang.Exception
 import java.util.*
 
@@ -33,17 +34,19 @@ class MixViewModel(private val mixData: MixData,private val context:Context) {
 
     }
 
-    fun addToRadioList(radioData: RadioData):Boolean{
+    fun addToRadioList(radioData: RadioData){
         radioData.waitTime=Date().time
-        val db= RadioDatabase.getDb(context)
-        val mDao=db.radioDao()
-        try{
-            mDao.updateItem(radioData)
-            RadioDatabase.closeDb()
-        }catch(e: Exception){
-            return false
-        }
-        return true
+        RadioHttpHelper().updateToNet(radioData)
+
+        object :Thread(){
+            override fun run() {
+                super.run()
+                val db= RadioDatabase.getDb(context)
+                val mDao=db.radioDao()
+                mDao.updateItem(radioData)
+                RadioDatabase.closeDb()
+            }
+        }.start()
     }
 
     fun changeLove(radioData: RadioData){
@@ -54,10 +57,16 @@ class MixViewModel(private val mixData: MixData,private val context:Context) {
         else{
             radioData.loveTime= Date().time
         }
-        val db= RadioDatabase.getDb(context)
-        val mDao=db.radioDao()
-        mDao.updateItem(radioData)
-        RadioDatabase.closeDb()
-        mixModelLiveData.postValue(list)
+        RadioHttpHelper().updateToNet(radioData)
+        object :Thread(){
+            override fun run() {
+                super.run()
+                val db= RadioDatabase.getDb(context)
+                val mDao=db.radioDao()
+                mDao.updateItem(radioData)
+                RadioDatabase.closeDb()
+                mixModelLiveData.postValue(list)
+            }
+        }.start()
     }
 }

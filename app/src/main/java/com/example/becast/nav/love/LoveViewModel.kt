@@ -11,6 +11,7 @@ class LoveViewModel {
     val loveModelLiveData: MutableLiveData<MutableList<MixData>> = MutableLiveData()
 
     init {
+        list.add(MixData("","我喜欢","我喜欢",1L))
         loveModelLiveData.value=list
     }
 

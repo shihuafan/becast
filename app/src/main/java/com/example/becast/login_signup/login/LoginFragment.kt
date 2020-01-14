@@ -42,7 +42,6 @@ class LoginFragment :Fragment(), View.OnClickListener {
                     startActivity(Intent(activity, MainActivity::class.java))
                     activity?.finish()
                 }
-
             }
         }
         false
@@ -81,9 +80,7 @@ class LoginFragment :Fragment(), View.OnClickListener {
             }
             R.id.btn_login_sign_up->{
                 fragmentManager!!.beginTransaction()
-                    .add(R.id.layout_main_all,
-                        RegisterFragment()
-                    )
+                    .add(R.id.layout_main_all, RegisterFragment())
                     .hide(this)
                     .addToBackStack(null)
                     .commit()
