@@ -31,28 +31,27 @@ class LoveAdapter (private val context: Context,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        Glide.with(context)
-            .load(R.drawable.timg)
-            .apply(RequestOptions.overrideOf(100,100))
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
-            .into(holder.imageItemShow)
+        if(position==0){
+            Glide.with(context)
+                .load(R.drawable.timg)
+                .apply(RequestOptions.overrideOf(100,100))
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
+                .into(holder.imageItemShow)
 
-        holder.textItemTitle.text=mData[position].mix
-      //  holder.textItemNum.text=mData[position].time.toString()
-        holder.btnItem.setOnClickListener {
-            val msg= Message()
-            msg.what=0x001
-            msg.obj=mData[position]
-            handler.sendMessage(msg)
+            holder.textItemTitle.text=mData[position].mix
+            holder.btnItem.setOnClickListener {
+                val msg= Message()
+                msg.what=0x001
+                msg.obj=mData[position]
+                handler.sendMessage(msg)
+            }
         }
-
     }
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
         val imageItemShow: ImageView = view.findViewById(R.id.image_item_love)
         val btnItem : Button = view.findViewById(R.id.btn_item_love)
         val textItemTitle:TextView= view.findViewById(R.id.text_item_love)
-        val textItemNum:TextView=view.findViewById(R.id.text_item_love_num)
     }
 }
 

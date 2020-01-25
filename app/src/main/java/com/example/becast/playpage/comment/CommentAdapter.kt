@@ -1,5 +1,6 @@
 package com.example.becast.playpage.comment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Message
@@ -17,7 +18,9 @@ import kotlinx.android.synthetic.main.item_note.view.*
 import kotlinx.android.synthetic.main.popup_share.view.*
 
 
-class CommentAdapter (private val context: Context, private val mData : MutableList<CommentData>, private val handler: Handler) : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
+class CommentAdapter (private val context: Context,
+                      private val mData : MutableList<CommentData>,
+                      private val handler: Handler) : RecyclerView.Adapter<CommentAdapter.ViewHolder>() {
 
     private lateinit var v:View
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,12 +30,20 @@ class CommentAdapter (private val context: Context, private val mData : MutableL
 
     override fun getItemCount(): Int = mData.size
 
-
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.textNote.text=mData[position].comment
-//        @SuppressLint("SetTextI18n")
-//        holder.textTime.text=mData[position].startTime.toString()+"-"+mData[position].endTime.toString()
+
+        val startTime=mData[position].startTime
+        val endTime=mData[position].endTime
+        if(endTime-startTime>1){
+            holder.textTime.text=timeToStr(startTime)+"-"+timeToStr(endTime)
+        }
+        else{
+            holder.textTime.text=timeToStr(startTime)
+        }
+
         holder.layoutNote.setOnLongClickListener {
             val view = LayoutInflater.from(context).inflate(R.layout.popup_share, null, false)
             val popWindow = PopupWindow(
@@ -72,5 +83,12 @@ class CommentAdapter (private val context: Context, private val mData : MutableL
         val textTime:TextView=view.text_note_time
     }
 
+    private fun timeToStr(time: Int): String {
+        return if (time % 60 < 10) {
+            (time / 60).toString() + ":0" + time % 60
+        } else {
+            (time / 60).toString() + ":" + time % 60
+        }
+    }
 }
 

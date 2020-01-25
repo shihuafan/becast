@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -40,27 +41,37 @@
                     android:layout_height="60dp"
                     android:layout_marginTop="40dp">
 
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:text="手机号" />
 
                     <EditText
-                        android:id="@+id/edit_login_id"
+                        android:id="@+id/edit_login_phone"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="50dp"
-                        android:layout_marginBottom="0dp"
-                        android:autofillHints="请输入账号" />
+                        android:layout_marginStart="60dp"
+                        android:autofillHints="请输入手机号" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp">
 
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:text="密    码" />
 
                     <EditText
                         android:id="@+id/edit_login_password"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:layout_marginStart="50dp"
+                        android:layout_marginStart="60dp"
                         android:inputType="textPassword"
                         android:autofillHints="请输入密码"
                         android:editable="true"/>
@@ -86,7 +97,7 @@
                         android:background="@drawable/radius_concern_40_0xcfcfcf"/>
 
                     <Button
-                        android:id="@+id/btn_login_sign_in"
+                        android:id="@+id/btn_login_login"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"

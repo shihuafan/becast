@@ -11,18 +11,32 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.channel.ChannelFragment
+import com.example.becast.data.Becast
 import com.example.becast.data.mix.MixData
 import com.example.becast.data.radio.RadioData
+import com.example.becast.data.xml.XmlData
 import com.example.becast.playpage.play.PlayPageFragment
-import com.example.becast.service.RadioService
+import com.example.becast.service.MediaHelper
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_detail.view.*
 
-class DetailFragment(private val radioData: RadioData, private val mBinder: RadioService.LocalBinder,private val fromChannel:Boolean=false):Fragment(), View.OnClickListener {
+class DetailFragment(private val radioData: RadioData, private val fromChannel:Boolean=false):Fragment(), View.OnClickListener {
 
     private lateinit var v:View
     private lateinit var detailViewModel: DetailViewModel
-
+    private val mHandler=Handler{
+        when(it.what){
+            Becast.OPEN_CHANNEL_FRAGMENT->{
+                val xmlData=it.obj as XmlData
+                fragmentManager!!.beginTransaction()
+                    .hide(this)
+                    .add(R.id.layout_main_all, ChannelFragment(xmlData))
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+        false
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_detail, container, false)
         detailViewModel= context?.let {
@@ -54,20 +68,15 @@ class DetailFragment(private val radioData: RadioData, private val mBinder: Radi
                activity?.onBackPressed()
            }
            R.id.btn_detail_play->{
-               mBinder.playRadio(radioData)
+               MediaHelper().getBinder()?.playRadio(radioData)
                fragmentManager!!.beginTransaction()
                    .hide(this)
-                   .add(R.id.layout_main_all, PlayPageFragment(mBinder,fromChannel))
+                   .add(R.id.layout_main_all, PlayPageFragment(fromChannel))
                    .addToBackStack(null)
                    .commit()
            }
            R.id.btn_detail_rss->{
-               val xmlData=detailViewModel.getXmlData(radioData.xmlUrl)
-               fragmentManager!!.beginTransaction()
-                   .hide(this)
-                   .add(R.id.layout_main_all, ChannelFragment(xmlData,mBinder))
-                   .addToBackStack(null)
-                   .commit()
+               detailViewModel.getXmlData(radioData.xmlUrl,mHandler)
            }
            R.id.btn_detail_wait->{
                val handler=Handler{
@@ -77,15 +86,16 @@ class DetailFragment(private val radioData: RadioData, private val mBinder: Radi
                            Snackbar.make(v, "已加入收藏", Snackbar.LENGTH_SHORT).show()
                        }
                        0x001->{
-                           mBinder.addRadioItemToNext(radioData)
+                           MediaHelper().getBinder()?.addRadioItemToNext(radioData)
                            Snackbar.make(v, "已加入收听列表", Snackbar.LENGTH_SHORT).show()
                        }
                        0x002->{
-                           mBinder.addRadioItem(radioData)
+                           MediaHelper().getBinder()?.addRadioItem(radioData)
                            Snackbar.make(v, "已加入收听列表", Snackbar.LENGTH_SHORT).show()
                        }
                        0x003->{
-                           Snackbar.make(v, (it.obj as MixData).mix, Snackbar.LENGTH_SHORT).show()
+                           val text=(it.obj as MixData).mix
+                           text?.let { Snackbar.make(v, text, Snackbar.LENGTH_SHORT).show() }
                        }
                    }
                    false

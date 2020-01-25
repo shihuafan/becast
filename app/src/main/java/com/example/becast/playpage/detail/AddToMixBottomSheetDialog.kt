@@ -37,7 +37,7 @@ class AddToMixBottomSheetDialog(context: Context, handler: Handler) {
         db.close()
 
         view.list_mix.layoutManager=LinearLayoutManager(context)
-        view.list_mix.adapter=AddToMixAdapter(context, list, handler ,bottomSheetDialog)
+        view.list_mix.adapter=AddToMixAdapter(list, handler, bottomSheetDialog)
 
 
         bottomSheetDialog.show()

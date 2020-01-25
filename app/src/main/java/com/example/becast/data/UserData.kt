@@ -2,88 +2,99 @@ package com.example.becast.data
 
 import android.content.Context
 import com.example.becast.R
+import com.example.becast.data.radio.RadioData
+import com.example.becast.data.radio.RadioDatabase
+import com.example.becast.data.xml.XmlDatabase
+import org.greenrobot.eventbus.EventBus
+import java.time.format.DecimalStyle
 
 object UserData {
-    var uid:String?="0294374072"
-    var name:String?=""
-    var image:String?=""
-    var phone:String?=""
-    var password:String?=""
-    var isLogin:Boolean=false
+    var uid:String?=null
+    var name:String?=null
+    var image:String?=null
+    var phone:String?=null
+    var password:String?=null
+
     var style:Int= R.style.AppTheme
     var delay:Int=0
-    var downloadWhenLove:Boolean=false
-    var downloadWhenWait:Boolean=false
-    val BaseUrl="http://104.168.140.16:8080"
+    const val BaseUrl="http://192.168.1.80:8080"
+    var xmlSum=0
+    var radioSum=0
+    var timeSum=0
 
 
     fun getAll(context:Context) : UserData {
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
-        uid =sp.getString("uid", "")
-        name =sp.getString("name", "")
-        image =sp.getString("image", "")
-        isLogin =sp.getBoolean("is_login",false)
-        style =sp.getInt("style",R.style.DarkTheme)
-        downloadWhenWait=sp.getBoolean("download_when_wait", false)
-        downloadWhenLove=sp.getBoolean("download_when_love", false)
+        uid =sp.getString("uid", null)
+        name =sp.getString("name", uid)
+        image = sp.getString("image", null)
+        style =sp.getInt("style",R.style.AppTheme)
+        object:Thread(){
+            override fun run() {
+                super.run()
+                val db= XmlDatabase.getDb(context)
+                val xmlDao=db.xmlDao()
+                xmlSum=xmlDao.getSum()
+            }
+        }.start()
         return this
-    }
-
-    fun setAll(context:Context,uid:String?=this.uid) {
-        val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
-        val edit=sp.edit()
-
-        edit.putString("uid", uid)
-        edit.putString("name", "拉普兰德")
-        edit.putString("image", "http://raw.yiyoushuo.com/UGC/21f4bb93-9344-4a89-923c-6f9ce4a1b58b.jpg?x-oss-process=image/format,jpg")
-        edit.putBoolean("is_login",true)
-        edit.apply()
     }
 
     fun clearAll(context: Context){
         val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
         val edit=sp.edit()
-        uid = ""
-        password = ""
-        name = ""
-        image = ""
-        isLogin =false
-        edit.putString("uid", "")
-        edit.putString("password","")
-        edit.putString("name", "")
-        edit.putString("image", "")
-        edit.putBoolean("is_login",false)
+        uid = null
+        password = null
+        name = null
+        image = null
+        edit.putString("uid", null)
+        edit.putString("password",null)
+        edit.putString("name", null)
+        edit.putString("image", null)
         edit.apply()
     }
 
-    fun changeStyle(context: Context){
-        style = if(style ==R.style.AppTheme){
-            R.style.DarkTheme
-        }else{
-            R.style.AppTheme
+    fun change(context: Context,
+               uid:String?=this.uid,
+               name:String?=this.name,
+               password:String?=this.password,
+               phone:String?=this.phone,
+               image:String?=this.image,
+               style: Boolean=false){
+
+        val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
+        val edit=sp.edit()
+        if(uid!=this.uid){
+            this.uid=uid
+            edit.putString("uid",this.uid)
         }
-        val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
-        val edit=sp.edit()
-        edit.putInt("style", style)
+        if(name!=this.name){
+            this.name=name
+            edit.putString("name",this.name)
+        }
+        if(password!=this.password){
+            this.password=password
+            edit.putString("password",this.password)
+        }
+        if(phone!=this.phone){
+            this.phone=phone
+            edit.putString("phone",this.phone)
+        }
+        if(image!=this.image){
+            this.image=image
+            edit.putString("image",this.image)
+        }
+        if(style){
+            this.style = if(this.style ==R.style.AppTheme){
+                R.style.DarkTheme
+            }else{
+                R.style.AppTheme
+            }
+            edit.putInt("style", this.style)
+        }
         edit.apply()
-    }
 
-    fun changeDownloadWhenLove(context:Context,flag:Boolean){
-        this.downloadWhenLove=flag
-        val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
-        val edit=sp.edit()
-        edit.putBoolean("download_when_love", this.downloadWhenLove)
-        edit.apply()
-    }
-
-    fun changeDownloadWhenWait(context:Context,flag:Boolean){
-        this.downloadWhenWait=flag
-        val sp = context.getSharedPreferences("name", Context.MODE_PRIVATE)
-        val edit=sp.edit()
-        edit.putBoolean("download_when_wait", this.downloadWhenWait)
-        edit.apply()
 
     }
-
 }
 

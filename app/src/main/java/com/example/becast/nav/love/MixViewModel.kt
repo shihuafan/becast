@@ -21,7 +21,7 @@ class MixViewModel(private val mixData: MixData,private val context:Context) {
                 super.run()
                 val db = RadioDatabase.getDb(context)
                 val mDao=db.radioDao()
-                if(mixData.time==1L){
+                if(mixData.mixId == "0"){
                     list.addAll(mDao.getLove() as MutableList<RadioData>)
                 }
                 else{

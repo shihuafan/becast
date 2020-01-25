@@ -1,6 +1,5 @@
 package com.example.becast.more.from_xml
 
-import android.content.Context
 import android.os.Handler
 import android.os.Message
 import android.view.LayoutInflater
@@ -16,8 +15,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class FromXmlAdapter (private val context: Context, private val mData : MutableList<RadioData>,
-                    private val handler: Handler)
+class FromXmlAdapter(
+    private val mData: MutableList<RadioData>,
+    private val handler: Handler
+)
     : RecyclerView.Adapter<FromXmlAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,7 +36,7 @@ class FromXmlAdapter (private val context: Context, private val mData : MutableL
 
         holder.btnItem.setOnClickListener {
             val msg= Message()
-            msg.what=Becast.OPEN_PLAY_PAGE_FRAGMENT
+            msg.what=Becast.OPEN_DETAIL_FRAGMENT
             msg.obj=mData[position]
             handler.sendMessage(msg)
         }

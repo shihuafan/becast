@@ -12,8 +12,7 @@ import com.example.becast.nav.square.recommend.RecommendFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_square.view.*
 
-
-class SquareFragment(private var mBinder: RadioService.LocalBinder): Fragment(){
+class SquareFragment: Fragment(){
 
     private val squareViewModel:SquareViewModel=SquareViewModel()
     private val mHandler=Handler{
@@ -24,7 +23,7 @@ class SquareFragment(private var mBinder: RadioService.LocalBinder): Fragment(){
                 fragmentManager!!.beginTransaction()
                     .hide(this)
                     .add(R.id.layout_main_all,
-                        RecommendFragment(url, mBinder)
+                        RecommendFragment(url)
                     )
                     .addToBackStack(null)
                     .commit()
@@ -35,7 +34,7 @@ class SquareFragment(private var mBinder: RadioService.LocalBinder): Fragment(){
                 fragmentManager!!.beginTransaction()
                     .hide(this)
                     .add(R.id.layout_main_all,
-                        RecommendFragment(url, mBinder)
+                        RecommendFragment(url)
                     )
                     .addToBackStack(null)
                     .commit()
@@ -47,7 +46,7 @@ class SquareFragment(private var mBinder: RadioService.LocalBinder): Fragment(){
                 fragmentManager!!.beginTransaction()
                     .hide(this)
                     .add(R.id.layout_main_all,
-                        RecommendFragment(url, mBinder)
+                        RecommendFragment(url)
                     )
                     .addToBackStack(null)
                     .commit()

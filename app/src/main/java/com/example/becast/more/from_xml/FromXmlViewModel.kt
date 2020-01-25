@@ -1,11 +1,8 @@
 package com.example.becast.more.from_xml
 
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Handler
-import android.os.Message
-import android.util.Log
 import android.util.Xml
 import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.Becast
@@ -16,17 +13,12 @@ import com.example.becast.data.radio.RadioHttpHelper
 import com.example.becast.data.xml.XmlData
 import com.example.becast.data.xml.XmlDatabase
 import com.example.becast.data.xml.XmlHttpHelper
-import com.example.becast.data.xml.XmlReader
-import io.reactivex.Observer
 import okhttp3.*
 import org.xmlpull.v1.XmlPullParser
 import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import io.reactivex.internal.disposables.DisposableHelper.dispose
-import io.reactivex.disposables.Disposable
-import io.reactivex.internal.disposables.DisposableHelper.dispose
 
 class FromXmlViewModel(val context: Context,private val url:String,private val handler: Handler) {
 
@@ -101,7 +93,7 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
                     {
                         when(parser.name){
                             "title"->radioData.title=parser.nextText()
-                            "duration"->radioData.duration=parser.nextText()
+//                            "duration"->radioData.duration=parser.nextText()
                             "enclosure"->radioData.radioUrl=parser.getAttributeValue(null,"url")
                             "image"->radioData.imageUrl=parser.getAttributeValue(null,"href")
                             "description"->radioData.description=parser.nextText()
@@ -164,8 +156,22 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
         object : Thread() {
             override fun run() {
                 try{
-                    subscribeRadio()
-                    subscribeRss()
+                    XmlHttpHelper().addToNet(xmlData)
+                    RadioHttpHelper().addToNet(radioListCache)
+                    val xmlDb = XmlDatabase.getDb(context)
+                    val xmlDao=xmlDb.xmlDao()
+                    try{
+                        xmlDao.insert(xmlData)
+                    }catch (e:Exception){ }
+                    XmlDatabase.closeDb()
+
+                    val radioDb = RadioDatabase.getDb(context)
+                    val radioDao=radioDb.radioDao()
+                    try {
+                        radioDao.insertAll(radioListCache)
+                    }catch (e:Exception){ }
+                    RadioDatabase.closeDb()
+
                     handler.sendEmptyMessage(0x000)
                 }
                 catch(e:Exception){
@@ -173,24 +179,5 @@ class FromXmlViewModel(val context: Context,private val url:String,private val h
                 }
             }
         }.start()
-    }
-
-    fun subscribeRss(){
-        val db = XmlDatabase.getDb(context)
-        val mDao=db.xmlDao()
-        try{
-            mDao.insert(xmlData)
-        }catch (e:Exception){ }
-        XmlDatabase.closeDb()
-        XmlHttpHelper().addToNet(xmlData)
-    }
-
-    fun subscribeRadio(){
-        RadioHttpHelper().addToNet(radioListCache)
-        val db = RadioDatabase.getDb(context)
-        val mDao=db.radioDao()
-        mDao.insertAll(radioListCache)
-        Log.d(TAG,radioListCache[0].toString())
-        RadioDatabase.closeDb()
     }
 }

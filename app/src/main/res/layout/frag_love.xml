@@ -30,7 +30,7 @@
                 android:text="收  藏"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/btn_love_add"
@@ -46,6 +46,7 @@
             android:id="@+id/list_love"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:scrollbarSize="5dp"
             android:scrollbarThumbVertical="@color/colorPrimary"
             android:overScrollMode="never"

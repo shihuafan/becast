@@ -10,11 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.becast.R
 import com.example.becast.data.mix.MixData
-import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_love.view.*
 import org.greenrobot.eventbus.EventBus
 
-class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), View.OnClickListener {
+class LoveFragment :Fragment(), View.OnClickListener {
 
     private val loveViewModel: LoveViewModel=LoveViewModel()
 
@@ -23,7 +22,7 @@ class LoveFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), V
             0x001 ->{
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_top, MixFragment(it.obj as MixData,mBinder))
+                    .add(R.id.layout_main_top, MixFragment(it.obj as MixData))
                     .addToBackStack(null)
                     .commit()
             }

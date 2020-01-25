@@ -26,4 +26,7 @@ interface XmlDao {
 
     @Query("DELETE FROM xml_db")
     fun deleteAll()
+
+    @Query("select count(*) from xml_db")
+    fun getSum():Int
 }

@@ -19,13 +19,14 @@ import com.example.becast.data.radio.RadioData
 import com.example.becast.data.xml.XmlData
 import com.example.becast.main.page.RadioAdapter
 import com.example.becast.playpage.detail.DetailFragment
+import com.example.becast.service.MediaIBinder
 import com.example.becast.service.RadioService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_channel.*
 import kotlinx.android.synthetic.main.frag_channel.view.*
 
 @SuppressLint("NewApi")
-class ChannelFragment(private val xmlData: XmlData, private val mBinder: RadioService.LocalBinder):Fragment(), View.OnClickListener,
+class ChannelFragment(private val xmlData: XmlData):Fragment(), View.OnClickListener,
     View.OnScrollChangeListener {
 
     private lateinit var v:View
@@ -38,9 +39,7 @@ class ChannelFragment(private val xmlData: XmlData, private val mBinder: RadioSe
                     .hide(this)
                     .replace(R.id.layout_main_all,
                         DetailFragment(
-                            it.obj as RadioData,
-                            mBinder,
-                            true
+                            it.obj as RadioData, true
                         )
                     )
                     .addToBackStack(null)
@@ -57,7 +56,6 @@ class ChannelFragment(private val xmlData: XmlData, private val mBinder: RadioSe
         v.list_channel.adapter = context?.let {
             RadioAdapter(it,channelViewModel.channelLiveData.value!!, mHandler)
         }
-
         //更新列表
         channelViewModel.channelLiveData.observe(this, Observer{
             v.list_channel.adapter?.notifyDataSetChanged()

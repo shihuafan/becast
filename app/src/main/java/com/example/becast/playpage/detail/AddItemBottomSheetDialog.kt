@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_dialog_add_item.view.*
 
 
 class AddItemBottomSheetDialog(context: Context,handler: Handler) {
+
     init {
         val view = View.inflate(context, R.layout.bottom_sheet_dialog_add_item, null)
         val bottomSheetDialog = BottomSheetDialog(context)
@@ -44,4 +45,5 @@ class AddItemBottomSheetDialog(context: Context,handler: Handler) {
             bottomSheetDialog.dismiss()
         }
     }
+
 }

@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 data class RadioData(
     @ColumnInfo (name = "uid")var uid:String="",
     @ColumnInfo (name = "title")var title:String="",
-    @ColumnInfo (name = "duration")var duration:String="",
+    @ColumnInfo (name = "duration")var duration:Int=0,
     @ColumnInfo (name = "link")var link:String="",
     @ColumnInfo (name = "image_url")@SerializedName("image_url")var imageUrl:String="",
     @ColumnInfo (name = "xml_image_url")@SerializedName("xml_image_url")var xmlImageUrl:String="",

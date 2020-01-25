@@ -12,9 +12,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.becast.R
 import com.example.becast.data.Becast
-import com.example.becast.data.UserData
 import com.example.becast.main.MainActivity
-import com.example.becast.login_signup.register.RegisterFragment
+import com.example.becast.login_signup.sign_up.SignUpFragment
 import kotlinx.android.synthetic.main.frag_login.*
 import kotlinx.android.synthetic.main.frag_login.view.*
 import org.greenrobot.eventbus.EventBus
@@ -40,17 +39,10 @@ class LoginFragment :Fragment(), View.OnClickListener {
                 flag++
                 if(flag==2){
                     startActivity(Intent(activity, MainActivity::class.java))
-                    activity?.finish()
                 }
             }
         }
         false
-    }
-
-    override fun onResume() {
-        super.onResume()
-        v.edit_login_id.setText(UserData.uid.toString())
-        v.edit_login_password.setText(UserData.password.toString())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -58,7 +50,7 @@ class LoginFragment :Fragment(), View.OnClickListener {
         EventBus.getDefault().post("close")
 
         v.layout_login.setOnClickListener(this)
-        v.btn_login_sign_in.setOnClickListener(this)
+        v.btn_login_login.setOnClickListener(this)
         v.btn_login_sign_up.setOnClickListener(this)
 
         return v
@@ -66,22 +58,21 @@ class LoginFragment :Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when(v!!.id){
-            R.id.btn_login_sign_in->{
-                val id=edit_login_id.text.toString()
+            R.id.btn_login_login->{
+                val phone=edit_login_phone.text.toString()
                 val password=edit_login_password.text.toString()
-                if(id=="" || password==""){
-                    Toast.makeText(context,"id和密码不能为空",Toast.LENGTH_SHORT).show()
+                if(phone == "" || password == "" ){
+                    Toast.makeText(context,"手机号和密码不能为空",Toast.LENGTH_SHORT).show()
                 }
                 else{
                     val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(activity!!.window.decorView.windowToken, 0)
-                    context?.let { loginViewModel.login(id,password,mHandler, it) }
+                    context?.let { loginViewModel.login(phone,password,mHandler, it) }
                 }
             }
             R.id.btn_login_sign_up->{
                 fragmentManager!!.beginTransaction()
-                    .add(R.id.layout_main_all, RegisterFragment())
-                    .hide(this)
+                    .replace(R.id.layout_main_all, SignUpFragment())
                     .addToBackStack(null)
                     .commit()
             }

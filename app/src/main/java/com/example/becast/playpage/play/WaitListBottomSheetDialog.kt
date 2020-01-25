@@ -7,12 +7,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.becast.R
-import com.example.becast.service.RadioService
+import com.example.becast.service.MediaHelper
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottom_sheet_dialog_wait_list.view.*
 
-
-class WaitListBottomSheetDialog(owner:LifecycleOwner,context: Context,mBinder: RadioService.LocalBinder){
+class WaitListBottomSheetDialog(
+    owner: LifecycleOwner,
+    context: Context
+){
     init {
         val view = View.inflate(context, R.layout.bottom_sheet_dialog_wait_list, null)
         val bottomSheetDialog = BottomSheetDialog(context)
@@ -26,9 +28,8 @@ class WaitListBottomSheetDialog(owner:LifecycleOwner,context: Context,mBinder: R
         bottomSheetDialog.show()
 
         view.list_wait_dialog.layoutManager = LinearLayoutManager(context)
-        view.list_wait_dialog.adapter=WaitDialogAdapter(context,
-            mBinder.getLiveData().value!!,mBinder)
-        mBinder.getLiveData().observe(owner, Observer{
+        view.list_wait_dialog.adapter=WaitDialogAdapter(MediaHelper().getBinder()?.getLiveData()?.value!!)
+        MediaHelper().getBinder()?.getLiveData()?.observe(owner, Observer{
             view.list_wait_dialog.adapter?.notifyDataSetChanged()
         })
 

@@ -21,11 +21,11 @@ import java.io.IOException
 
 class LoginViewModel {
 
-    fun login(id:String,password:String,handler: Handler,context: Context){
+    fun login(phone:String,password:String,handler: Handler,context: Context){
         val url= UserData.BaseUrl+"/login"
 
         val formBody = FormBody.Builder()
-            .add("phone", id)
+            .add("phone", phone)
             .add("password", password)
             .build()
         val request = Request.Builder()
@@ -39,24 +39,23 @@ class LoginViewModel {
                 try {
                     val dataJson = JSONObject(dataString)
                     if(dataJson.getString("status") == "success"){
-                        UserData.uid = dataJson.getString("uid")
-                        UserData.phone = dataJson.getString("phone")
-                        UserData.password = dataJson.getString("password")
-                        UserData.setAll(context)
+                        UserData.change(context,
+                            uid = dataJson.getString("uid"),
+                            phone = dataJson.getString("phone"),
+                            password = dataJson.getString("password"))
                         getXml(context,handler)
                         getRadio(context,handler)
                         handler.sendEmptyMessage(Becast.LOGIN_SUCCESS)
                     }
                     else{
-                        UserData.setAll(context)
                         handler.sendEmptyMessage(Becast.LOGIN_FAIL)
                     }
                 } catch (e:Exception){
-                    UserData.setAll(context)
                     handler.sendEmptyMessage(Becast.LOGIN_FAIL)
                 }
             }
             override fun onFailure(call: Call, e: IOException) {
+                Log.d(TAG,e.toString())
                 handler.sendEmptyMessage(Becast.NET_ERROR)
             }
         })

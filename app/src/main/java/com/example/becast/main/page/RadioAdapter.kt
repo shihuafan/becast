@@ -15,7 +15,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.data.Becast
+import com.example.becast.data.UserData
 import com.example.becast.data.radio.RadioData
+import kotlinx.android.synthetic.main.layout_nav.*
 import java.text.SimpleDateFormat
 import java.util.*
 

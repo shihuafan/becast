@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.mix.MixData
 import com.example.becast.data.mix.MixDatabase
+import com.example.becast.data.radio.RadioDatabase
 
 class LoveViewModel {
 
@@ -11,7 +12,6 @@ class LoveViewModel {
     val loveModelLiveData: MutableLiveData<MutableList<MixData>> = MutableLiveData()
 
     init {
-        list.add(MixData("","我喜欢","我喜欢",1L))
         loveModelLiveData.value=list
     }
 
@@ -19,9 +19,15 @@ class LoveViewModel {
         object : Thread(){
             override fun run() {
                 super.run()
-                val db = MixDatabase.getDb(context)
-                val mDao=db.mixDao()
-                list.addAll(mDao.getAll() as MutableList<MixData>)
+                val mixDb = MixDatabase.getDb(context)
+                val mixDao=mixDb.mixDao()
+                val radioDb=RadioDatabase.getDb(context)
+                val radioDao=radioDb.radioDao()
+                list.addAll(mixDao.getAll() as MutableList<MixData>)
+                for(mix in list){
+                   mix.imageUrl=radioDao.getImageUrlByMix(mix.time)
+                }
+                list.add(0,MixData(mix="我喜欢",mixId = "0"))
                 loveModelLiveData.postValue(list)
                 MixDatabase.closeDb()
             }

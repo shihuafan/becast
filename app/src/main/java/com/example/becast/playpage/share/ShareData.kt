@@ -1,15 +1,20 @@
 package com.example.becast.playpage.share
 
-import android.graphics.Bitmap
+import com.google.gson.annotations.Expose
 
 data class ShareData (
-    var startTime:Long=0,
-    var endTime:Long=0,
+    @Expose
+    var uid:String?=null,
+    @Expose
+    var createTime:String="",
+    var startTime:Int=0,
+    var endTime:Int=0,
+    var xmlTitle:String="",
+    var title:String="",
     var xmlUrl:String="",
     var radioUrl:String="",
     var xmlImageUrl:String="",
     var radioImageUrl:String="",
-    var xmlTitle:String="",
-    var title:String="",
-    var bitmap: Bitmap?=null
+    var shareLink:String?=null,
+    var comment:String?=null
 )

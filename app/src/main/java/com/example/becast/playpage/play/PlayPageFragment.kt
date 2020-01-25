@@ -19,19 +19,24 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
-import com.example.becast.channel.ChannelFragment
+import com.example.becast.data.UserData
+import com.example.becast.data.comment.CommentData
 import com.example.becast.playpage.comment.CommentFragment
 import com.example.becast.playpage.share.ShareData
 import com.example.becast.playpage.share.ShareFragment
-import com.example.becast.service.RadioService
+import com.example.becast.service.MediaHelper
+import com.example.becast.service.MediaIBinder
 import kotlinx.android.synthetic.main.frag_playpage.view.*
 import java.util.*
 
-class PlayPageFragment(private val mBinder: RadioService.LocalBinder,private val fromChannel:Boolean = false) : Fragment(),  View.OnClickListener, SeekBar.OnSeekBarChangeListener{
+class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  View.OnClickListener, SeekBar.OnSeekBarChangeListener,
+    View.OnTouchListener {
+
 
     private lateinit var v: View
     private val playPageViewModel= PlayPageViewModel()
-    private var shareData= ShareData()
+    private lateinit var mBinder: MediaIBinder
+    private var commentData=CommentData()
     private var timer=Timer()
     private val mHandler= Handler{
         if(mBinder.isPrepared()){
@@ -62,8 +67,12 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder,private val
         false
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         v= inflater.inflate(R.layout.frag_playpage, container, false)
 
+        MediaHelper().getBinder()?.let {
+            mBinder=it
+        }
         context?.let {
             Glide.with(it)
                 .load(Uri.parse(mBinder.getRadioItem().xmlImageUrl))
@@ -74,7 +83,6 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder,private val
         v.text_play_title.isSelected=true
         v.text_play_rsstitle.text= mBinder.getRadioItem().xmlTitle
 
-        v.layout_pin.visibility=View.GONE
         v.image_play_loading.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate0))
 
 //        v.webview_playpage_describe.loadDataWithBaseURL(
@@ -90,45 +98,43 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder,private val
         v.btn_play_share.setOnClickListener(this)
         v.btn_play_wait_list.setOnClickListener(this)
         v.btn_play_channel.setOnClickListener(this)
-
-        v.btn_play_pin.setOnTouchListener{ _: View, motionEvent: MotionEvent ->
-            when(motionEvent.action){
-                MotionEvent.ACTION_DOWN->{
-                //    shareData.startTime=mBinder.getRadioCurrentPosition()/1000
-                    shareData.startTime=System.currentTimeMillis()
-                }
-                MotionEvent.ACTION_MOVE->{
-                    val time=mBinder.getRadioCurrentPosition()/1000
-                    @SuppressLint("SetTextI18n")
-                    v.text_playpage_pin.text=playPageViewModel.timeToStr(shareData.startTime.toInt())+"-"+playPageViewModel.timeToStr(time)
-                }
-                //记录结束
-                MotionEvent.ACTION_UP->{
-                    v.layout_pin.visibility=View.GONE
-                  //  shareData.endTime=mBinder.getRadioCurrentPosition()/1000
-                    shareData.endTime=System.currentTimeMillis()
-                    if((shareData.endTime-shareData.startTime)<500  || (shareData.endTime-shareData.startTime)>3000){
-                        val bundle=Bundle()
-                        bundle.putBinder("Binder",mBinder)
-                        bundle.putString("radio_uri",mBinder.getRadioItem().radioUrl)
-                        bundle.putString("rss_uri",mBinder.getRadioItem().xmlUrl)
-                        bundle.putLong("start_time",shareData.startTime)
-                        bundle.putLong("end_time",shareData.endTime)
-                        val shareFragment= CommentFragment()
-                        shareFragment.arguments=bundle
-                        fragmentManager!!.beginTransaction()
-                            .add(R.id.layout_main_all, shareFragment)
-                            .addToBackStack(null)
-                            .commit()
-                    }
-                    else {
-                        Toast.makeText(context,"截取时长不应小于3秒",Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            false
-        }
+        v.btn_play_pin.setOnTouchListener(this)
+        v.btn_play_pin.setOnTouchListener(this)
         return v
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        when(event?.action){
+            MotionEvent.ACTION_DOWN->{
+                commentData.startTime=mBinder.getRadioCurrentPosition()/1000
+            }
+            MotionEvent.ACTION_MOVE->{
+                val time=mBinder.getRadioCurrentPosition()/1000
+                if((time - commentData.startTime)>1){
+                    this.v.layout_pin.visibility=View.VISIBLE
+                }
+                @SuppressLint("SetTextI18n")
+                this.v.text_playpage_pin.text=playPageViewModel.timeToStr(commentData.startTime)+"-"+playPageViewModel.timeToStr(time)
+            }
+            //记录结束
+            MotionEvent.ACTION_UP->{
+                this.v.layout_pin.visibility=View.GONE
+                commentData.endTime=mBinder.getRadioCurrentPosition()/1000
+                val radioData=mBinder.getRadioItem()
+                commentData.xmlUrl=radioData.xmlUrl
+                commentData.radioUrl=radioData.radioUrl
+                commentData.xmlTitle=radioData.xmlTitle
+                commentData.title=radioData.title
+                fragmentManager!!.beginTransaction()
+                    .add(R.id.layout_main_all,
+                        CommentFragment(commentData,(commentData.endTime-commentData.startTime)>1))
+                    .addToBackStack(null)
+                    .commit()
+
+            }
+        }
+        return false
     }
 
     override fun onClick(v: View?) {
@@ -138,7 +144,7 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder,private val
             }
             R.id.btn_play_pre->{
                 timer.cancel()
-             //   mBinder.playPreRadio()
+                mBinder.playPreRadio()
             }
             R.id.btn_play_pause->{
                 if(mBinder.pauseRadio()){
@@ -157,31 +163,30 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder,private val
                 context?.let { SleepBottomSheetDialog(it) }
             }
             R.id.btn_play_share->{
-//                val handler=Handler {
-//                    this.v.image_play_show.setImageBitmap(it.obj as Bitmap)
-//                    false
-//                }
-//                playPageViewModel.getSharePic(mBinder.getRadioItem() ,handler)
                 val radioData=mBinder.getRadioItem()
-                shareData.xmlUrl=radioData.xmlUrl
-                shareData.radioUrl=radioData.radioUrl
-                shareData.xmlTitle=radioData.xmlTitle
-                shareData.title=radioData.title
-                shareData.xmlImageUrl=radioData.xmlImageUrl
-                shareData.radioImageUrl=radioData.imageUrl
+                val shareData=ShareData(
+                    uid=UserData.uid,
+                    createTime = System.currentTimeMillis().toString(),
+                    xmlUrl=radioData.xmlUrl,
+                    radioUrl=radioData.radioUrl,
+                    xmlTitle=radioData.xmlTitle,
+                    title=radioData.title,
+                    xmlImageUrl=radioData.xmlImageUrl,
+                    radioImageUrl=radioData.imageUrl
+                )
                 fragmentManager!!.beginTransaction()
                     .add(R.id.layout_main_all,ShareFragment(shareData))
                     .addToBackStack(null)
                     .commit()
             }
             R.id.btn_play_wait_list->{
-                context?.let { WaitListBottomSheetDialog(this,it,mBinder)}
+                context?.let { WaitListBottomSheetDialog(this, it)}
             }
             R.id.btn_play_channel->{
                 if(fromChannel){
                     activity?.onBackPressed()
                 }
-                else{
+//                else{
 //                    val rssData= context?.let { playPageViewModel.getXmlData(it,mBinder.getRadioItem()) }
 //                    if(rssData!=null){
 //                        fragmentManager!!.beginTransaction()
@@ -189,7 +194,7 @@ class PlayPageFragment(private val mBinder: RadioService.LocalBinder,private val
 //                            .addToBackStack(null)
 //                            .commit()
 //                    }
-                }
+//                }
 
 
             }

@@ -18,6 +18,8 @@ import com.example.becast.data.radio.RadioData
 import com.example.becast.more.MoreFragment
 import com.example.becast.more.from_opml.FromOpmlFragment
 import com.example.becast.playpage.detail.DetailFragment
+import com.example.becast.service.MediaHelper
+import com.example.becast.service.MediaIBinder
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_page.view.*
 import org.greenrobot.eventbus.EventBus
@@ -28,7 +30,7 @@ class PageFragment : Fragment(), View.OnClickListener,
 
     private lateinit var pageViewModel:PageViewModel
     private lateinit var v:View
-    private lateinit var mBinder: RadioService.LocalBinder
+    private var mBinder: MediaIBinder ?= null
     private val mHandler : Handler = Handler{
         when(it.what){
             Becast.OPEN_DETAIL_FRAGMENT ->{
@@ -36,7 +38,7 @@ class PageFragment : Fragment(), View.OnClickListener,
                     fragmentManager!!.beginTransaction()
                         .hide(this)
                         .hide(it_)
-                        .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData, mBinder))
+                        .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData))
                         .addToBackStack(null)
                         .commit()
                 }
@@ -49,17 +51,13 @@ class PageFragment : Fragment(), View.OnClickListener,
         if(!hidden){
             EventBus.getDefault().post("open")
             pageViewModel.getAll()
-            for( temp in fragmentManager!!.fragments){
-                println(temp)
-            }
         }
         super.onHiddenChanged(hidden)
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view= inflater.inflate(R.layout.frag_page, container, false)
         v=view
-
-        mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
+        mBinder=MediaHelper().getBinder()
         val path=arguments!!.getString("path")
         if(path!=null){
             val index= path.lastIndexOf('.')+1
@@ -87,7 +85,10 @@ class PageFragment : Fragment(), View.OnClickListener,
             RadioAdapter(it, pageViewModel.subscribeListLiveData.value!!, mHandler)
         }
         view.list_page_wait.adapter = context?.let {
-            WaitAdapter(it, mBinder.getLiveData().value!!, mHandler,mBinder)
+            mBinder?.let {it_->
+                WaitAdapter(it, it_.getLiveData().value!!, mHandler,it_)
+            }
+
         }
         view.list_page_subscribe.addOnScrollListener(object :RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -96,7 +97,6 @@ class PageFragment : Fragment(), View.OnClickListener,
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     val lastVisibleItem = manager.findLastCompletelyVisibleItemPosition()//从0开始
                     val totalItemCount = manager.itemCount
-                    Toast.makeText(context,totalItemCount.toString(),Toast.LENGTH_SHORT).show()
                     if (lastVisibleItem >= (totalItemCount - 10)) {
                         pageViewModel.getSubscribeList()
                     }else if(lastVisibleItem < (totalItemCount - 200)){
@@ -108,7 +108,7 @@ class PageFragment : Fragment(), View.OnClickListener,
         pageViewModel.subscribeListLiveData.observe(this, Observer{
             view.list_page_subscribe.adapter?.notifyDataSetChanged()
         })
-        mBinder.getLiveData().observe(this, Observer{
+        mBinder?.getLiveData()?.observe(this, Observer{
             view.list_page_wait.adapter?.notifyDataSetChanged()
         })
 
@@ -124,15 +124,11 @@ class PageFragment : Fragment(), View.OnClickListener,
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.btn_page_more->{
-                val moreFragment=MoreFragment()
-                val bundle=Bundle()
-                bundle.putBinder("Binder",mBinder)
-                moreFragment.arguments=bundle
                 fragmentManager!!.findFragmentByTag("playingFragment")?.let {
                     fragmentManager!!.beginTransaction()
                         .hide(this)
                         .hide(it)
-                        .replace(R.id.layout_main_all,moreFragment)
+                        .replace(R.id.layout_main_all,MoreFragment())
                         .addToBackStack(null)
                         .commit()
                 }

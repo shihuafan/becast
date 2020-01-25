@@ -4,10 +4,13 @@ import android.content.Context
 import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
+import com.example.becast.data.UserData
 import com.example.becast.data.radio.RadioData
 import com.example.becast.data.radio.RadioDatabase
+import com.example.becast.data.radio.RadioHttpHelper
 import com.example.becast.data.xml.XmlData
 import com.example.becast.data.xml.XmlDatabase
+import com.example.becast.data.xml.XmlHttpHelper
 
 class ChannelViewModel(private val context: Context, private val xmlData: XmlData) {
 
@@ -17,6 +20,11 @@ class ChannelViewModel(private val context: Context, private val xmlData: XmlDat
 
     init {
         channelLiveData.value=list
+        getAll()
+
+    }
+
+    fun getAll(){
         object : Thread(){
             override fun run() {
                 super.run()
@@ -28,7 +36,6 @@ class ChannelViewModel(private val context: Context, private val xmlData: XmlDat
                 db.close()
             }
         }.start()
-
     }
 
     fun changeAll(handler: Handler):Boolean{
@@ -41,83 +48,51 @@ class ChannelViewModel(private val context: Context, private val xmlData: XmlDat
     }
 
     private fun cancelAll(handler: Handler):Boolean{
-        object : Thread() {
+        object:Thread(){
             override fun run() {
+                super.run()
                 try{
-                    cancelChannel()
-                    cancelRadio()
+                    val xmlDb = XmlDatabase.getDb(context)
+                    val xmlDao=xmlDb.xmlDao()
+                    xmlDao.delete(xmlData)
+                    XmlDatabase.closeDb()
+                    XmlHttpHelper().delList(UserData.uid.toString(),xmlData.xmlUrl)
+
+                    val radioDb = RadioDatabase.getDb(context)
+                    val radioDao=radioDb.radioDao()
+                    radioDao.deleteByChannel(xmlData.xmlUrl)
+                    RadioDatabase.closeDb()
+                    RadioHttpHelper().delList(UserData.uid.toString(),xmlData.xmlUrl)
                     handler.sendEmptyMessage(0x000)
-                }
-                catch(e:Exception){
-                   // handler.sendEmptyMessage(0x001)
+                }catch (e:Exception){
+
                 }
             }
         }.start()
         return false
     }
 
-    fun cancelChannel(){
-        val db = Room.databaseBuilder(context, XmlDatabase::class.java, "xml_db")
-            .build()
-        val mDao=db.xmlDao()
-        mDao.delete(xmlData)
-        db.close()
-    }
-
-    fun cancelRadio(){
-        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio_db")
-            .build()
-        val mDao=db.radioDao()
-        mDao.deleteByChannel(xmlData.xmlUrl)
-        db.close()
-    }
-
     private fun subscribeAll(handler: Handler):Boolean{
         object : Thread() {
             override fun run() {
-                try{
-                    subscribeRadio()
-                    subscribeRss()
+                super.run()
+                try {
+                    val xmlDb=XmlDatabase.getDb(context)
+                    val xmlDao=xmlDb.xmlDao()
+                    xmlDao.insert(xmlData)
+                    XmlDatabase.closeDb()
+
+                    val radioDb=RadioDatabase.getDb(context)
+                    val radioDao=radioDb.radioDao()
+                    radioDao.insertAll(list)
+                    RadioDatabase.closeDb()
+
                     handler.sendEmptyMessage(0x001)
-                }
-                catch(e:Exception){
-                 //   handler.sendEmptyMessage(0x001)
+                }catch (e:Exception){
+
                 }
             }
         }.start()
         return true
-    }
-
-    fun subscribeRss(){
-        val db = Room.databaseBuilder(context, XmlDatabase::class.java, "rss")
-            .build()
-        val mDao=db.xmlDao()
-        try{
-            mDao.insert(xmlData)
-        }catch (e:Exception){
-            if(!e.message!!.contains("SQLITE_CONSTRAINT_PRIMARYKEY")){
-                throw e
-            }
-        }
-        db.close()
-    }
-
-    fun subscribeRadio(){
-        val db = Room.databaseBuilder(context, RadioDatabase::class.java, "radio")
-            .build()
-        val mDao=db.radioDao()
-        for(item : RadioData in list){
-            try{
-                mDao.insert(item)
-            }catch (e:Exception){
-                if(e.message!!.contains("SQLITE_CONSTRAINT_PRIMARYKEY")){
-                    continue
-                }
-                else{
-                    throw e
-                }
-            }
-        }
-        db.close()
     }
 }

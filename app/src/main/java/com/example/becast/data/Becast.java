@@ -19,6 +19,11 @@ public class Becast {
     public static int SHARE_NOTE=116;
     public static int CHANGE_REST_TIME=117;
     public static int SET_CAPTCHA=118;
+    public static int ALREADY_SIGN_UP=119;
+    public static int RESTART=120;
+    public static int GET_TEXT=121;
+    public static int SHARE_ID=122;
+    public static int SHARE_BK=123;
 
 
 }

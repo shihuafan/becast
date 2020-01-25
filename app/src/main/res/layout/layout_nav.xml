@@ -28,7 +28,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="70dp"
             android:layout_centerVertical="true"
-            android:text="点击头像登陆"
             android:textColor="#fff"
             android:textStyle="bold"
             android:textSize="18sp"/>

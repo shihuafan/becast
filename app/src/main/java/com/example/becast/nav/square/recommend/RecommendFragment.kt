@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.becast.R
 import com.example.becast.playpage.play.PlayPageFragment
-import com.example.becast.service.RadioService
+import com.example.becast.service.MediaHelper
 import kotlinx.android.synthetic.main.frag_recommend.view.*
 
 
-class RecommendFragment(private val url:String,private var mBinder: RadioService.LocalBinder) : Fragment(){
+class RecommendFragment(private val url:String) : Fragment(){
 
     private val recommendViewModel: RecommendViewModel =
         RecommendViewModel()
@@ -28,12 +28,13 @@ class RecommendFragment(private val url:String,private var mBinder: RadioService
 //                    radio.rss_image_uri, radio.radio_uri, radio.pub_date, 0,radio.description,
 //                    radio.rss_uri, radio.rss_title,0,0,0, 0,0
 //                ))
-                fragmentManager!!.beginTransaction()
-                    .hide(this)
-                    .add(R.id.layout_main_all, PlayPageFragment(mBinder))
-                    .addToBackStack(null)
-                    .commit()
-
+                MediaHelper().getBinder()?.let {it_->
+                    fragmentManager!!.beginTransaction()
+                        .hide(this)
+                        .add(R.id.layout_main_all, PlayPageFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
             0x404->{
                 Toast.makeText(context,"网络异常，加载失败",Toast.LENGTH_SHORT).show()
@@ -57,8 +58,7 @@ class RecommendFragment(private val url:String,private var mBinder: RadioService
             view.list_recommend.adapter= RecommendAdapter(
                 context!!,
                 it.content,
-                mHandler,
-                mBinder
+                mHandler
             )
             if(it.title!=null){
                 view.layout_recommend_loading.visibility=View.GONE

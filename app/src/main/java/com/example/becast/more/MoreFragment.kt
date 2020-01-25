@@ -11,45 +11,48 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.becast.R
 import com.example.becast.more.from_opml.FromFileFragment
 import com.example.becast.more.from_xml.FromXmlFragment
-import com.example.becast.more.search.SearchFragment
+import com.example.becast.more.search.SearchAdapter
+import com.example.becast.more.search.SearchViewModel
 import com.example.becast.service.RadioService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_more.*
 import kotlinx.android.synthetic.main.frag_more.view.*
+import kotlinx.android.synthetic.main.frag_more.view.image_search_loading
+import kotlinx.android.synthetic.main.frag_more.view.layout_search_loading
+import kotlinx.android.synthetic.main.frag_more.view.list_search
 import java.util.regex.Pattern
 
 
 class MoreFragment : Fragment(), View.OnClickListener{
 
     private lateinit var v: View
-    private lateinit var mBinder: RadioService.LocalBinder
 
     private val mHandler= Handler{
         when(it.what){
             0x103->{
                 val fromXmlFragment=FromXmlFragment()
                 val bundle=Bundle()
-                bundle.putBinder("Binder",mBinder)
                 bundle.putString("url",it.obj as String)
                 fromXmlFragment.arguments=bundle
-                childFragmentManager.beginTransaction()
-                    .add(R.id.layout_more, fromXmlFragment)
-                    // .addToBackStack(null)
+                fragmentManager!!.beginTransaction()
+                    .add(R.id.layout_main_all, fromXmlFragment)
+                    .hide(this)
+                    .addToBackStack(null)
                     .commit()
-                this.v.layout_more_content.visibility=View.GONE
             }
         }
         false
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_more, container, false)
-        mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
         v.layout_more.setOnClickListener(this)
         v.btn_more_back.setOnClickListener(this)
         v.btn_more_opml.setOnClickListener(this)
@@ -65,7 +68,6 @@ class MoreFragment : Fragment(), View.OnClickListener{
                 if (mat.matches()) {
                     val fromXmlFragment=FromXmlFragment()
                     val bundle=Bundle()
-                    bundle.putBinder("Binder",mBinder)
                     bundle.putString("url",content)
                     fromXmlFragment.arguments=bundle
                     childFragmentManager.beginTransaction()
@@ -75,14 +77,15 @@ class MoreFragment : Fragment(), View.OnClickListener{
                     this.v.layout_more_content.visibility=View.GONE
                 }
                 else{
-                    val bundle=Bundle()
-                    bundle.putBinder("Binder",mBinder)
-                    bundle.putString("content",content)
-                    val searchFragment = SearchFragment(mHandler)
-                    searchFragment.arguments=bundle
-                    childFragmentManager.beginTransaction()
-                        .add(R.id.layout_more_show, searchFragment)
-                        .commit()
+                    startSearch(content)
+//                    val bundle=Bundle()
+//                    bundle.putBinder("Binder",mBinder)
+//                    bundle.putString("content",content)
+//                    val searchFragment = SearchFragment(mHandler)
+//                    searchFragment.arguments=bundle
+//                    childFragmentManager.beginTransaction()
+//                        .add(R.id.layout_more_show, searchFragment)
+//                        .commit()
                 }
             }
            false
@@ -132,13 +135,28 @@ class MoreFragment : Fragment(), View.OnClickListener{
     private fun openFromFileFragment(){
         val imm = activity!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(activity!!.window.decorView.windowToken, 0)
-        val bundle=Bundle()
-        bundle.putBinder("Binder",mBinder)
-        val fromFileFragment= FromFileFragment()
-        fromFileFragment.arguments=bundle
+
         childFragmentManager.beginTransaction()
-            .replace(R.id.layout_more,fromFileFragment)
+            .replace(R.id.layout_more,FromFileFragment())
             .commit()
         this.v.layout_more_content.visibility=View.GONE
+    }
+
+    private fun startSearch(content:String){
+        val searchViewModel= SearchViewModel(content)
+
+        Glide.with(context!!)
+            .load(resources.getDrawable(R.drawable.loading_gif,null))
+            .into(v.image_search_loading)
+
+        v.list_search.layoutManager = LinearLayoutManager(context)
+        v.list_search.adapter = context?.let { SearchAdapter(it,searchViewModel.listLiveData.value!!,mHandler) }
+
+        searchViewModel.listLiveData.observe(this, Observer{
+            if(searchViewModel.listLiveData.value!!.size>0 && v.layout_search_loading.visibility==View.VISIBLE){
+                v.layout_search_loading.visibility=View.GONE
+            }
+            v.list_search.adapter?.notifyDataSetChanged()
+        })
     }
 }

@@ -20,7 +20,6 @@ class FromOpmlFragment : Fragment() {
 
     private lateinit var fromOpmlViewModel: FromOpmlViewModel
     private lateinit var v: View
-    private lateinit var mBinder: RadioService.LocalBinder
 
     private val mHandler : Handler = Handler{
 
@@ -28,7 +27,6 @@ class FromOpmlFragment : Fragment() {
             Becast.OPEN_XML_FRAGMENT ->{
                 val fromXmlFragment= FromXmlFragment()
                 val bundle=Bundle()
-                bundle.putBinder("Binder",mBinder)
                 bundle.putString("url",it.obj as String)
                 fromXmlFragment.arguments=bundle
                 fragmentManager!!.beginTransaction()
@@ -46,7 +44,6 @@ class FromOpmlFragment : Fragment() {
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_opml, container, false)
-        mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
         val path=arguments!!.getString("path") as String
         fromOpmlViewModel=FromOpmlViewModel(path, mHandler)
 

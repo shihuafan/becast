@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/layout_share"
     android:background="#88000000">
-    
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore="UselessParent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -19,10 +14,10 @@
             android:layout_marginBottom="150dp">
 
             <LinearLayout
+                android:id="@+id/layout_share_background"
                 android:layout_width="300dp"
                 android:layout_height="420dp"
                 android:layout_centerInParent="true"
-                android:id="@+id/layout_share_background"
                 android:padding="15dp"
                 android:background="@color/colorPrimary"
                 android:orientation="vertical">
@@ -51,24 +46,26 @@
                         android:layout_centerVertical="true">
 
                         <TextView
+                            android:id="@+id/text_share_xmltitle"
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:textSize="16sp"
-                            android:id="@+id/text_share_xmltitle"
+                            android:lines="1"
                             android:textStyle="bold"/>
 
                         <TextView
+                            android:id="@+id/text_share_title"
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:textSize="14sp"
-                            android:id="@+id/text_share_title"/>
+                            android:lines="1" />
 
                         <TextView
+                            android:id="@+id/text_share_time"
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
-                            android:text="标题"
-                            android:textSize="12sp"
-                            android:id="@+id/text_share_time"/>
+                            android:lines="1"
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -87,7 +84,6 @@
             </LinearLayout>
 
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -113,26 +109,38 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/image_show"
+                <Button
+                    android:id="@+id/btn_share_qq"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_margin="10dp"
                     android:background="@drawable/qq"/>
 
 
-                <ImageView
+                <Button
+                    android:id="@+id/btn_share_wechat"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/weixin"/>
+                    android:background="@drawable/wechat"/>
 
+                <Button
+                    android:id="@+id/btn_share_time_line"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/time_line"/>
+
+                <Button
+                    android:id="@+id/btn_share_link"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/link"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </RelativeLayout>
-
-</FrameLayout>
+</RelativeLayout>
 

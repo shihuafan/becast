@@ -1,13 +1,12 @@
 package com.example.becast.more.search
 
-import android.os.Handler
 import androidx.lifecycle.MutableLiveData
 import com.example.becast.data.xml.XmlData
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 
-class SearchViewModel(term:String,private val handler: Handler) {
+class SearchViewModel(term: String) {
 
     val list : MutableList<XmlData> = mutableListOf()
     val  listLiveData: MutableLiveData<MutableList<XmlData>> = MutableLiveData()
@@ -37,7 +36,7 @@ class SearchViewModel(term:String,private val handler: Handler) {
             val xmlUrl=jsonObject.getString("feedUrl")
             val imageUri=jsonObject.getString("artworkUrl60")
             val title=jsonObject.getString("collectionName")
-            val rssData = XmlData(title,"",imageUri,"","",xmlUrl,"","")
+            val rssData = XmlData("",title,"",imageUri,"","",xmlUrl,"","")
             list.add(rssData)
         }
         listLiveData.postValue(list)

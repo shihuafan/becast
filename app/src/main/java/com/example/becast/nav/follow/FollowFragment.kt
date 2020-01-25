@@ -12,11 +12,10 @@ import com.example.becast.R
 import com.example.becast.channel.ChannelFragment
 import com.example.becast.data.Becast
 import com.example.becast.data.xml.XmlData
-import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_follow.view.*
 import org.greenrobot.eventbus.EventBus
 
-class FollowFragment(private val mBinder: RadioService.LocalBinder):Fragment(), View.OnClickListener {
+class FollowFragment :Fragment(), View.OnClickListener {
 
     private val followViewModel:FollowViewModel= FollowViewModel()
     private val mHandler= Handler{
@@ -24,7 +23,7 @@ class FollowFragment(private val mBinder: RadioService.LocalBinder):Fragment(), 
             Becast.OPEN_CHANNEL_FRAGMENT->{
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_top, ChannelFragment(it.obj as XmlData,mBinder))
+                    .add(R.id.layout_main_top, ChannelFragment(it.obj as XmlData))
                     .addToBackStack(null)
                     .commit()
             }

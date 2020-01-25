@@ -1,14 +1,21 @@
 package com.example.becast.data.comment
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
+import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "comment_db",primaryKeys  = ["radio_url","xml_url","time"])
 data class CommentData(
-    @ColumnInfo (name = "comment") var comment:String="",
-    @ColumnInfo (name = "time") var time:Long=0,
-    @ColumnInfo (name = "radio_url") var radioUrl:String="",
-    @ColumnInfo (name = "xml_url") var xnlUrl:String="",
-    @ColumnInfo (name = "star_time") var startTime:Long=0,
-    @ColumnInfo (name = "end_time") var endTime:Long=0
+  var uid:String?=null,
+  @SerializedName("create_time")
+  var createTime:Long=0,
+  var comment:String="",
+  @SerializedName("xml_url")
+  var xmlUrl:String="",
+  @SerializedName("radio_url")
+  var radioUrl:String="",
+  @SerializedName("start_time")
+  var startTime:Int=0,
+  @SerializedName("end_time")
+  var endTime:Int=0,
+  @SerializedName("xml_title")
+  var xmlTitle:String="",
+  var title:String=""
 )

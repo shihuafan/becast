@@ -28,15 +28,6 @@
             android:textStyle="bold"
             android:lines="1" />
 
-        <TextView
-            android:id="@+id/text_item_love_num"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="21集"
-            android:textSize="13sp"
-            android:textColor="#989898"
-            android:lines="1" />
-
     </LinearLayout>
 
     <Button

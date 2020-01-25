@@ -16,14 +16,14 @@ import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_mix.view.*
 import org.greenrobot.eventbus.EventBus
 
-class MixFragment(private val mixData: MixData,private val mBinder: RadioService.LocalBinder) :Fragment(), View.OnClickListener {
+class MixFragment(private val mixData: MixData) :Fragment(), View.OnClickListener {
     private lateinit var mixViewModel: MixViewModel
     private val mHandler : Handler = Handler{
         when(it.what){
             0x001 ->{
                 fragmentManager!!.beginTransaction()
                     .hide(this)
-                    .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData, mBinder))
+                    .add(R.id.layout_main_all, DetailFragment(it.obj as RadioData))
                     .addToBackStack(null)
                     .commit()
             }

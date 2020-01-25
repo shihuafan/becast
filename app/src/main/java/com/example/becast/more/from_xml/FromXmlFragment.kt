@@ -15,8 +15,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
 import com.example.becast.data.Becast
 import com.example.becast.data.radio.RadioData
-import com.example.becast.playpage.play.PlayPageFragment
-import com.example.becast.service.RadioService
+import com.example.becast.playpage.detail.DetailFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_add_from_xml.*
 import kotlinx.android.synthetic.main.frag_add_from_xml.view.*
@@ -25,14 +24,12 @@ class FromXmlFragment : Fragment(), View.OnClickListener {
 
     private lateinit var fromXmlViewModel: FromXmlViewModel
     private lateinit var v: View
-    private lateinit var mBinder: RadioService.LocalBinder
     private lateinit var url: String
     private val mHandler : Handler = Handler{
         when(it.what){
-            Becast.OPEN_PLAY_PAGE_FRAGMENT ->{
-                mBinder.playRadio(it.obj as RadioData)
+            Becast.OPEN_DETAIL_FRAGMENT ->{
                 fragmentManager!!.beginTransaction()
-                    .replace(R.id.layout_add_from_xml, PlayPageFragment(mBinder))
+                    .replace(R.id.layout_add_from_xml, DetailFragment(it.obj as RadioData))
                     .addToBackStack(null)
                     .commit()
             }
@@ -49,13 +46,12 @@ class FromXmlFragment : Fragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_add_from_xml, container, false)
-        mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
         url=arguments!!.getString("url") as String
         fromXmlViewModel= context?.let { FromXmlViewModel(it,url,mHandler) }!!
 
         v.list_add_from_xml.layoutManager = LinearLayoutManager(context)
         v.list_add_from_xml.adapter = context?.let {
-            FromXmlAdapter(it, fromXmlViewModel.radioListLiveData.value!!,mHandler) }
+            FromXmlAdapter(fromXmlViewModel.radioListLiveData.value!!, mHandler) }
 
         Glide.with(context!!)
             .load(resources.getDrawable(R.drawable.loading_gif,null))

@@ -31,7 +31,7 @@ class SearchAdapter (private val context: Context, private val mData : MutableLi
         Glide.with(context)
             .load(mData[position].imageUrl)
             .apply(RequestOptions.overrideOf(100,100))
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
             .into(holder.imageItemShow)
         holder.textItemName.text=mData[position].title
         holder.textItemUrl.text=mData[position].xmlUrl

@@ -42,4 +42,15 @@ interface RadioDao {
     @Query("SELECT* FROM radio_db WHERE mix = (:mix) ")
     fun getByMix(mix:Long ):List<RadioData>
 
+    @Query("SELECT xml_image_url  FROM radio_db WHERE mix = (:mix) limit 1")
+    fun getImageUrlByMix(mix:Long ):String
+
+    @Query("SELECT count(*) FROM radio_db WHERE history_time != 0 ")
+    fun getHistorySum():Int
+
+    @Query("select count(*) from radio_db WHERE history_time != 0")
+    fun getSum():Int
+
+    @Query("select sum(progress) from radio_db")
+    fun getSumTime():Int
 }

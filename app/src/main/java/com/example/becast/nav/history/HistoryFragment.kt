@@ -11,26 +11,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.becast.R
 import com.example.becast.data.Becast
 import com.example.becast.data.radio.RadioData
-import com.example.becast.main.page.RadioAdapter
 import com.example.becast.playpage.detail.DetailFragment
-import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_history.view.*
 import org.greenrobot.eventbus.EventBus
 
-class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment(), View.OnClickListener {
+class HistoryFragment :Fragment(), View.OnClickListener {
 
     private val historyViewModel:HistoryViewModel=HistoryViewModel()
 
     private val mHandler : Handler = Handler{
         when(it.what){
             Becast.OPEN_DETAIL_FRAGMENT ->{
-             //   mBinder.playRadio(it.obj as RadioData)
                 fragmentManager!!.beginTransaction()
                     .hide(this)
                     .add(R.id.layout_main_all,
                         DetailFragment(
-                            it.obj as RadioData,
-                            mBinder
+                            it.obj as RadioData
                         )
                     )
                     .addToBackStack(null)
@@ -50,7 +46,7 @@ class HistoryFragment(private var mBinder: RadioService.LocalBinder) :Fragment()
 
         view.list_history.layoutManager = LinearLayoutManager(context)
         view.list_history.adapter = context?.let {
-            RadioAdapter(it,historyViewModel.historyModelLiveData.value!!, mHandler)
+            HistoryAdapter(it,historyViewModel.historyModelLiveData.value!!, mHandler)
         }
 
         //更新列表

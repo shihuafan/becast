@@ -1,15 +1,10 @@
 package com.example.becast.more.from_opml
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,12 +18,10 @@ class FromFileFragment : Fragment() {
 
     private lateinit var fromFileViewModel: FromFileViewModel
     private lateinit var v: View
-    private lateinit var mBinder: RadioService.LocalBinder
     private val mHandler : Handler = Handler{
         when(it.what){
             Becast.OPEN_OPML_FRAGMENT ->{
                 val bundle=Bundle()
-                bundle.putBinder("Binder",mBinder)
                 bundle.putString("path",it.obj as String)
                 val fromOpmlFragment=FromOpmlFragment()
                 fromOpmlFragment.arguments=bundle
@@ -44,7 +37,6 @@ class FromFileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v= inflater.inflate(R.layout.frag_file, container, false)
 
-        mBinder= arguments!!.getBinder("Binder") as RadioService.LocalBinder
 
         fromFileViewModel= context?.let { FromFileViewModel(it) }!!
 

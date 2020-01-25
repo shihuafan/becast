@@ -12,13 +12,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.becast.R
+import com.example.becast.service.MediaHelper
 import com.example.becast.service.RadioService
 
 
 class RecommendAdapter (private val context: Context,
                         private val mData : MutableList<Part>,
-                        private val handler: Handler,
-                        private var mBinder: RadioService.LocalBinder)
+                        private val handler: Handler)
     : RecyclerView.Adapter<RecommendAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -54,12 +54,15 @@ class RecommendAdapter (private val context: Context,
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
                 .into(holder.imageItemShow)
             holder.btnItemPlay.setOnClickListener {
-                if(mBinder.pauseRadio()){
-                    it.setBackgroundResource(R.drawable.pause_light)
+                MediaHelper().getBinder()?.let {it_->
+                    if(it_.pauseRadio()){
+                        it.setBackgroundResource(R.drawable.pause_light)
+                    }
+                    else{
+                        it.setBackgroundResource(R.drawable.play_light)
+                    }
                 }
-                else{
-                    it.setBackgroundResource(R.drawable.play_light)
-                }
+
             }
             holder.btnItem.setOnClickListener {
                 val msg=Message()

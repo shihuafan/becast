@@ -1,6 +1,5 @@
 package com.example.becast.playpage.play
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.becast.R
 import com.example.becast.data.radio.RadioData
-import com.example.becast.service.RadioService
+import com.example.becast.service.MediaHelper
 
 
-class WaitDialogAdapter (private val context: Context, private val mData : MutableList<RadioData>,
-                         private val mBinder: RadioService.LocalBinder) : RecyclerView.Adapter<WaitDialogAdapter.ViewHolder>() {
+class WaitDialogAdapter(private val mData: MutableList<RadioData>)
+    : RecyclerView.Adapter<WaitDialogAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.item_wait_dialog, parent, false)
@@ -27,11 +26,11 @@ class WaitDialogAdapter (private val context: Context, private val mData : Mutab
         holder.textItemName.text=mData[position].title
 
         holder.btnItem.setOnClickListener {
-            mBinder.deleteRadioItem(position)
+            MediaHelper().getBinder()?.deleteRadioItem(position)
 //            mBinder.playRadio(mData[position])
         }
         holder.btnItemDelete.setOnClickListener {
-            mBinder.deleteRadioItem(position)
+            MediaHelper().getBinder()?.deleteRadioItem(position)
         }
     }
 

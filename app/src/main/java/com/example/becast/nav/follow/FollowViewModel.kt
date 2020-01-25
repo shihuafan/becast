@@ -15,7 +15,6 @@ class FollowViewModel {
     }
 
     fun getList(context:Context){
-
         object :Thread(){
             override fun run() {
                 super.run()

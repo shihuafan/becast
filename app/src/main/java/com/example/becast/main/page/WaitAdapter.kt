@@ -17,6 +17,7 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.example.becast.R
 import com.example.becast.data.Becast
 import com.example.becast.data.radio.RadioData
+import com.example.becast.service.MediaIBinder
 import com.example.becast.service.RadioService
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,7 +25,7 @@ import java.util.*
 class WaitAdapter (private val context: Context,
                    private val mData : MutableList<RadioData>,
                    private val handler: Handler,
-                   private val mBinder: RadioService.LocalBinder)
+                   private val mBinder: MediaIBinder)
     : RecyclerView.Adapter<WaitAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

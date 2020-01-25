@@ -1,6 +1,5 @@
 package com.example.becast.playpage.detail
 
-import android.content.Context
 import android.os.Handler
 import android.os.Message
 import android.view.LayoutInflater
@@ -13,10 +12,10 @@ import com.example.becast.R
 import com.example.becast.data.mix.MixData
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class AddToMixAdapter (private val context: Context,
-                        private val mData : List<MixData>,
-                        private val handler: Handler,
-                        private val bottomSheetDialog: BottomSheetDialog
+class AddToMixAdapter(
+    private val mData: List<MixData>,
+    private val handler: Handler,
+    private val bottomSheetDialog: BottomSheetDialog
 )
     : RecyclerView.Adapter<AddToMixAdapter.ViewHolder>() {
 
