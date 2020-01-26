@@ -1,21 +1,18 @@
 package com.example.becast.service
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.Service
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
+import android.content.IntentFilter
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
 import android.os.Handler
 import android.util.Log
-import androidx.core.app.NotificationCompat
-import androidx.media.app.NotificationCompat as MediaNotificationCompat
 import androidx.lifecycle.MutableLiveData
-
+import com.example.becast.broadcastReceiver.MBroadcastReceiver
+import com.example.becast.broadcastReceiver.NotificationClickReceiver
 import com.example.becast.data.radio.RadioData
 import com.example.becast.data.radio.RadioDatabase
 import java.io.IOException
@@ -38,15 +35,24 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
     }
     @Volatile
     private var isPrepared=false
+    private val receiver=NotificationClickReceiver()
 
     override fun onBind(intent: Intent?): MediaIBinder { return mBinder }
 
     override fun onCreate() {
         super.onCreate()
         context=this
-        Log.d(TAG,"service创建")
-        createNotification()
         listLiveData.value=list
+
+        val intentFilterPre= IntentFilter()
+        intentFilterPre.addAction("android.intent.action.RADIO_PRE")
+        registerReceiver(receiver,intentFilterPre)
+        val intentFilterPause= IntentFilter()
+        intentFilterPause.addAction("android.intent.action.RADIO_PAUSE")
+        registerReceiver(receiver,intentFilterPause)
+        val intentFilterNext= IntentFilter()
+        intentFilterNext.addAction("android.intent.action.RADIO_NEXT")
+        registerReceiver(receiver,intentFilterNext)
 
         val handler=Handler{
             playList()
@@ -72,48 +78,26 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
 
     }
 
-    private fun createNotification(){
-        val channelId=1
-        val notificationManager= getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {    //Android 8.0以上适配
-            val channel = NotificationChannel(
-                context.packageName,
-                "channel_name",
-                NotificationManager.IMPORTANCE_HIGH)
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val mediaStyle=MediaNotificationCompat.MediaStyle()
-        mediaStyle.setShowCancelButton(true)
-            .setShowActionsInCompactView(0,1,2)
-        val builder = NotificationCompat.Builder(this,channelId.toString())
-        builder.setContentTitle("this is content title,this is content title,this is content title")            //指定通知栏的标题内容
-            .setContentText("this is content text,this is content text,this is content text,this is content text")             //通知的正文内容
-            .setWhen(System.currentTimeMillis())                //通知创建的时间
-            .setSmallIcon(com.example.becast.R.drawable.logo)    //通知显示的小图标，只能用alpha图层的图片进行设置
-            .setLargeIcon(BitmapFactory.decodeResource(resources, com.example.becast.R.drawable.nian))
-            .addAction(com.example.becast.R.drawable.ic_backword,"",null)
-            .addAction(com.example.becast.R.drawable.ic_play,"",null)
-            .addAction(com.example.becast.R.drawable.ic_foeword,"",null)
-            .setStyle(mediaStyle)
-
-        val notification = builder.build()
-        notificationManager.notify(channelId, notification)
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receiver)
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
-        Log.d(TAG,"准备好了")
         list[0].historyTime=System.currentTimeMillis()
         list[0].duration=mediaPlayer.duration
         updateItem(list[0])
         //调用待播放列表并预加载完成
         if(firstFlag){
             firstFlag=false
+            MediaNotification.setNotification(context,list[0].xmlTitle,list[0].title,list[0].xmlImageUrl,false)
         }
         else{
             mp?.start()
+            MediaNotification.setNotification(context,list[0].xmlTitle,list[0].title,list[0].xmlImageUrl,true)
         }
         isPrepared=true
+
         //开始TimerTask
         try {
             timer.schedule(task,0,1000)
@@ -231,13 +215,15 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
     }
 
     fun pause():Boolean{
-        return if(mediaPlayer.isPlaying){
+        val play= if(mediaPlayer.isPlaying){
             mediaPlayer.pause()
             false
         } else{
             mediaPlayer.start()
             true
         }
+        MediaNotification.setNotification(context,list[0].xmlTitle,list[0].title,list[0].xmlImageUrl,play)
+        return play
     }
 
     fun changeSpeed(speed: Float) {

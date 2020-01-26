@@ -14,6 +14,7 @@ object UserData {
     var image:String?=null
     var phone:String?=null
     var password:String?=null
+    const val version="0.0.2"
 
     var style:Int= R.style.AppTheme
     var delay:Int=0

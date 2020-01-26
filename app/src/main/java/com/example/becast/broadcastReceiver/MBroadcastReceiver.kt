@@ -9,6 +9,7 @@ import org.greenrobot.eventbus.EventBus
 
 
 class MBroadcastReceiver : BroadcastReceiver() {
+
     private val ACTION_BOOT = "android.intent.action.BOOT_COMPLETED"
     private val HEADSET_PLUG="android.intent.action.HEADSET_PLUG"
 

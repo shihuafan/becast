@@ -24,6 +24,9 @@ public class Becast {
     public static int GET_TEXT=121;
     public static int SHARE_ID=122;
     public static int SHARE_BK=123;
+    public static int NOT_LATEST=124;
+    public static int IS_LATEST=125;
+
 
 
 }
