@@ -54,10 +54,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
 
         startService(Intent(this,RadioService::class.java))
+        MediaHelper().getBinder(this)
         //注册EventBus
         EventBus.getDefault().register(this)
 
-        MediaHelper().getBinder(this)
+
         //使用opml直接进入
         val opmlIntent = intent
         val action = opmlIntent.action

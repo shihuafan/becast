@@ -19,8 +19,6 @@ import com.example.becast.data.radio.RadioData
 import com.example.becast.data.xml.XmlData
 import com.example.becast.main.page.RadioAdapter
 import com.example.becast.playpage.detail.DetailFragment
-import com.example.becast.service.MediaIBinder
-import com.example.becast.service.RadioService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.frag_channel.*
 import kotlinx.android.synthetic.main.frag_channel.view.*

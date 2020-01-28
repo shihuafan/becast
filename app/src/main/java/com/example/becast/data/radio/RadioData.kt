@@ -2,6 +2,7 @@ package com.example.becast.data.radio
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "radio_db",primaryKeys  = ["uid","radio_url","xml_url","mix"])
@@ -22,5 +23,8 @@ data class RadioData(
     @ColumnInfo (name = "history_time")@SerializedName("history_time")var historyTime:Long=0,
     @ColumnInfo (name = "wait_time")@SerializedName("wait_time")var waitTime:Long=0,
     @ColumnInfo (name = "progress")var progress:Int=0,
-    @ColumnInfo (name = "mix") var mix:Long=0
+    @ColumnInfo (name = "mix") var mix:Long=0,
+    @ColumnInfo (name = "download_path")@Expose(serialize = false, deserialize = false)var downloadPath:String="",
+    @ColumnInfo (name = "download_max")@Expose(serialize = false, deserialize = false)var downloadMax:Int=0,
+    @ColumnInfo (name = "download_progress")@Expose(serialize = false, deserialize = false) var downloadProgress:Int=0
 )

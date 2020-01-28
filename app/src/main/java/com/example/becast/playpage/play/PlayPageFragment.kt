@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -25,7 +24,7 @@ import com.example.becast.playpage.comment.CommentFragment
 import com.example.becast.playpage.share.ShareData
 import com.example.becast.playpage.share.ShareFragment
 import com.example.becast.service.MediaHelper
-import com.example.becast.service.MediaIBinder
+import com.example.becast.service.RadioIPlayer
 import kotlinx.android.synthetic.main.frag_playpage.view.*
 import java.util.*
 
@@ -35,7 +34,7 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
 
     private lateinit var v: View
     private val playPageViewModel= PlayPageViewModel()
-    private lateinit var mBinder: MediaIBinder
+    private lateinit var mBinder: RadioIPlayer
     private var commentData=CommentData()
     private var timer=Timer()
     private val mHandler= Handler{
@@ -95,6 +94,7 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
         v.seekBar_play.setOnSeekBarChangeListener(this)
         v.layout_play.setOnClickListener(this)
         v.btn_play_sleep.setOnClickListener(this)
+        v.btn_play_speed.setOnClickListener(this)
         v.btn_play_share.setOnClickListener(this)
         v.btn_play_wait_list.setOnClickListener(this)
         v.btn_play_channel.setOnClickListener(this)
@@ -161,6 +161,20 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
 
             R.id.btn_play_sleep->{
                 context?.let { SleepBottomSheetDialog(it) }
+            }
+            R.id.btn_play_speed->{
+                when(mBinder.changeRadioSpeed()){
+                    10->{
+                        v.background=resources.getDrawable(R.drawable.speed10)
+                    }
+                    15->{
+                        v.background=resources.getDrawable(R.drawable.speed15)
+                    }
+                    20->{
+                        v.background=resources.getDrawable(R.drawable.speed20)
+                    }
+
+                }
             }
             R.id.btn_play_share->{
                 val radioData=mBinder.getRadioItem()

@@ -38,7 +38,7 @@
             android:priority = "1000"/>
 
         <service
-            android:name=".data.DownLoadService"
+            android:name=".radiodownload.RadioDownLoadService"
             android:priority = "1000"/>
 
         <receiver android:name=".broadcastReceiver.MBroadcastReceiver">

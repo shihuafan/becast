@@ -9,19 +9,19 @@ import androidx.appcompat.app.AppCompatActivity
 class MediaHelper {
 
     companion object{
-        private var mIBinder: RadioService.MediaBinder ?= null
+        private var mIBinder: RadioService.RadioBinder ?= null
         private val conn=MyConnection()
 
         class MyConnection:ServiceConnection{
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                mIBinder = service as RadioService.MediaBinder
+                mIBinder = service as RadioService.RadioBinder
             }
 
             override fun onServiceDisconnected(name: ComponentName?) {}
         }
     }
 
-    fun getBinder(activity: AppCompatActivity? = null):RadioService.MediaBinder?{
+    fun getBinder(activity: AppCompatActivity? = null):RadioService.RadioBinder?{
         mIBinder?.let {
             return it
         }

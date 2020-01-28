@@ -18,7 +18,8 @@ object UserData {
 
     var style:Int= R.style.AppTheme
     var delay:Int=0
-    const val BaseUrl="http://192.168.1.80:8080"
+//    const val BaseUrl="http://192.168.1.80:8080"
+    const val BaseUrl="http://104.168.140.16:8080"
     var xmlSum=0
     var radioSum=0
     var timeSum=0
@@ -94,8 +95,7 @@ object UserData {
             edit.putInt("style", this.style)
         }
         edit.apply()
-
-
+        
     }
 }
 

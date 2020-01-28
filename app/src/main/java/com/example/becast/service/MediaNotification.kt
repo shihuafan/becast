@@ -56,7 +56,7 @@ object MediaNotification {
             .setContentText(title)
             .setWhen(System.currentTimeMillis())
             .setPriority(androidx.core.app.NotificationCompat.PRIORITY_MAX)
-            .setSmallIcon(com.example.becast.R.drawable.logo)
+            .setSmallIcon(com.example.becast.R.drawable.smallicon)
             .setLargeIcon(image)
             .addAction(com.example.becast.R.drawable.ic_backword,"pre",intentPre)
             .addAction(iconPlay,"pause",intentPause)

@@ -3,21 +3,15 @@ package com.example.becast.nav.setting
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.UserManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.becast.R
 import com.example.becast.data.Becast
-import com.example.becast.data.DownLoadFromNet
-import com.example.becast.data.DownLoadService
-import com.example.becast.data.UserData
-import com.example.becast.service.RadioService
+import com.example.becast.nav.setting.download.DownLoadService
 import kotlinx.android.synthetic.main.frag_setting.view.*
-import org.greenrobot.eventbus.EventBus
 
 class SettingFragment :Fragment() {
 

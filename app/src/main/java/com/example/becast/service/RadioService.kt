@@ -11,7 +11,6 @@ import android.os.Build
 import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.becast.broadcastReceiver.MBroadcastReceiver
 import com.example.becast.broadcastReceiver.NotificationClickReceiver
 import com.example.becast.data.radio.RadioData
 import com.example.becast.data.radio.RadioDatabase
@@ -21,13 +20,14 @@ import java.util.*
 
 class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener{
 
-    private val mBinder = MediaBinder()
+    private val mBinder = RadioBinder()
     private val mediaPlayer = MediaPlayer()
     private val list : MutableList<RadioData> = mutableListOf()
     val listLiveData: MutableLiveData<MutableList<RadioData>> = MutableLiveData()
     private lateinit var context: Context
     private var firstFlag=true
     private var timer=Timer()
+    private var speed=10
     private val task=object : TimerTask() {
         override fun run() {
             updateProgress()
@@ -37,7 +37,7 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
     private var isPrepared=false
     private val receiver=NotificationClickReceiver()
 
-    override fun onBind(intent: Intent?): MediaIBinder { return mBinder }
+    override fun onBind(intent: Intent?): RadioBinder { return mBinder }
 
     override fun onCreate() {
         super.onCreate()
@@ -59,22 +59,22 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
             false
         }
 
-        object:Thread(){
-            override fun run() {
-                super.run()
-                val db = RadioDatabase.getDb(context)
-                val mDao=db.radioDao()
-                list.clear()
-                list.addAll(mDao.getWait(0,50) as MutableList<RadioData>)
-                listLiveData.postValue(list)
-                RadioDatabase.closeDb()
-                if(list.size>0){
-                    handler.sendEmptyMessage(0x000)
-                }else{
-                    firstFlag=false
-                }
-            }
-        }.start()
+//        object:Thread(){
+//            override fun run() {
+//                super.run()
+//                val db = RadioDatabase.getDb(context)
+//                val mDao=db.radioDao()
+//                list.clear()
+//                list.addAll(mDao.getWait(0,50) as MutableList<RadioData>)
+//                listLiveData.postValue(list)
+//                RadioDatabase.closeDb()
+//                if(list.size>0){
+//                    handler.sendEmptyMessage(0x000)
+//                }else{
+//                    firstFlag=false
+//                }
+//            }
+//        }.start()
 
     }
 
@@ -226,15 +226,20 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
         return play
     }
 
-    fun changeSpeed(speed: Float) {
+    fun changeSpeed() :Int{
+        speed+=5
+        if(speed==25){
+            speed=10
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (mediaPlayer.isPlaying) {
-                mediaPlayer.playbackParams = mediaPlayer.playbackParams.setSpeed(speed)
+                mediaPlayer.playbackParams = mediaPlayer.playbackParams.setSpeed(speed.toFloat()/10)
             } else {
-                mediaPlayer.playbackParams = mediaPlayer.playbackParams.setSpeed(speed)
+                mediaPlayer.playbackParams = mediaPlayer.playbackParams.setSpeed(speed.toFloat()/10)
                 mediaPlayer.pause()
             }
         }
+        return speed
     }
 
     private fun updateProgress(){
@@ -258,7 +263,10 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
         }.start()
     }
 
-    inner class MediaBinder : Binder() , MediaIBinder {
+    inner class RadioBinder : Binder() , RadioIPlayer {
+
+//        private val radioPlayer=RadioPlayer(context)
+//        fun getPlayer():RadioPlayer{return radioPlayer}
         override fun playPreRadio(){ playPre() }
         override fun playNextRadio(){  playNext() }
         override fun pauseRadio():Boolean{ return pause() }
@@ -267,7 +275,7 @@ class RadioService : Service(), MediaPlayer.OnPreparedListener, MediaPlayer.OnCo
         override fun seekRadioTo( progress: Int){ mediaPlayer.seekTo(progress) }
         override fun isRadioPlaying():Boolean{return mediaPlayer.isPlaying }
         override fun isPrepared():Boolean{return isPrepared}
-        override fun changeRadioSpeed(speed: Float){ changeSpeed(speed)}
+        override fun changeRadioSpeed():Int{ return changeSpeed()}
 
         override fun playRadio(item: RadioData){ play(item) }
         override fun addRadioItem(item: RadioData){ addItem(item) }

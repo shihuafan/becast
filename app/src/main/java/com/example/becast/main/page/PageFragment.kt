@@ -19,8 +19,7 @@ import com.example.becast.more.MoreFragment
 import com.example.becast.more.from_opml.FromOpmlFragment
 import com.example.becast.playpage.detail.DetailFragment
 import com.example.becast.service.MediaHelper
-import com.example.becast.service.MediaIBinder
-import com.example.becast.service.RadioService
+import com.example.becast.service.RadioIPlayer
 import kotlinx.android.synthetic.main.frag_page.view.*
 import org.greenrobot.eventbus.EventBus
 
@@ -30,7 +29,7 @@ class PageFragment : Fragment(), View.OnClickListener,
 
     private lateinit var pageViewModel:PageViewModel
     private lateinit var v:View
-    private var mBinder: MediaIBinder ?= null
+    private var mBinder: RadioIPlayer ?= null
     private val mHandler : Handler = Handler{
         when(it.what){
             Becast.OPEN_DETAIL_FRAGMENT ->{
@@ -59,12 +58,11 @@ class PageFragment : Fragment(), View.OnClickListener,
         v=view
         mBinder=MediaHelper().getBinder()
         val path=arguments!!.getString("path")
-        if(path!=null){
+        path?.let{
             val index= path.lastIndexOf('.')+1
             //这里检验一下文件格式
             if(index>=0 && "opml"== path.substring(index)){
                 val bundle=Bundle()
-                bundle.putBinder("Binder",mBinder)
                 bundle.putString("path",path)
                 val fromOpmlFragment= FromOpmlFragment()
                 fromOpmlFragment.arguments=bundle

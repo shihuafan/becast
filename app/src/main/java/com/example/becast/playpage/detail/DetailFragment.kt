@@ -79,6 +79,7 @@ class DetailFragment(private val radioData: RadioData, private val fromChannel:B
                detailViewModel.getXmlData(radioData.xmlUrl,mHandler)
            }
            R.id.btn_detail_wait->{
+               MediaHelper().getBinder()
                val handler=Handler{
                    when(it.what) {
                        0x000->{
