@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
+import com.example.becast.service.download.RadioDownload
+import com.example.becast.service.player.RadioPlayer
 
 class MediaHelper {
 
@@ -37,6 +39,20 @@ class MediaHelper {
             activity.unbindService(conn)
             activity.stopService(Intent(activity,RadioService::class.java))
         }
+    }
+
+    fun getPlayer(): RadioPlayer?{
+        mIBinder?.let {
+            return it.getPlayer()
+        }
+        return null
+    }
+
+    fun getDownload(): RadioDownload?{
+        mIBinder?.let {
+            return it.getDownload()
+        }
+        return null
     }
 
 }

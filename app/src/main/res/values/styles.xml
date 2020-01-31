@@ -16,6 +16,7 @@
         <item name="ic_theme">@drawable/moon</item>
         <item name="ic_follow">@drawable/follow_light</item>
         <item name="ic_collect">@drawable/collect_light</item>
+        <item name="ic_local">@drawable/download_light</item>
         <item name="ic_history">@drawable/history</item>
         <item name="ic_setting">@drawable/setting_dark</item>
         <item name="ic_search">@drawable/search_light</item>
@@ -39,6 +40,7 @@
         <item name="ic_theme">@drawable/sun</item>
         <item name="ic_follow">@drawable/follow_dark</item>
         <item name="ic_collect">@drawable/collect_dark</item>
+        <item name="ic_local">@drawable/download_light</item>
         <item name="ic_history">@drawable/history</item>
         <item name="ic_setting">@drawable/setting_dark</item>
         <item name="ic_search">@drawable/search_light</item>

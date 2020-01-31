@@ -35,6 +35,9 @@ class UserFragment  : Fragment(), View.OnClickListener {
                 EventBus.getDefault().post("change_user")
                 setView()
             }
+            Becast.OUTPUT_OPML->{
+                context?.let { it1 -> userViewModel.share(it1,it.obj as String) }
+            }
         }
         false
     }
@@ -44,6 +47,7 @@ class UserFragment  : Fragment(), View.OnClickListener {
         EventBus.getDefault().post("close")
 
         view.layout_info_sign_up.setOnClickListener(this)
+        view.layout_user_xml.setOnClickListener(this)
         view.btn_info_back.setOnClickListener(this)
         view.btn_image_user.setOnClickListener(this)
         view.btn_info_name.setOnClickListener(this)
@@ -71,6 +75,9 @@ class UserFragment  : Fragment(), View.OnClickListener {
         when(v!!.id){
             R.id.btn_info_back->{
                 activity?.onBackPressed()
+            }
+            R.id.layout_user_xml->{
+                context?.let { userViewModel.serializeXml(it,mHandler) }
             }
             R.id.layout_info_sign_up->{
                 context?.let {

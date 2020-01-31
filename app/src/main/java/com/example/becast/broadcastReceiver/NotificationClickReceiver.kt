@@ -15,7 +15,7 @@ class NotificationClickReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.d(TAG,intent.toString())
-        val binder= MediaHelper().getBinder()
+        val binder= MediaHelper().getPlayer()
         when(intent?.action){
             ACTION_PAUSE->{
                 binder?.pauseRadio()

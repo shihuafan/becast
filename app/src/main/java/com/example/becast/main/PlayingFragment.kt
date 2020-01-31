@@ -37,7 +37,7 @@ open class PlayingFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setView(){
-        MediaHelper().getBinder()?.let {
+        MediaHelper().getPlayer()?.let {
             if(!it.radioItemEmpty()) {
                 if(v.text_playing_title.text != it.getRadioItem().title){
                     v.text_playing_title.text = it.getRadioItem().title
@@ -60,7 +60,7 @@ open class PlayingFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        MediaHelper().getBinder()?.let {
+        MediaHelper().getPlayer()?.let {
             when(v!!.id){
                 R.id.btn_playing_page->{
                     if(!it.radioItemEmpty()){

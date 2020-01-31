@@ -26,6 +26,7 @@ class DownLoadFromNet: AsyncTask<String,Int,String>() {
             file.delete()
         }
         file.createNewFile()
+        println(file)
         val outputStream = FileOutputStream(file)
         val request= Request.Builder()
             .url(url)
@@ -54,9 +55,8 @@ class DownLoadFromNet: AsyncTask<String,Int,String>() {
         super.onProgressUpdate(*values)
         val max= values[0]!!.toInt()
         val progress=values[1]!!.toInt()
-        val temp=100*progress/max
-        if(temp!=present){
-            present=temp
+        if(max!=0 && (100*progress/max)!=present){
+            present=100*progress/max
             listener?.setNotification(present)
         }
     }

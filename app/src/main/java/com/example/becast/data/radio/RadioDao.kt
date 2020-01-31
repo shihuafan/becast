@@ -42,6 +42,13 @@ interface RadioDao {
     @Query("SELECT* FROM radio_db WHERE mix = (:mix) ")
     fun getByMix(mix:Long ):List<RadioData>
 
+    @Query("SELECT * FROM radio_db WHERE download_path != (:path) ")
+    fun getLocal(path:String=""):List<RadioData>
+
+    @Query("SELECT * FROM radio_db WHERE download_path != (:path) and download_finish == (:finish) ")
+    fun getDownLoad(path:String="",finish:Boolean=false):List<RadioData>
+
+
     @Query("SELECT xml_image_url  FROM radio_db WHERE mix = (:mix) limit 1")
     fun getImageUrlByMix(mix:Long ):String
 

@@ -26,11 +26,11 @@ class WaitDialogAdapter(private val mData: MutableList<RadioData>)
         holder.textItemName.text=mData[position].title
 
         holder.btnItem.setOnClickListener {
-            MediaHelper().getBinder()?.deleteRadioItem(position)
+            MediaHelper().getPlayer()?.deleteRadioItem(position)
 //            mBinder.playRadio(mData[position])
         }
         holder.btnItemDelete.setOnClickListener {
-            MediaHelper().getBinder()?.deleteRadioItem(position)
+            MediaHelper().getPlayer()?.deleteRadioItem(position)
         }
     }
 

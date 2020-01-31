@@ -72,20 +72,11 @@ class MoreFragment : Fragment(), View.OnClickListener{
                     fromXmlFragment.arguments=bundle
                     childFragmentManager.beginTransaction()
                         .add(R.id.layout_more, fromXmlFragment)
-                       // .addToBackStack(null)
                         .commit()
                     this.v.layout_more_content.visibility=View.GONE
                 }
                 else{
                     startSearch(content)
-//                    val bundle=Bundle()
-//                    bundle.putBinder("Binder",mBinder)
-//                    bundle.putString("content",content)
-//                    val searchFragment = SearchFragment(mHandler)
-//                    searchFragment.arguments=bundle
-//                    childFragmentManager.beginTransaction()
-//                        .add(R.id.layout_more_show, searchFragment)
-//                        .commit()
                 }
             }
            false

@@ -19,7 +19,7 @@ import com.example.becast.more.MoreFragment
 import com.example.becast.more.from_opml.FromOpmlFragment
 import com.example.becast.playpage.detail.DetailFragment
 import com.example.becast.service.MediaHelper
-import com.example.becast.service.RadioIPlayer
+import com.example.becast.service.player.RadioIPlayer
 import kotlinx.android.synthetic.main.frag_page.view.*
 import org.greenrobot.eventbus.EventBus
 
@@ -29,7 +29,7 @@ class PageFragment : Fragment(), View.OnClickListener,
 
     private lateinit var pageViewModel:PageViewModel
     private lateinit var v:View
-    private var mBinder: RadioIPlayer ?= null
+    private var mPlayer: RadioIPlayer?= null
     private val mHandler : Handler = Handler{
         when(it.what){
             Becast.OPEN_DETAIL_FRAGMENT ->{
@@ -56,7 +56,7 @@ class PageFragment : Fragment(), View.OnClickListener,
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view= inflater.inflate(R.layout.frag_page, container, false)
         v=view
-        mBinder=MediaHelper().getBinder()
+        mPlayer=MediaHelper().getPlayer()
         val path=arguments!!.getString("path")
         path?.let{
             val index= path.lastIndexOf('.')+1
@@ -64,11 +64,16 @@ class PageFragment : Fragment(), View.OnClickListener,
             if(index>=0 && "opml"== path.substring(index)){
                 val bundle=Bundle()
                 bundle.putString("path",path)
-                val fromOpmlFragment= FromOpmlFragment()
+                val fromOpmlFragment= FromOpmlFragment(false)
                 fromOpmlFragment.arguments=bundle
-                fragmentManager!!.beginTransaction()
-                    .replace(R.id.layout_main, fromOpmlFragment)
-                    .commit()
+                fragmentManager?.findFragmentByTag("playingFragment")?.let { it1 ->
+                    fragmentManager!!.beginTransaction()
+                        .replace(R.id.layout_main_all, fromOpmlFragment)
+                        .addToBackStack(null)
+                        .hide(this)
+                        .hide(it1)
+                        .commit()
+                }
             }
             else{
                 Toast.makeText(context, "文件格式错误",Toast.LENGTH_SHORT).show()
@@ -83,7 +88,7 @@ class PageFragment : Fragment(), View.OnClickListener,
             RadioAdapter(it, pageViewModel.subscribeListLiveData.value!!, mHandler)
         }
         view.list_page_wait.adapter = context?.let {
-            mBinder?.let {it_->
+            mPlayer?.let {it_->
                 WaitAdapter(it, it_.getLiveData().value!!, mHandler,it_)
             }
 
@@ -106,7 +111,7 @@ class PageFragment : Fragment(), View.OnClickListener,
         pageViewModel.subscribeListLiveData.observe(this, Observer{
             view.list_page_subscribe.adapter?.notifyDataSetChanged()
         })
-        mBinder?.getLiveData()?.observe(this, Observer{
+        mPlayer?.getLiveData()?.observe(this, Observer{
             view.list_page_wait.adapter?.notifyDataSetChanged()
         })
 

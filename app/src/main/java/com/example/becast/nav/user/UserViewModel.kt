@@ -2,24 +2,21 @@ package com.example.becast.nav.user
 
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Handler
+import android.os.Message
 import android.util.Log
+import android.util.Xml
 import com.example.becast.data.Becast
 import com.example.becast.data.UserData
 import com.example.becast.data.radio.RadioDatabase
 import com.example.becast.data.xml.XmlDatabase
-import com.example.becast.data.xml.XmlHttpHelper
-import com.google.gson.Gson
-import io.reactivex.Observable
 import okhttp3.*
 import okio.BufferedSink
-import java.io.IOException
-import java.lang.Exception
-import okhttp3.RequestBody
-import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 class UserViewModel {
@@ -46,6 +43,58 @@ class UserViewModel {
                 handler.sendEmptyMessage(Becast.RESTART)
             }
         }.start()
+    }
+
+    fun serializeXml(context: Context,handler:Handler){
+        object :Thread(){
+            override fun run() {
+                super.run()
+                val xmlDatabase=XmlDatabase.getDb(context)
+                val xmlDao=xmlDatabase.xmlDao()
+                val list=xmlDao.getAll()
+                XmlDatabase.closeDb()
+                val path=context.externalCacheDir
+                val file= File(path.path+"/xml/")
+                if(!file.exists()){
+                    file.mkdirs()
+                }
+                val xmlFile=File(path.path+"/xml/"+System.currentTimeMillis()+".opml")
+                xmlFile.createNewFile()
+                val serializer = Xml.newSerializer()
+                val outputStream= FileOutputStream(xmlFile)
+
+                serializer.setOutput(outputStream, "utf-8")
+                serializer.startDocument("utf-8", true)
+                serializer.startTag(null,"opml")
+                serializer.startTag(null,"body")
+                for(item in list){
+                    serializer.startTag(null,"outline")
+                    serializer.attribute(null,"text",item.title)
+                    serializer.attribute(null,"title",item.title)
+                    serializer.attribute(null,"type","rss")
+                    serializer.attribute(null,"xmlUrl",item.xmlUrl)
+                    serializer.attribute(null,"htmlUrl",item.link)
+                    serializer.endTag(null,"outline")
+                }
+                serializer.endTag(null,"body")
+                serializer.endTag(null,"opml")
+                serializer.endDocument()
+                outputStream.close()
+                val msg=Message()
+                msg.obj=xmlFile.path.toString()
+                msg.what=Becast.OUTPUT_OPML
+                handler.sendMessage(msg)
+            }
+        }.start()
+    }
+
+    fun share(context: Context,path:String){
+        var shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.type = "text/*"
+        shareIntent.putExtra(Intent.EXTRA_STREAM, path)
+        shareIntent = Intent.createChooser(shareIntent, "Share Opml to ......")
+        context.startActivity(shareIntent)
     }
 
     fun deleteAll(context: Context,handler: Handler){

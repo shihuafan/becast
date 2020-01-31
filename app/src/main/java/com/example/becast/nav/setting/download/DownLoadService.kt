@@ -23,12 +23,16 @@ class DownLoadService:Service() {
     val downLoadService=this
     override fun onCreate() {
         super.onCreate()
-
+        println("service启动")
         val path=this.externalCacheDir
         val downLoadFromNet= DownLoadFromNet()
         val downLoadListener=DownLoadListener()
         downLoadFromNet.setListener(downLoadListener)
         path?.let {
+            val file= File(path.path+"/download")
+            if(!file.exists()){
+                file.mkdir()
+            }
             downLoadFromNet.execute(path.path+"/download/becast.apk")
         }
     }

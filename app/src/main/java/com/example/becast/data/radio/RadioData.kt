@@ -25,6 +25,5 @@ data class RadioData(
     @ColumnInfo (name = "progress")var progress:Int=0,
     @ColumnInfo (name = "mix") var mix:Long=0,
     @ColumnInfo (name = "download_path")@Expose(serialize = false, deserialize = false)var downloadPath:String="",
-    @ColumnInfo (name = "download_max")@Expose(serialize = false, deserialize = false)var downloadMax:Int=0,
-    @ColumnInfo (name = "download_progress")@Expose(serialize = false, deserialize = false) var downloadProgress:Int=0
+    @ColumnInfo (name = "download_finish")@Expose(serialize = false, deserialize = false) var downloadFinish:Boolean=false
 )

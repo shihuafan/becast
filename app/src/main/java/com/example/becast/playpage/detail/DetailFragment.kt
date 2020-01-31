@@ -5,6 +5,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -63,12 +64,13 @@ class DetailFragment(private val radioData: RadioData, private val fromChannel:B
     }
 
     override fun onClick(v: View?) {
-       when(v?.id){
+        when(v?.id){
            R.id.btn_detail_back->{
                activity?.onBackPressed()
            }
            R.id.btn_detail_play->{
-               MediaHelper().getBinder()?.playRadio(radioData)
+
+               MediaHelper().getPlayer()?.playRadio(radioData)
                fragmentManager!!.beginTransaction()
                    .hide(this)
                    .add(R.id.layout_main_all, PlayPageFragment(fromChannel))
@@ -79,7 +81,6 @@ class DetailFragment(private val radioData: RadioData, private val fromChannel:B
                detailViewModel.getXmlData(radioData.xmlUrl,mHandler)
            }
            R.id.btn_detail_wait->{
-               MediaHelper().getBinder()
                val handler=Handler{
                    when(it.what) {
                        0x000->{
@@ -87,11 +88,11 @@ class DetailFragment(private val radioData: RadioData, private val fromChannel:B
                            Snackbar.make(v, "已加入收藏", Snackbar.LENGTH_SHORT).show()
                        }
                        0x001->{
-                           MediaHelper().getBinder()?.addRadioItemToNext(radioData)
+                           MediaHelper().getPlayer()?.addRadioItemToNext(radioData)
                            Snackbar.make(v, "已加入收听列表", Snackbar.LENGTH_SHORT).show()
                        }
                        0x002->{
-                           MediaHelper().getBinder()?.addRadioItem(radioData)
+                           MediaHelper().getPlayer()?.addRadioItem(radioData)
                            Snackbar.make(v, "已加入收听列表", Snackbar.LENGTH_SHORT).show()
                        }
                        0x003->{

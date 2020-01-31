@@ -54,7 +54,7 @@ class RecommendAdapter (private val context: Context,
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(10)))
                 .into(holder.imageItemShow)
             holder.btnItemPlay.setOnClickListener {
-                MediaHelper().getBinder()?.let {it_->
+                MediaHelper().getPlayer()?.let {it_->
                     if(it_.pauseRadio()){
                         it.setBackgroundResource(R.drawable.pause_light)
                     }

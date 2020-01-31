@@ -76,7 +76,7 @@
             android:scaleType="centerCrop"
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
-            android:background="?attr/ic_collect"
+            android:background="?attr/ic_local"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
             android:layout_centerVertical="true"
-            android:text="收藏"
+            android:text="本地"
             android:textColor="#fff"/>
 
     </RelativeLayout>

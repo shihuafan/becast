@@ -28,8 +28,8 @@ class WaitListBottomSheetDialog(
         bottomSheetDialog.show()
 
         view.list_wait_dialog.layoutManager = LinearLayoutManager(context)
-        view.list_wait_dialog.adapter=WaitDialogAdapter(MediaHelper().getBinder()?.getLiveData()?.value!!)
-        MediaHelper().getBinder()?.getLiveData()?.observe(owner, Observer{
+        view.list_wait_dialog.adapter=WaitDialogAdapter(MediaHelper().getPlayer()?.getLiveData()?.value!!)
+        MediaHelper().getPlayer()?.getLiveData()?.observe(owner, Observer{
             view.list_wait_dialog.adapter?.notifyDataSetChanged()
         })
 

@@ -53,7 +53,6 @@ class FromFileFragment : Fragment() {
 
         })
 
-
         return v
     }
 

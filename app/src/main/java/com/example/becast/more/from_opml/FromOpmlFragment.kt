@@ -16,7 +16,7 @@ import com.example.becast.more.from_xml.FromXmlFragment
 import com.example.becast.service.RadioService
 import kotlinx.android.synthetic.main.frag_opml.view.*
 
-class FromOpmlFragment : Fragment() {
+class FromOpmlFragment(private val fromFIle:Boolean=true) : Fragment() {
 
     private lateinit var fromOpmlViewModel: FromOpmlViewModel
     private lateinit var v: View
@@ -29,11 +29,20 @@ class FromOpmlFragment : Fragment() {
                 val bundle=Bundle()
                 bundle.putString("url",it.obj as String)
                 fromXmlFragment.arguments=bundle
-                fragmentManager!!.beginTransaction()
-                    .hide(this)
-                    .add(R.id.layout_more, fromXmlFragment)
-                    .addToBackStack(null)
-                    .commit()
+                if(fromFIle){
+                    fragmentManager!!.beginTransaction()
+                        .hide(this)
+                        .add(R.id.layout_more, fromXmlFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }else{
+                    fragmentManager!!.beginTransaction()
+                        .hide(this)
+                        .add(R.id.layout_main_all, fromXmlFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+
             }
             Becast.FILE_ERROR->{
                 Toast.makeText(context,"文件解析加载异常",Toast.LENGTH_SHORT).show()

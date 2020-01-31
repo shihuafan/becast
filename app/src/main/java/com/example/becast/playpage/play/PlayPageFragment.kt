@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -24,7 +25,7 @@ import com.example.becast.playpage.comment.CommentFragment
 import com.example.becast.playpage.share.ShareData
 import com.example.becast.playpage.share.ShareFragment
 import com.example.becast.service.MediaHelper
-import com.example.becast.service.RadioIPlayer
+import com.example.becast.service.player.RadioIPlayer
 import kotlinx.android.synthetic.main.frag_playpage.view.*
 import java.util.*
 
@@ -34,23 +35,23 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
 
     private lateinit var v: View
     private val playPageViewModel= PlayPageViewModel()
-    private lateinit var mBinder: RadioIPlayer
+    private lateinit var mPlayer: RadioIPlayer
     private var commentData=CommentData()
     private var timer=Timer()
     private val mHandler= Handler{
-        if(mBinder.isPrepared()){
+        if(mPlayer.isPrepared()){
             try {
-                v.seekBar_play.progress = mBinder.getRadioCurrentPosition()
-                v.seekBar_play.max = mBinder.getRadioDuration()
-                v.text_play_duration.text = playPageViewModel.timeToStr(mBinder.getRadioDuration()/1000)
-                v.text_play_position.text = playPageViewModel.timeToStr(mBinder.getRadioCurrentPosition()/1000)
+                v.seekBar_play.progress = mPlayer.getRadioCurrentPosition()
+                v.seekBar_play.max = mPlayer.getRadioDuration()
+                v.text_play_duration.text = playPageViewModel.timeToStr(mPlayer.getRadioDuration()/1000)
+                v.text_play_position.text = playPageViewModel.timeToStr(mPlayer.getRadioCurrentPosition()/1000)
 
-                if (mBinder.isRadioPlaying()) {
+                if (mPlayer.isRadioPlaying()) {
                     v.btn_play_pause.setBackgroundResource(R.drawable.pause_light)
                     v.image_play_loading.clearAnimation()
                     v.image_play_loading.visibility = View.INVISIBLE
                 } else {
-                    if (!mBinder.isPrepared()) {
+                    if (!mPlayer.isPrepared()) {
                         v.image_play_loading.visibility = View.VISIBLE
                         v.image_play_loading.startAnimation(
                             AnimationUtils.loadAnimation(
@@ -69,18 +70,18 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
 
         v= inflater.inflate(R.layout.frag_playpage, container, false)
 
-        MediaHelper().getBinder()?.let {
-            mBinder=it
+        MediaHelper().getPlayer()?.let {
+            mPlayer=it
         }
         context?.let {
             Glide.with(it)
-                .load(Uri.parse(mBinder.getRadioItem().xmlImageUrl))
+                .load(Uri.parse(mPlayer.getRadioItem().xmlImageUrl))
                 .apply(RequestOptions.overrideOf(300,300))
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                 .into(v.image_play_show) }
-        v.text_play_title.text= mBinder.getRadioItem().title
+        v.text_play_title.text= mPlayer.getRadioItem().title
         v.text_play_title.isSelected=true
-        v.text_play_rsstitle.text= mBinder.getRadioItem().xmlTitle
+        v.text_play_rsstitle.text= mPlayer.getRadioItem().xmlTitle
 
         v.image_play_loading.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate0))
 
@@ -96,7 +97,7 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
         v.btn_play_sleep.setOnClickListener(this)
         v.btn_play_speed.setOnClickListener(this)
         v.btn_play_share.setOnClickListener(this)
-        v.btn_play_wait_list.setOnClickListener(this)
+        v.btn_play_download.setOnClickListener(this)
         v.btn_play_channel.setOnClickListener(this)
         v.btn_play_pin.setOnTouchListener(this)
         v.btn_play_pin.setOnTouchListener(this)
@@ -107,10 +108,10 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         when(event?.action){
             MotionEvent.ACTION_DOWN->{
-                commentData.startTime=mBinder.getRadioCurrentPosition()/1000
+                commentData.startTime=mPlayer.getRadioCurrentPosition()/1000
             }
             MotionEvent.ACTION_MOVE->{
-                val time=mBinder.getRadioCurrentPosition()/1000
+                val time=mPlayer.getRadioCurrentPosition()/1000
                 if((time - commentData.startTime)>1){
                     this.v.layout_pin.visibility=View.VISIBLE
                 }
@@ -120,8 +121,8 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
             //记录结束
             MotionEvent.ACTION_UP->{
                 this.v.layout_pin.visibility=View.GONE
-                commentData.endTime=mBinder.getRadioCurrentPosition()/1000
-                val radioData=mBinder.getRadioItem()
+                commentData.endTime=mPlayer.getRadioCurrentPosition()/1000
+                val radioData=mPlayer.getRadioItem()
                 commentData.xmlUrl=radioData.xmlUrl
                 commentData.radioUrl=radioData.radioUrl
                 commentData.xmlTitle=radioData.xmlTitle
@@ -144,10 +145,10 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
             }
             R.id.btn_play_pre->{
                 timer.cancel()
-                mBinder.playPreRadio()
+                mPlayer.playPreRadio()
             }
             R.id.btn_play_pause->{
-                if(mBinder.pauseRadio()){
+                if(mPlayer.pauseRadio()){
                     v.btn_play_pause.setBackgroundResource(R.drawable.pause_light)
                 }
                 else{
@@ -155,7 +156,7 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
                 }
             }
             R.id.btn_play_next->{
-                mBinder.playNextRadio()
+                mPlayer.playNextRadio()
             }
             R.id.layout_play->{ }
 
@@ -163,7 +164,7 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
                 context?.let { SleepBottomSheetDialog(it) }
             }
             R.id.btn_play_speed->{
-                when(mBinder.changeRadioSpeed()){
+                when(mPlayer.changeRadioSpeed()){
                     10->{
                         v.background=resources.getDrawable(R.drawable.speed10)
                     }
@@ -177,7 +178,7 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
                 }
             }
             R.id.btn_play_share->{
-                val radioData=mBinder.getRadioItem()
+                val radioData=mPlayer.getRadioItem()
                 val shareData=ShareData(
                     uid=UserData.uid,
                     createTime = System.currentTimeMillis().toString(),
@@ -193,8 +194,13 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
                     .addToBackStack(null)
                     .commit()
             }
-            R.id.btn_play_wait_list->{
-                context?.let { WaitListBottomSheetDialog(this, it)}
+            R.id.btn_play_download->{
+                Toast.makeText(context, "已加入下载", Toast.LENGTH_SHORT).show()
+                val radioData= MediaHelper().getPlayer()?.getRadioItem()
+                radioData?.let {
+                    context?.let { it1 -> playPageViewModel.download(it1,it) }
+                }
+
             }
             R.id.btn_play_channel->{
                 if(fromChannel){
@@ -216,7 +222,7 @@ class PlayPageFragment(private val fromChannel:Boolean = false) : Fragment(),  V
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
-        mBinder.seekRadioTo(v.seekBar_play.progress)
+        mPlayer.seekRadioTo(v.seekBar_play.progress)
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {}

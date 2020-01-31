@@ -26,6 +26,7 @@ public class Becast {
     public static int SHARE_BK=123;
     public static int NOT_LATEST=124;
     public static int IS_LATEST=125;
+    public static int OUTPUT_OPML=126;
 
 
 

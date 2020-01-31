@@ -1,10 +1,13 @@
 package com.example.becast.playpage.play
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.*
 import android.os.Handler
 import android.os.Message
 import com.example.becast.data.radio.RadioData
+import com.example.becast.data.radio.RadioDatabase
+import com.example.becast.service.MediaHelper
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.WriterException
@@ -27,7 +30,21 @@ class PlayPageViewModel {
         }
     }
 
-
+    fun download(context: Context, radioData: RadioData){
+        object :Thread(){
+            override fun run() {
+                super.run()
+                val path=context.getExternalFilesDir("")
+                val filename=radioData.radioUrl.hashCode()
+                radioData.downloadPath=path!!.path+"/download/"+filename+".mp3"
+                val radioDatabase=RadioDatabase.getDb(context)
+                val radioDao=radioDatabase.radioDao()
+                radioDao.updateItem(radioData)
+                RadioDatabase.closeDb()
+                MediaHelper().getDownload()?.downLoad(radioData)
+            }
+        }.start()
+    }
 
     @SuppressLint("DefaultLocale")
     fun md5(password:String):String{

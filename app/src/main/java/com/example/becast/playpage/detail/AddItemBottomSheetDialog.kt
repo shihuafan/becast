@@ -25,10 +25,10 @@ class AddItemBottomSheetDialog(context: Context,handler: Handler) {
 
         bottomSheetDialog.show()
 
-        view.btn_add_item_love.setOnClickListener {
-            handler.sendEmptyMessage(0x000)
-            bottomSheetDialog.dismiss()
-        }
+//        view.btn_add_item_love.setOnClickListener {
+//            handler.sendEmptyMessage(0x000)
+//            bottomSheetDialog.dismiss()
+//        }
         view.btn_add_item_next.setOnClickListener {
             handler.sendEmptyMessage(0x001)
             bottomSheetDialog.dismiss()
@@ -39,11 +39,11 @@ class AddItemBottomSheetDialog(context: Context,handler: Handler) {
             bottomSheetDialog.dismiss()
         }
 
-        view.btn_add_item_folder.setOnClickListener {
-        //    handler.sendEmptyMessage(0x003)
-            AddToMixBottomSheetDialog(context,handler)
-            bottomSheetDialog.dismiss()
-        }
+//        view.btn_add_item_folder.setOnClickListener {
+//        //    handler.sendEmptyMessage(0x003)
+//            AddToMixBottomSheetDialog(context,handler)
+//            bottomSheetDialog.dismiss()
+//        }
     }
 
 }

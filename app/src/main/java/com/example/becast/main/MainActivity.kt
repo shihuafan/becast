@@ -29,6 +29,7 @@ import com.example.becast.nav.love.LoveFragment
 import com.example.becast.nav.setting.SettingFragment
 import com.example.becast.nav.square.SquareFragment
 import com.example.becast.login_signup.login.LoginFragment
+import com.example.becast.nav.local.LocalFragment
 import com.example.becast.nav.user.UserFragment
 import com.example.becast.service.MediaHelper
 import com.example.becast.service.RadioService
@@ -155,7 +156,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 supportFragmentManager.findFragmentByTag("pageFragment")?.let {
                     supportFragmentManager.beginTransaction()
                         .hide(it)
-                        .add(R.id.layout_main_top, LoveFragment())
+                        .add(R.id.layout_main_top, LocalFragment())
                         .addToBackStack(null)
                         .commit()
                 }
@@ -241,7 +242,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             "stop_radio"->{
-                MediaHelper().getBinder()?.let {
+                MediaHelper().getPlayer()?.let {
                     if(it.isRadioPlaying()) {
                         it.pauseRadio()
                     }

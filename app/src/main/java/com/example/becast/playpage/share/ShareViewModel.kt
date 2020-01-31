@@ -126,7 +126,7 @@ class ShareViewModel{
         }
     }
 
-    fun shareToQQ(context: Context, view: View){
+    private fun shareToQQ(context: Context, view: View){
 
         val bitmap=getBitmapToView(view)
 
